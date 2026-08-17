@@ -41,13 +41,13 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // 1. Initial State Setup
+      // 1. Initial State Setup (Guaranteed clean separation)
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
-      gsap.set('.act3-top-left', { x: -600, opacity: 0 });
-      gsap.set('.act3-center-hero', { x: -800, opacity: 0 });
-      gsap.set('.act3-schedule-node', { x: -400, opacity: 0 });
+      gsap.set('.act3-typo-block', { x: -600, opacity: 0 });
+      gsap.set('.act3-visual-graphic', { x: 400, opacity: 0, scale: 0.85 });
+      gsap.set('.act3-laser-arc', { strokeDashoffset: 1000 });
       gsap.set('.act4-stage', { autoAlpha: 0, y: 70, scale: 0.94 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
 
@@ -144,9 +144,8 @@ export const CinematicHero: React.FC = () => {
         })
 
         // =====================================================================
-        // ACT 2 OUTRO & ACT 3 ENTRANCE: Seamless Left-to-Right Kinetic Flow
+        // ACT 2 OUTRO & ACT 3 ENTRANCE: Kinetic Swipe Flow with Architectural Graphic
         // =====================================================================
-        // Act 2 sweeps rapidly to the left
         .to('.act2-line-1', {
           x: -800,
           opacity: 0,
@@ -173,29 +172,29 @@ export const CinematicHero: React.FC = () => {
           duration: 0.1,
         })
 
-        // Act 3 immediately sweeps in from left to right with matching velocity
+        // Act 3 sweeps in from the left with unified typographic lockup & right visual graphic
         .to('.act3-stage', {
           autoAlpha: 1,
           duration: 0.1,
         }, '-=0.4')
-        .to('.act3-top-left', {
-          x: 0,
-          opacity: 1,
-          duration: 1.2,
-          ease: 'power3.out',
-        }, '-=0.3')
-        .to('.act3-center-hero', {
+        .to('.act3-typo-block', {
           x: 0,
           opacity: 1,
           duration: 1.4,
           ease: 'power3.out',
-        }, '-=1.0')
-        .to('.act3-schedule-node', {
+        }, '-=0.3')
+        .to('.act3-visual-graphic', {
           x: 0,
           opacity: 1,
-          duration: 1.0,
+          scale: 1,
+          duration: 1.6,
           ease: 'power3.out',
-        }, '-=1.0')
+        }, '-=1.2')
+        .to('.act3-laser-arc', {
+          strokeDashoffset: 0,
+          duration: 1.8,
+          ease: 'power2.out',
+        }, '-=1.2')
 
         // Extended Clean Reading Hold for Act 3
         .to('.act3-stage', {
@@ -205,25 +204,18 @@ export const CinematicHero: React.FC = () => {
         })
 
         // ACT 3 OUTRO: Sweeps rapidly to the left
-        .to('.act3-top-left', {
-          x: -700,
-          opacity: 0,
-          filter: 'blur(12px)',
-          duration: 0.9,
-          ease: 'power2.in',
-        })
-        .to('.act3-center-hero', {
-          x: -900,
+        .to('.act3-typo-block', {
+          x: -800,
           opacity: 0,
           filter: 'blur(12px)',
           duration: 1.0,
           ease: 'power2.in',
-        }, '-=0.8')
-        .to('.act3-schedule-node', {
+        })
+        .to('.act3-visual-graphic', {
           x: -600,
           opacity: 0,
-          filter: 'blur(8px)',
-          duration: 0.8,
+          filter: 'blur(12px)',
+          duration: 0.9,
           ease: 'power2.in',
         }, '-=0.8')
         .to('.act3-stage', {
@@ -343,35 +335,105 @@ export const CinematicHero: React.FC = () => {
         </div>
 
         {/* ===================================================================== */}
-        {/* ACT 3: "Within your" (Top-Left) & "planned timeline." (Center Zone)    */}
+        {/* ACT 3: MONUMENTAL TYPOGRAPHIC LOCKUP & ARCHITECTURAL TIMELINE GRAPHIC */}
         {/* ===================================================================== */}
-        <div className="act3-stage absolute inset-0 z-20 w-full h-full flex flex-col justify-between p-6 sm:p-10 lg:p-16 pointer-events-none">
-          {/* Top Row: Left-Upper Corner Headline "Within your" (Swept from Left) */}
-          <div className="act3-top-left w-full flex items-start justify-start pl-2 sm:pl-8">
-            <h2 className="text-[clamp(2.4rem,5.5vw,5.2rem)] font-black text-white tracking-[-0.03em] leading-none uppercase">
-              Within your
-            </h2>
-          </div>
+        <div className="act3-stage absolute inset-0 z-20 w-full h-full flex items-center justify-center px-6 sm:px-12 lg:px-16 pointer-events-none">
+          <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center">
+            {/* Left Column: Unified Left-Aligned Monumental Typography */}
+            <div className="act3-typo-block flex flex-col text-left">
+              {/* Line 1: WITHIN YOUR (Uppercase Bold) */}
+              <h2 className="text-[clamp(3rem,6.8vw,6.4rem)] font-black text-white tracking-[-0.035em] leading-[0.96] uppercase drop-shadow-[0_10px_50px_rgba(0,0,0,0.95)]">
+                Within your
+              </h2>
 
-          {/* Middle/Center Row: Hero Inscription "planned timeline." (Swept from Left) */}
-          <div className="act3-center-hero w-full max-w-6xl mx-auto text-left sm:text-center my-auto py-4">
-            <h2 className="text-[clamp(3.5rem,9.5vw,8.8rem)] font-black tracking-[-0.04em] leading-[0.96] drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
-              <span className="text-[#F5B800] glow-gold-cinematic font-serif italic font-normal tracking-normal">
-                planned timeline.
-              </span>
-            </h2>
-          </div>
+              {/* Line 2: planned timeline. (Luminous Liquid Gold Serif Italic) */}
+              <h2 className="text-[clamp(3.4rem,7.8vw,7.4rem)] font-black tracking-[-0.04em] leading-[0.96] mt-2 drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
+                <span className="text-[#F5B800] glow-gold-cinematic font-serif italic font-normal tracking-normal">
+                  planned timeline.
+                </span>
+              </h2>
 
-          {/* Bottom Row: 100% Target On-Schedule Indicator (Swept from Left) */}
-          <div className="act3-schedule-node w-full flex items-end justify-start pl-2 sm:pl-8">
-            <div className="flex items-center gap-3 text-left">
-              <div className="w-8 h-8 rounded-full border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800] text-xs font-bold shadow-[0_0_15px_rgba(245,184,0,0.2)]">
-                ⏱
+              {/* Aligned Precision Guarantee Metadata Ribbon */}
+              <div className="mt-8 flex items-center gap-3 text-left">
+                <div className="w-9 h-9 rounded-full bg-[#F5B800]/10 border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800] text-sm font-black shadow-[0_0_20px_rgba(245,184,0,0.25)]">
+                  ⏱
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-sm font-extrabold text-white tracking-wide">
+                    100% Target On-Schedule
+                  </span>
+                  <span className="text-[11px] font-mono text-gray-400 tracking-wider">
+                    ZERO PROJECT DELAY GUARANTEE &bull; MANDATE DISCIPLINE
+                  </span>
+                </div>
               </div>
-              <div className="flex flex-col">
-                <span className="text-[12px] font-bold text-gray-200 tracking-wide">100% Target On-Schedule</span>
-                <span className="text-[10px] font-mono text-gray-500 tracking-wider">ZERO PROJECT DELAY GUARANTEE</span>
-              </div>
+            </div>
+
+            {/* Right Column: Holographic Architectural Timeline Vector Graphic */}
+            <div className="act3-visual-graphic relative w-full h-[320px] hidden sm:flex items-center justify-center">
+              <svg viewBox="0 0 500 320" className="w-full h-full overflow-visible" fill="none">
+                <defs>
+                  {/* Glowing Laser Gradient */}
+                  <linearGradient id="laser-arc-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.4" />
+                    <stop offset="50%" stopColor="#F5B800" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#10B981" stopOpacity="1" />
+                  </linearGradient>
+
+                  {/* Radial Lens Flare */}
+                  <radialGradient id="node-flare" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#F5B800" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#F5B800" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+
+                {/* Perspective Coordinate Grid Background */}
+                <ellipse cx="250" cy="160" rx="220" ry="120" stroke="#1E293B" strokeWidth="1" strokeDasharray="4 8" />
+                <ellipse cx="250" cy="160" rx="160" ry="85" stroke="#334155" strokeWidth="1" strokeDasharray="6 6" />
+
+                {/* Sweeping Parabolic Trajectory Arc */}
+                <path
+                  d="M 50,250 C 120,60 380,60 450,250"
+                  stroke="url(#laser-arc-gradient)"
+                  strokeWidth="3.5"
+                  strokeDasharray="1000"
+                  className="act3-laser-arc"
+                  strokeLinecap="round"
+                />
+
+                {/* Milestone Node 1: Month 01 Position */}
+                <g transform="translate(110, 150)">
+                  <circle cx="0" cy="0" r="16" fill="url(#node-flare)" opacity="0.3" />
+                  <circle cx="0" cy="0" r="5" fill="#030508" stroke="#38BDF8" strokeWidth="2.5" />
+                  <text x="0" y="-14" fill="#94A3B8" fontSize="10" fontWeight="bold" textAnchor="middle" letterSpacing="1">
+                    M1: BLUEPRINT
+                  </text>
+                </g>
+
+                {/* Milestone Node 2: Month 02 Trust Pre-Sales */}
+                <g transform="translate(250, 105)">
+                  <circle cx="0" cy="0" r="22" fill="url(#node-flare)" opacity="0.4" />
+                  <circle cx="0" cy="0" r="6" fill="#F5B800" stroke="#FFFFFF" strokeWidth="2" />
+                  <text x="0" y="-18" fill="#F5B800" fontSize="11" fontWeight="900" textAnchor="middle" letterSpacing="1.2">
+                    M2: PRE-SALES TRUST
+                  </text>
+                  <text x="0" y="24" fill="#CBD5E1" fontSize="9" fontWeight="bold" textAnchor="middle">
+                    +4.2x Absorption
+                  </text>
+                </g>
+
+                {/* Milestone Node 3: 100% Target Delivered */}
+                <g transform="translate(390, 150)">
+                  <circle cx="0" cy="0" r="26" fill="url(#node-flare)" opacity="0.5" className="animate-pulse" />
+                  <circle cx="0" cy="0" r="8" fill="#10B981" stroke="#FFFFFF" strokeWidth="2.5" />
+                  <text x="0" y="-16" fill="#10B981" fontSize="11" fontWeight="900" textAnchor="middle" letterSpacing="1.5">
+                    100% SOLD OUT
+                  </text>
+                  <text x="0" y="24" fill="#6EE7B7" fontSize="9" fontWeight="bold" textAnchor="middle">
+                    On Planned Date
+                  </text>
+                </g>
+              </svg>
             </div>
           </div>
         </div>
