@@ -5,7 +5,7 @@ export const Act1ArtboardPoster: React.FC = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      // Fit 1920x1080 artboard proportionally inside viewport
+      // Scale 1920x1080 artboard to fit screen proportionally
       const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
       setScale(s);
     };
@@ -17,9 +17,9 @@ export const Act1ArtboardPoster: React.FC = () => {
 
   return (
     <div className="act1-stage absolute inset-0 z-20 w-full h-full flex items-center justify-center pointer-events-none select-none bg-black overflow-hidden">
-      {/* Fixed 1920x1080 Motion Design Artboard */}
+      {/* 1920x1080 Fixed Editorial Artboard Canvas */}
       <div
-        className="act1-artboard relative bg-[#050505] overflow-hidden"
+        className="act1-artboard relative bg-[#000000] overflow-hidden"
         style={{
           width: 1920,
           height: 1080,
@@ -29,65 +29,70 @@ export const Act1ArtboardPoster: React.FC = () => {
         }}
       >
         {/* ===================================================================== */}
-        {/* ZONE 1: "Most" + Horizontal Hairline Rule (y: 45 to 240)               */}
+        {/* ROW 1: "Most" + Continuous Hairline Rule (x: 76, y: 50)               */}
         {/* ===================================================================== */}
         <div
-          className="act1-most-zone absolute flex items-center justify-between"
-          style={{ left: 70, top: 45, width: 1780, height: 190 }}
+          className="act1-most-zone absolute flex items-center"
+          style={{ left: 76, top: 48, width: 1768, height: 180 }}
         >
           <div className="overflow-hidden">
             <span
               className="act1-most-word block font-black text-white"
               style={{
-                fontSize: 195,
-                lineHeight: 0.82,
-                letterSpacing: '-0.06em',
+                fontSize: 210,
+                lineHeight: 0.85,
+                letterSpacing: '-0.065em',
                 fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                fontWeight: 900,
               }}
             >
               Most
             </span>
           </div>
-          {/* Crisp Horizontal Hairline Rule */}
+          {/* Horizontal Hairline Rule */}
           <div
             className="act1-top-rule"
             style={{
               flex: 1,
               height: 2,
               backgroundColor: 'rgba(255, 255, 255, 0.45)',
-              marginLeft: 50,
+              marginLeft: 45,
               marginTop: 15,
             }}
           />
         </div>
 
         {/* ===================================================================== */}
-        {/* ZONE 2: "agencies" INVERTED WHITE SLAB (y: 255, h: 360, z-index: 2)   */}
+        {/* ROW 2: "agencies" INVERTED WHITE SLAB (x: 72, y: 260, w: 1772, h: 365)*/}
         {/* ===================================================================== */}
         <div
-          className="act1-agencies-slab absolute flex items-center justify-center bg-[#E8E8E8]"
+          className="act1-agencies-slab absolute flex items-center justify-center bg-[#ECECEC]"
           style={{
-            left: 70,
-            top: 255,
-            width: 1780,
-            height: 360,
+            left: 72,
+            top: 260,
+            width: 1772,
+            height: 365,
             zIndex: 2,
             overflow: 'hidden',
           }}
         >
           <svg
-            viewBox="0 0 1780 340"
-            className="act1-agencies-word w-full h-full block"
+            viewBox="0 0 1772 365"
+            width="1772"
+            height="365"
+            className="act1-agencies-word block"
             style={{ overflow: 'visible' }}
           >
             <text
-              x="0"
-              y="272"
-              textLength="1780"
-              lengthAdjust="spacingAndGlyphs"
-              fontFamily='Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+              x="886"
+              y="285"
+              textAnchor="middle"
+              fontSize="330"
               fontWeight="900"
-              letterSpacing="-0.07em"
+              letterSpacing="-0.075em"
+              lengthAdjust="spacingAndGlyphs"
+              textLength="1730"
+              fontFamily='Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
               fill="#000000"
             >
               agencies
@@ -96,33 +101,37 @@ export const Act1ArtboardPoster: React.FC = () => {
         </div>
 
         {/* ===================================================================== */}
-        {/* ZONE 3: "run" EXAGGERATED TALL TYPOGRAPHY (y: 635, z-index: 1)        */}
+        {/* ROW 3 - LEFT: "run" CONDENSED TALL TYPOGRAPHY (x: 72, y: 645, h: 390) */}
         {/* ===================================================================== */}
         <div
           className="act1-run-zone absolute flex items-center overflow-hidden"
           style={{
-            left: 75,
-            top: 635,
-            width: 480,
-            height: 400,
+            left: 72,
+            top: 645,
+            width: 490,
+            height: 390,
             zIndex: 1,
           }}
         >
           <svg
-            viewBox="0 0 460 380"
-            className="act1-run-word w-full h-full block"
+            viewBox="0 0 490 390"
+            width="490"
+            height="390"
+            className="act1-run-word block"
             style={{ overflow: 'visible' }}
           >
             <text
-              x="0"
-              y="330"
-              textLength="440"
-              lengthAdjust="spacingAndGlyphs"
-              fontFamily='Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+              x="245"
+              y="325"
+              textAnchor="middle"
+              fontSize="370"
               fontWeight="900"
-              letterSpacing="-0.04em"
+              transform="scale(0.85, 1.28) translate(40, -55)"
+              letterSpacing="-0.05em"
+              lengthAdjust="spacingAndGlyphs"
+              textLength="470"
+              fontFamily='Impact, "Arial Black", Inter, sans-serif'
               fill="#FFFFFF"
-              transform="scale(0.88, 1.28) translate(0, -60)"
             >
               run
             </text>
@@ -130,28 +139,28 @@ export const Act1ArtboardPoster: React.FC = () => {
         </div>
 
         {/* ===================================================================== */}
-        {/* ZONE 4: "your" DELICATE SERIF BETWEEN RULES (y: 675, z-index: 1)      */}
+        {/* ROW 3 - CENTER: "your" DELICATE SERIF BETWEEN RULES (x: 590, y: 675)  */}
         {/* ===================================================================== */}
         <div
           className="act1-your-zone absolute flex flex-col items-center justify-center"
           style={{
-            left: 580,
+            left: 590,
             top: 675,
-            width: 430,
-            height: 320,
+            width: 440,
+            height: 330,
             zIndex: 1,
           }}
         >
           <div
             className="act1-your-rule-top"
-            style={{ width: '100%', height: 1.5, backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
+            style={{ width: '100%', height: 2, backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
           />
           <span
             className="act1-your-word block font-serif italic text-white"
             style={{
-              fontSize: 118,
+              fontSize: 135,
               lineHeight: 1.05,
-              padding: '12px 0',
+              padding: '16px 0',
               fontFamily: '"Playfair Display", "Instrument Serif", Georgia, serif',
             }}
           >
@@ -159,38 +168,40 @@ export const Act1ArtboardPoster: React.FC = () => {
           </span>
           <div
             className="act1-your-rule-bottom"
-            style={{ width: '100%', height: 1.5, backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
+            style={{ width: '100%', height: 2, backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
           />
         </div>
 
         {/* ===================================================================== */}
-        {/* ZONE 5: "ads." CHARCOAL BOX (y: 615 -> Overlaps agencies at y: 615)   */}
+        {/* ROW 3 - RIGHT: "ads." CHARCOAL BOX OVERLAPPING SLAB (x: 1060, y: 615) */}
         {/* ===================================================================== */}
         <div
           className="act1-ads-slab absolute flex items-center justify-center bg-[#2B2B2B] border border-white/10"
           style={{
-            left: 1045,
-            top: 615, // Physically cuts 5px upward into the white slab!
-            width: 805,
-            height: 420,
+            left: 1060,
+            top: 615, // Cuts 10px upward into the agencies slab!
+            width: 784,
+            height: 425,
             zIndex: 4,
             overflow: 'hidden',
           }}
         >
           <svg
-            viewBox="0 0 805 420"
-            className="act1-ads-word w-full h-full block"
+            viewBox="0 0 784 425"
+            width="784"
+            height="425"
+            className="act1-ads-word block"
             style={{ overflow: 'visible' }}
           >
             <text
-              x="-10"
-              y="360"
-              fontFamily='Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-              fontStyle="italic"
+              x="20"
+              y="345"
+              fontSize="390"
               fontWeight="900"
-              fontSize="370"
+              fontStyle="italic"
               letterSpacing="-0.06em"
-              fill="#EAEAEA"
+              fontFamily='Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+              fill="#ECECEC"
             >
               ads.
             </text>
