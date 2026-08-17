@@ -49,7 +49,8 @@ export const CinematicHero: React.FC = () => {
     const ctx = gsap.context(() => {
       // Set initial states
       gsap.set('.scene-transformation', { autoAlpha: 0, y: 50, scale: 0.96 });
-      gsap.set('.consequence-text-line', { autoAlpha: 0, y: 20, filter: 'blur(8px)' });
+      gsap.set('.burn-telemetry-panel', { autoAlpha: 0, y: 30, scale: 0.9 });
+      gsap.set('.burn-ember', { autoAlpha: 0, scale: 0 });
 
       // Master Scroll Scrub Timeline (400% scroll distance for luxurious pacing)
       const tl = gsap.timeline({
@@ -64,12 +65,12 @@ export const CinematicHero: React.FC = () => {
       });
 
       // -------------------------------------------------------------
-      // ACT 1: "Most agencies run your ads." -> Dissolves on scrub
+      // ACT 1: Hook Dissolve & Fire Telemetry Emergence
       // -------------------------------------------------------------
       tl.to('.agency-char', {
         y: -30,
-        opacity: 0.15,
-        filter: 'blur(6px)',
+        opacity: 0.2,
+        filter: 'blur(5px)',
         stagger: {
           each: 0.02,
           from: 'random',
@@ -77,17 +78,23 @@ export const CinematicHero: React.FC = () => {
         duration: 1.2,
         ease: 'power2.inOut',
       })
-        // Consequence text reveals with kinetic un-blurring
-        .to('.consequence-text-line', {
+        // Reveal the Burning Ad Spend & Stagnant Inventory Visual Telemetry
+        .to('.burn-telemetry-panel', {
           autoAlpha: 1,
           y: 0,
-          filter: 'blur(0px)',
-          duration: 1,
-          ease: 'power3.out',
-        }, '-=0.4')
+          scale: 1,
+          duration: 1.2,
+          ease: 'back.out(1.5)',
+        }, '-=0.5')
+        .to('.burn-ember', {
+          autoAlpha: 1,
+          scale: 1,
+          stagger: 0.1,
+          duration: 0.8,
+        }, '-=0.8')
 
         // -------------------------------------------------------------
-        // ACT 2: Full Transformation to "We SELL-OUT your project"
+        // ACT 2: Transition from Hook to the Solution Stage
         // -------------------------------------------------------------
         .to('.scene-agency-hook', {
           autoAlpha: 0,
@@ -125,15 +132,15 @@ export const CinematicHero: React.FC = () => {
         ref={stageRef}
         className="relative w-full h-screen min-h-[640px] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-20 py-4 overflow-hidden"
       >
-        {/* Deep Luxury Architectural Backdrop with Vignette */}
+        {/* Deep Luxury Architectural Backdrop with High Visibility */}
         <div className="absolute inset-0 z-0">
           <img
             src="/cinematic_luxury_tower.jpg"
             alt="Luxury Architecture"
-            className="w-full h-full object-cover opacity-20 filter brightness-75 scale-105"
+            className="w-full h-full object-cover opacity-45 filter brightness-90 contrast-105 scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0B0F17]/90 via-[#0B0F17]/70 to-[#0B0F17]/95" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.08)_0%,transparent_70%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0B0F17]/70 via-[#0B0F17]/50 to-[#0B0F17]/90" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.12)_0%,transparent_70%)]" />
         </div>
 
         {/* Ambient Subtle Grid Pattern Overlay */}
@@ -146,31 +153,61 @@ export const CinematicHero: React.FC = () => {
         />
 
         {/* ========================================================================= */}
-        {/* ACT 1: KINETIC HOOK STAGE (Pure Typographic Artistry)                     */}
+        {/* ACT 1: KINETIC HOOK STAGE (Pure Typographic Artistry + Fire Visuals)      */}
         {/* ========================================================================= */}
         <div className="scene-agency-hook absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-          {/* Subtle Ambient Pulse Aura */}
-          <div className="w-2 h-2 rounded-full bg-[#F5B800] animate-beacon mb-6 shadow-[0_0_20px_#F5B800]" />
-
           {/* Main Huge Kinetic Headline */}
           <h1 className="text-[clamp(2.8rem,6.8vw,6.4rem)] font-black text-white tracking-tight leading-[1.06] max-w-5xl">
             <SplitChars
               text="Most agencies run your ads."
-              className="text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.8)]"
+              className="text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]"
               charClassName="agency-char inline-block text-white transition-all duration-300"
             />
           </h1>
 
-          {/* Consequence Subtext: Kinetic Un-blurring Reveal */}
-          <div className="consequence-text-line mt-8 max-w-2xl px-6 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl">
-            <p className="text-[clamp(1rem,1.6vw,1.35rem)] font-medium text-gray-300 tracking-wide">
-              Burning ad spend on junk enquiries while <span className="text-[#F5B800] font-bold">inventory sits stagnant</span>.
-            </p>
+          {/* VISUAL REPRESENTATION: Burning Ad Spend & Stagnant Inventory HUD */}
+          <div className="burn-telemetry-panel mt-8 flex flex-col items-center gap-4 max-w-3xl pointer-events-auto">
+            {/* Visual Diagnostic Metric Badges */}
+            <div className="flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
+              {/* Flame Ad Burn Metric */}
+              <div className="flex items-center gap-2.5 bg-red-950/70 border border-red-500/40 backdrop-blur-md px-4 py-2 rounded-2xl shadow-[0_0_25px_rgba(239,68,68,0.25)]">
+                <span className="text-lg animate-pulse">🔥</span>
+                <div className="flex flex-col text-left">
+                  <span className="text-[11px] font-extrabold text-red-300 uppercase tracking-wider">Ad Spend Burn</span>
+                  <span className="text-[13px] font-black text-white">$45,000+ / mo</span>
+                </div>
+              </div>
+
+              {/* Junk Lead Ratio */}
+              <div className="flex items-center gap-2.5 bg-amber-950/70 border border-amber-500/40 backdrop-blur-md px-4 py-2 rounded-2xl shadow-[0_0_25px_rgba(245,158,11,0.25)]">
+                <span className="text-lg">📉</span>
+                <div className="flex flex-col text-left">
+                  <span className="text-[11px] font-extrabold text-amber-300 uppercase tracking-wider">Junk Enquiries</span>
+                  <span className="text-[13px] font-black text-white">94.2% Unqualified</span>
+                </div>
+              </div>
+
+              {/* Stagnant Inventory Lock */}
+              <div className="flex items-center gap-2.5 bg-slate-900/80 border border-slate-600/50 backdrop-blur-md px-4 py-2 rounded-2xl shadow-lg">
+                <span className="text-lg">🔒</span>
+                <div className="flex flex-col text-left">
+                  <span className="text-[11px] font-extrabold text-slate-300 uppercase tracking-wider">Unsold Inventory</span>
+                  <span className="text-[13px] font-black text-white">184 Units Stagnant</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Kinetic Consequence Statement */}
+            <div className="px-6 py-2.5 rounded-full bg-black/60 border border-red-500/30 backdrop-blur-md">
+              <p className="text-[clamp(0.95rem,1.4vw,1.2rem)] font-semibold text-gray-200">
+                Burning ad spend on junk enquiries while <span className="text-[#F5B800] font-bold">inventory sits stagnant</span>.
+              </p>
+            </div>
           </div>
 
           {/* Scroll Cue Indicator */}
-          <div className="mt-12 flex items-center gap-2.5 text-[11px] font-bold tracking-widest uppercase text-gray-400 bg-black/40 border border-white/10 px-4 py-2 rounded-full backdrop-blur-md">
-            <span>Scroll to explore the Sell-Out Model</span>
+          <div className="mt-10 flex items-center gap-2.5 text-[11px] font-bold tracking-widest uppercase text-gray-400 bg-black/50 border border-white/10 px-4 py-2 rounded-full backdrop-blur-md">
+            <span>Scroll to reveal the Sell-Out Partner Model</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5B800" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce">
               <line x1="12" y1="5" x2="12" y2="19" />
               <polyline points="19 12 12 19 5 12" />

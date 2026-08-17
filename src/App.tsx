@@ -16,7 +16,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen bg-white text-gray-900 flex flex-col selection:bg-[#F5B800] selection:text-gray-950">
-      <Navbar />
+      <Navbar isDarkVariant={mode === 'cinematic'} />
 
       <main className="w-full flex flex-col">
         {mode === 'cinematic' ? (
