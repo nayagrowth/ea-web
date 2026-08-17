@@ -1,32 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { EaLogo, ChevronDownIcon, ArrowRightIcon } from './Icons';
 
 export const Navbar: React.FC<{ isDarkVariant?: boolean }> = ({ isDarkVariant = false }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 40) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const isDarkTheme = isDarkVariant && !isScrolled;
 
   return (
     <header
       className={`fixed top-0 left-0 w-full h-[64px] lg:h-[68px] flex items-center px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-20 z-50 transition-all duration-300 ${
-        isDarkTheme
-          ? 'bg-gradient-to-b from-[#0B0F17]/80 to-transparent border-transparent'
-          : isScrolled
-          ? 'bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-xs'
-          : 'bg-transparent'
+        isDarkVariant
+          ? 'bg-[#0B0F17]/70 backdrop-blur-md border-b border-white/10'
+          : 'bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-xs'
       }`}
     >
       <div className="w-full flex items-center justify-between">
@@ -36,14 +19,14 @@ export const Navbar: React.FC<{ isDarkVariant?: boolean }> = ({ isDarkVariant = 
           <div className="flex flex-col leading-none">
             <span
               className={`font-extrabold text-[17px] sm:text-[18px] tracking-tight transition-colors ${
-                isDarkTheme ? 'text-white' : 'text-gray-900'
+                isDarkVariant ? 'text-white' : 'text-gray-900'
               }`}
             >
               estate
             </span>
             <span
               className={`font-extrabold text-[17px] sm:text-[18px] tracking-tight transition-colors ${
-                isDarkTheme ? 'text-white' : 'text-gray-900'
+                isDarkVariant ? 'text-white' : 'text-gray-900'
               }`}
             >
               autopilots
@@ -51,12 +34,12 @@ export const Navbar: React.FC<{ isDarkVariant?: boolean }> = ({ isDarkVariant = 
           </div>
         </a>
 
-        {/* Minimal Transparent Desktop Navigation */}
+        {/* Minimal Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-6 xl:gap-8" aria-label="Main Navigation">
           <a
             href="#what-we-do"
             className={`inline-flex items-center gap-1.5 text-[13.5px] font-semibold transition-colors ${
-              isDarkTheme ? 'text-gray-300 hover:text-[#F5B800]' : 'text-gray-800 hover:text-[#D99A00]'
+              isDarkVariant ? 'text-gray-300 hover:text-[#F5B800]' : 'text-gray-800 hover:text-[#D99A00]'
             }`}
           >
             <span>What We Do</span>
@@ -65,7 +48,7 @@ export const Navbar: React.FC<{ isDarkVariant?: boolean }> = ({ isDarkVariant = 
           <a
             href="#how-it-works"
             className={`inline-flex items-center gap-1.5 text-[13.5px] font-semibold transition-colors ${
-              isDarkTheme ? 'text-gray-300 hover:text-[#F5B800]' : 'text-gray-800 hover:text-[#D99A00]'
+              isDarkVariant ? 'text-gray-300 hover:text-[#F5B800]' : 'text-gray-800 hover:text-[#D99A00]'
             }`}
           >
             <span>How It Works</span>
@@ -74,7 +57,7 @@ export const Navbar: React.FC<{ isDarkVariant?: boolean }> = ({ isDarkVariant = 
           <a
             href="#results"
             className={`text-[13.5px] font-semibold transition-colors ${
-              isDarkTheme ? 'text-gray-300 hover:text-[#F5B800]' : 'text-gray-800 hover:text-[#D99A00]'
+              isDarkVariant ? 'text-gray-300 hover:text-[#F5B800]' : 'text-gray-800 hover:text-[#D99A00]'
             }`}
           >
             Results
@@ -82,7 +65,7 @@ export const Navbar: React.FC<{ isDarkVariant?: boolean }> = ({ isDarkVariant = 
           <a
             href="#about-us"
             className={`text-[13.5px] font-semibold transition-colors ${
-              isDarkTheme ? 'text-gray-300 hover:text-[#F5B800]' : 'text-gray-800 hover:text-[#D99A00]'
+              isDarkVariant ? 'text-gray-300 hover:text-[#F5B800]' : 'text-gray-800 hover:text-[#D99A00]'
             }`}
           >
             About Us
@@ -90,7 +73,7 @@ export const Navbar: React.FC<{ isDarkVariant?: boolean }> = ({ isDarkVariant = 
           <a
             href="#resources"
             className={`inline-flex items-center gap-1.5 text-[13.5px] font-semibold transition-colors ${
-              isDarkTheme ? 'text-gray-300 hover:text-[#F5B800]' : 'text-gray-800 hover:text-[#D99A00]'
+              isDarkVariant ? 'text-gray-300 hover:text-[#F5B800]' : 'text-gray-800 hover:text-[#D99A00]'
             }`}
           >
             <span>Resources</span>
@@ -113,7 +96,7 @@ export const Navbar: React.FC<{ isDarkVariant?: boolean }> = ({ isDarkVariant = 
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className={`lg:hidden p-2 rounded-lg transition-colors ${
-              isDarkTheme ? 'text-gray-200 hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100'
+              isDarkVariant ? 'text-gray-200 hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100'
             }`}
             aria-label="Toggle navigation menu"
           >
@@ -137,12 +120,14 @@ export const Navbar: React.FC<{ isDarkVariant?: boolean }> = ({ isDarkVariant = 
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden absolute top-[64px] left-0 w-full bg-[#0B0F17] border-b border-white/10 p-6 flex flex-col gap-4 shadow-2xl z-50">
-          <a href="#what-we-do" onClick={() => setMobileMenuOpen(false)} className="text-[15px] font-semibold text-gray-200">What We Do</a>
-          <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="text-[15px] font-semibold text-gray-200">How It Works</a>
-          <a href="#results" onClick={() => setMobileMenuOpen(false)} className="text-[15px] font-semibold text-gray-200">Results</a>
-          <a href="#about-us" onClick={() => setMobileMenuOpen(false)} className="text-[15px] font-semibold text-gray-200">About Us</a>
-          <a href="#resources" onClick={() => setMobileMenuOpen(false)} className="text-[15px] font-semibold text-gray-200">Resources</a>
+        <div className={`lg:hidden absolute top-[64px] left-0 w-full p-6 flex flex-col gap-4 shadow-2xl z-50 ${
+          isDarkVariant ? 'bg-[#0B0F17] border-b border-white/10 text-gray-200' : 'bg-white border-b border-gray-200 text-gray-800'
+        }`}>
+          <a href="#what-we-do" onClick={() => setMobileMenuOpen(false)} className="text-[15px] font-semibold">What We Do</a>
+          <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="text-[15px] font-semibold">How It Works</a>
+          <a href="#results" onClick={() => setMobileMenuOpen(false)} className="text-[15px] font-semibold">Results</a>
+          <a href="#about-us" onClick={() => setMobileMenuOpen(false)} className="text-[15px] font-semibold">About Us</a>
+          <a href="#resources" onClick={() => setMobileMenuOpen(false)} className="text-[15px] font-semibold">Resources</a>
         </div>
       )}
     </header>
