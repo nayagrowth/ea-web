@@ -39,94 +39,103 @@ export const CinematicHero: React.FC = () => {
 
     const ctx = gsap.context(() => {
       // Set initial states
-      gsap.set('.act2-statement', { autoAlpha: 0, scale: 0.85 });
-      gsap.set('.act3-axiom', { autoAlpha: 0, scale: 0.9, y: 40 });
-      gsap.set('.telemetry-tag', { autoAlpha: 0, scale: 0.6, rotateZ: -10 });
+      gsap.set('.act2-statement', { autoAlpha: 0, scale: 0.9, y: 30 });
+      gsap.set('.act3-timeline', { autoAlpha: 0, scale: 0.9, y: 40 });
+      gsap.set('.timeline-laser-path', { strokeDashoffset: 800 });
+      gsap.set('.timeline-tick', { autoAlpha: 0, scale: 0.5 });
 
-      // Master 500% Scroll Scrub Timeline
+      // Master 450% Scroll Scrub Timeline for 3 Pure Acts
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=500%',
+          end: '+=450%',
           pin: stageRef.current,
-          scrub: 1.2,
+          scrub: 1.1,
           anticipatePin: 1,
           onUpdate: (self) => setScrollProgress(self.progress),
         },
       });
 
       // -------------------------------------------------------------
-      // ACT 1: "Most agencies run your ads." -> 3D Spatial Shatter
+      // ACT 1 -> ACT 2: "Most agencies run your ads." 3D Shatter
       // -------------------------------------------------------------
       tl.to('.trap-char', {
-        z: () => gsap.utils.random(100, 600),
-        x: () => gsap.utils.random(-250, 250),
-        y: () => gsap.utils.random(-200, 200),
-        rotateX: () => gsap.utils.random(-90, 90),
-        rotateY: () => gsap.utils.random(-90, 90),
-        rotateZ: () => gsap.utils.random(-45, 45),
+        z: () => gsap.utils.random(150, 600),
+        x: () => gsap.utils.random(-200, 200),
+        y: () => gsap.utils.random(-180, 180),
+        rotateX: () => gsap.utils.random(-80, 80),
+        rotateY: () => gsap.utils.random(-80, 80),
         opacity: 0,
-        filter: 'blur(16px)',
+        filter: 'blur(14px)',
         stagger: {
           each: 0.02,
           from: 'random',
         },
-        duration: 1.5,
+        duration: 1.4,
         ease: 'power3.inOut',
       })
         .to('.act1-container', {
           autoAlpha: 0,
-          duration: 0.4,
-        }, '-=0.3')
+          duration: 0.3,
+        }, '-=0.2')
 
         // -------------------------------------------------------------
-        // ACT 2: "We SELL-OUT your real estate project..." Golden Inscription
+        // ACT 2: "We sell-out your real estate project"
         // -------------------------------------------------------------
         .to('.act2-statement', {
           autoAlpha: 1,
           scale: 1,
-          duration: 1.2,
+          y: 0,
+          duration: 1.3,
           ease: 'power3.out',
         })
         .fromTo(
           '.sellout-char',
-          { y: 90, opacity: 0, rotateX: -60, filter: 'blur(8px)' },
+          { y: 80, opacity: 0, rotateX: -50, filter: 'blur(8px)' },
           { y: 0, opacity: 1, rotateX: 0, filter: 'blur(0px)', stagger: 0.02, duration: 1.4, ease: 'back.out(1.4)' },
-          '-=0.8'
+          '-=0.9'
         )
-        .to('.telemetry-tag', {
-          autoAlpha: 1,
-          scale: 1,
-          rotateZ: 0,
-          stagger: 0.15,
-          duration: 0.9,
-          ease: 'back.out(1.6)',
-        }, '-=0.6')
 
         // -------------------------------------------------------------
-        // ACT 3: The Velocity Axiom Crescendo
+        // ACT 2 -> ACT 3: Transition to "Within your planned timeline."
         // -------------------------------------------------------------
         .to('.act2-statement', {
           autoAlpha: 0,
-          scale: 1.15,
+          scale: 0.95,
+          y: -50,
           filter: 'blur(10px)',
           duration: 1.2,
           ease: 'power2.inOut',
-        }, '+=0.5')
-        .to('.act3-axiom', {
+        }, '+=0.4')
+
+        // ACT 3: Emergence of the Planned Timeline Climax
+        .to('.act3-timeline', {
           autoAlpha: 1,
           scale: 1,
           y: 0,
           duration: 1.4,
           ease: 'power3.out',
-        }, '-=0.6')
+        }, '-=0.5')
         .fromTo(
-          '.axiom-stat-number',
-          { scale: 0.8, opacity: 0 },
-          { scale: 1, opacity: 1, stagger: 0.15, duration: 1, ease: 'elastic.out(1, 0.5)' },
-          '-=0.8'
-        );
+          '.timeline-char',
+          { y: 80, opacity: 0, rotateX: -40, filter: 'blur(8px)' },
+          { y: 0, opacity: 1, rotateX: 0, filter: 'blur(0px)', stagger: 0.02, duration: 1.4, ease: 'power3.out' },
+          '-=0.9'
+        )
+        // Laser Timeline Sweep
+        .to('.timeline-laser-path', {
+          strokeDashoffset: 0,
+          duration: 1.8,
+          ease: 'power2.out',
+        }, '-=1.2')
+        .to('.timeline-tick', {
+          autoAlpha: 1,
+          scale: 1,
+          stagger: 0.2,
+          duration: 0.8,
+          ease: 'back.out(1.7)',
+        }, '-=1.2');
     }, containerRef);
 
     return () => ctx.revert();
@@ -156,7 +165,7 @@ export const CinematicHero: React.FC = () => {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.15)_0%,transparent_70%)]" />
         </div>
 
-        {/* Ambient High-Tech Blueprint Coordinates Overlay */}
+        {/* Ambient Subtle Grid */}
         <div
           className="absolute inset-0 z-1 pointer-events-none opacity-20"
           style={{
@@ -166,7 +175,7 @@ export const CinematicHero: React.FC = () => {
         />
 
         {/* ========================================================================= */}
-        {/* ACT 1: THE CONVENTIONAL TRAP ("Most agencies run your ads.")               */}
+        {/* ACT 1: THE INITIAL HOOK ("Most agencies run your ads.")                    */}
         {/* ========================================================================= */}
         <div className="act1-container absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
           <div className="max-w-5xl flex flex-col items-center justify-center gap-2">
@@ -178,10 +187,9 @@ export const CinematicHero: React.FC = () => {
             </h1>
           </div>
 
-          {/* Minimal Kinetic Scroll Guide */}
           <div className="mt-14 flex items-center gap-2.5 text-[11px] font-extrabold tracking-widest uppercase text-gray-400 bg-black/60 border border-white/10 px-5 py-2.5 rounded-full backdrop-blur-md shadow-2xl">
             <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-ping" />
-            <span>Scroll to shatter the agency model</span>
+            <span>Scroll to continue</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5B800" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce ml-1">
               <line x1="12" y1="5" x2="12" y2="19" /><polyline points="19 12 12 19 5 12" />
             </svg>
@@ -189,106 +197,78 @@ export const CinematicHero: React.FC = () => {
         </div>
 
         {/* ========================================================================= */}
-        {/* ACT 2: THE GOLDEN SELL-OUT TRANSFORMATION                                  */}
+        {/* ACT 2: THE SELL-OUT PROPOSITION ("We sell-out your real estate project")  */}
         {/* ========================================================================= */}
         <div className="act2-statement absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-          {/* Floating Orbit Telemetry Tags */}
-          <div className="flex items-center justify-center gap-3 sm:gap-4 flex-wrap mb-6">
-            <div className="telemetry-tag inline-flex items-center gap-2 bg-[#F5B800]/15 border border-[#F5B800]/40 text-[#F5B800] px-4 py-1.5 rounded-full text-[12px] font-black tracking-widest uppercase backdrop-blur-md shadow-[0_0_20px_rgba(245,184,0,0.2)]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#F5B800] animate-pulse" />
-              100% Project Sell-Out Partner
-            </div>
-            <div className="telemetry-tag inline-flex items-center gap-2 bg-white/5 border border-white/15 text-gray-200 px-4 py-1.5 rounded-full text-[12px] font-bold tracking-widest uppercase backdrop-blur-md">
-              Zero Booking Commission
-            </div>
-          </div>
-
-          {/* Massive Liquid Gold Headline */}
-          <h2 className="text-[clamp(2.6rem,6.8vw,6.5rem)] font-black text-white tracking-tight leading-[1.06] max-w-6xl drop-shadow-[0_10px_50px_rgba(0,0,0,0.95)]">
+          <h2 className="text-[clamp(3rem,7.5vw,7.2rem)] font-black text-white tracking-tight leading-[1.04] max-w-6xl drop-shadow-[0_10px_50px_rgba(0,0,0,0.95)]">
             <span className="block">
               <Split3D text="We" charClass="sellout-char inline-block" />{' '}
               <span className="inline-block text-[#F5B800] glow-gold-cinematic font-serif italic font-normal tracking-normal mx-2">
                 <Split3D text="sell-out" charClass="sellout-char inline-block text-[#F5B800]" />
               </span>
             </span>
-            <span className="block mt-1">
+            <span className="block mt-2">
               <Split3D text="your real estate project" charClass="sellout-char inline-block text-white" />
             </span>
-            <span className="block text-gray-400 font-extrabold text-[clamp(1.8rem,4.5vw,4.2rem)] mt-2">
-              <Split3D text="within your planned timeline." charClass="sellout-char inline-block text-gray-400" />
-            </span>
           </h2>
-
-          {/* Velocity Metrics Pill */}
-          <div className="mt-8 flex items-center gap-4 bg-black/60 border border-[#F5B800]/30 px-6 py-3 rounded-2xl backdrop-blur-md shadow-2xl">
-            <div className="flex items-center gap-2">
-              <span className="text-lg">⚡</span>
-              <span className="text-sm font-black text-white">4.2x Faster Absorption</span>
-            </div>
-            <span className="text-gray-600">&bull;</span>
-            <div className="flex items-center gap-2">
-              <span className="text-lg">🎯</span>
-              <span className="text-sm font-black text-[#F5B800]">99.4% Buyer Conviction</span>
-            </div>
-          </div>
         </div>
 
         {/* ========================================================================= */}
-        {/* ACT 3: THE HIGH-IMPACT VELOCITY AXIOM CRESCENDO                           */}
+        {/* ACT 3: THE TIMELINE PRECISION ("Within your planned timeline.")           */}
         {/* ========================================================================= */}
-        <div className="act3-axiom absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-          <div className="max-w-5xl flex flex-col items-center justify-center gap-6">
-            {/* Stat Counters Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 w-full">
-              <div className="axiom-stat-number flex flex-col items-center bg-white/5 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-2xl">
-                <span className="text-[clamp(2.8rem,5vw,4.8rem)] font-black text-[#F5B800] leading-none tracking-tight">
-                  459+
-                </span>
-                <span className="text-[13px] font-extrabold uppercase tracking-widest text-gray-300 mt-2">
-                  Projects Delivered
-                </span>
-              </div>
+        <div className="act3-timeline absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+          <div className="max-w-6xl flex flex-col items-center justify-center gap-6">
+            {/* Act 3 Main Statement */}
+            <h2 className="text-[clamp(3rem,7.5vw,7.2rem)] font-black text-white tracking-tight leading-[1.04] drop-shadow-[0_10px_50px_rgba(0,0,0,0.95)]">
+              <Split3D
+                text="Within your planned timeline."
+                charClass="timeline-char inline-block text-white"
+              />
+            </h2>
 
-              <div className="axiom-stat-number flex flex-col items-center bg-white/5 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-2xl">
-                <span className="text-[clamp(2.8rem,5vw,4.8rem)] font-black text-white leading-none tracking-tight">
-                  0%
-                </span>
-                <span className="text-[13px] font-extrabold uppercase tracking-widest text-gray-300 mt-2">
-                  Booking Commission
-                </span>
-              </div>
+            {/* Precision Laser Timeline Trajectory Sweep */}
+            <div className="relative w-full max-w-4xl h-[100px] mt-4 flex items-center justify-center">
+              <svg viewBox="0 0 800 100" className="w-full h-full overflow-visible" fill="none">
+                {/* Laser Background Track */}
+                <line x1="50" y1="50" x2="750" y2="50" stroke="#1E293B" strokeWidth="2" strokeDasharray="6 6" />
 
-              <div className="axiom-stat-number flex flex-col items-center bg-white/5 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-2xl">
-                <span className="text-[clamp(2.8rem,5vw,4.8rem)] font-black text-emerald-400 leading-none tracking-tight">
-                  100%
-                </span>
-                <span className="text-[13px] font-extrabold uppercase tracking-widest text-gray-300 mt-2">
-                  Real Estate Exclusive
-                </span>
-              </div>
-            </div>
+                {/* Animated Luminous Gold Laser Path */}
+                <line
+                  x1="50"
+                  y1="50"
+                  x2="750"
+                  y2="50"
+                  stroke="#F5B800"
+                  strokeWidth="3"
+                  strokeDasharray="800"
+                  className="timeline-laser-path"
+                  strokeLinecap="round"
+                />
 
-            {/* Core Punchline */}
-            <div className="mt-4">
-              <h3 className="text-[clamp(1.6rem,3.2vw,3rem)] font-extrabold text-white tracking-tight leading-snug">
-                An enquiry is interest &mdash; <span className="text-[#F5B800] font-serif italic">not intent.</span>
-              </h3>
-              <p className="text-gray-400 text-[clamp(0.95rem,1.4vw,1.25rem)] max-w-2xl mt-2 mx-auto leading-relaxed">
-                We engineer pre-sales buyer conviction so buyers arrive at the site visit already closed.
-              </p>
-            </div>
+                {/* Milestone 1: Positioning & ICP */}
+                <g className="timeline-tick" transform="translate(100, 50)">
+                  <circle cx="0" cy="0" r="7" fill="#05070A" stroke="#F5B800" strokeWidth="2.5" />
+                  <text x="0" y="28" fill="#94A3B8" fontSize="11" fontWeight="bold" textAnchor="middle" letterSpacing="1">
+                    01 &bull; POSITIONING
+                  </text>
+                </g>
 
-            {/* Strategy Call Action Trigger */}
-            <div className="pt-4 pointer-events-auto">
-              <a
-                href="#book-strategy-session"
-                className="inline-flex items-center gap-3 bg-[#F5B800] hover:bg-[#E5AB00] text-gray-950 font-black text-sm sm:text-base px-8 py-4 rounded-2xl border border-[#D99A00] transition-all shadow-[0_0_30px_rgba(245,184,0,0.4)] active:scale-95"
-              >
-                <span>Book Your Project Sell-Out Strategy Session</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
-                </svg>
-              </a>
+                {/* Milestone 2: Pre-Sales Trust */}
+                <g className="timeline-tick" transform="translate(400, 50)">
+                  <circle cx="0" cy="0" r="7" fill="#05070A" stroke="#F5B800" strokeWidth="2.5" />
+                  <text x="0" y="28" fill="#94A3B8" fontSize="11" fontWeight="bold" textAnchor="middle" letterSpacing="1">
+                    02 &bull; BUYER TRUST
+                  </text>
+                </g>
+
+                {/* Milestone 3: 100% Planned Sell-Out */}
+                <g className="timeline-tick" transform="translate(700, 50)">
+                  <circle cx="0" cy="0" r="9" fill="#10B981" stroke="#FFFFFF" strokeWidth="2.5" className="animate-pulse" />
+                  <text x="0" y="28" fill="#10B981" fontSize="12" fontWeight="900" textAnchor="middle" letterSpacing="1">
+                    100% SELL-OUT
+                  </text>
+                </g>
+              </svg>
             </div>
           </div>
         </div>
