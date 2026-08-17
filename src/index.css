@@ -90,3 +90,30 @@
   transform-style: preserve-3d;
   transform-origin: center center;
 }
+
+/* Cinematic Text Mask & Glint Keyframes */
+@keyframes kinetic-text-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 12px rgba(245, 184, 0, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 24px rgba(245, 184, 0, 0.75));
+  }
+}
+
+.glow-gold-cinematic {
+  animation: kinetic-text-glow 4s ease-in-out infinite;
+}
+
+/* Text Masking Utilities */
+.text-mask-reveal {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
