@@ -46,8 +46,8 @@ export const CinematicHero: React.FC = () => {
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
       gsap.set('.act3-typo-block', { x: -600, opacity: 0 });
-      gsap.set('.act3-visual-graphic', { x: 400, opacity: 0, scale: 0.85 });
-      gsap.set('.act3-laser-arc', { strokeDashoffset: 1000 });
+      gsap.set('.act3-visual-graphic', { x: 400, opacity: 0, scale: 0.88 });
+      gsap.set('.act3-laser-arc', { strokeDashoffset: 1200 });
       gsap.set('.act4-stage', { autoAlpha: 0, y: 70, scale: 0.94 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
 
@@ -370,66 +370,87 @@ export const CinematicHero: React.FC = () => {
             </div>
 
             {/* Right Column: Holographic Architectural Timeline Vector Graphic */}
-            <div className="act3-visual-graphic relative w-full h-[320px] hidden sm:flex items-center justify-center">
-              <svg viewBox="0 0 500 320" className="w-full h-full overflow-visible" fill="none">
+            <div className="act3-visual-graphic relative w-full h-[360px] hidden sm:flex items-center justify-center">
+              <svg viewBox="0 0 540 340" className="w-full h-full overflow-visible" fill="none">
                 <defs>
-                  {/* Glowing Laser Gradient */}
-                  <linearGradient id="laser-arc-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.4" />
-                    <stop offset="50%" stopColor="#F5B800" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#10B981" stopOpacity="1" />
+                  {/* Glowing Laser Trajectory Gradient */}
+                  <linearGradient id="laser-arc-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#EAB308" stopOpacity="0.9" />
+                    <stop offset="45%" stopColor="#F5B800" stopOpacity="1" />
+                    <stop offset="85%" stopColor="#10B981" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#059669" stopOpacity="0.8" />
                   </linearGradient>
 
-                  {/* Radial Lens Flare */}
-                  <radialGradient id="node-flare" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#F5B800" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#F5B800" stopOpacity="0" />
-                  </radialGradient>
+                  {/* High-Intensity Radial Glow Filters */}
+                  <filter id="gold-node-glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="6" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                  <filter id="green-node-glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="8" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
                 </defs>
 
-                {/* Perspective Coordinate Grid Background */}
-                <ellipse cx="250" cy="160" rx="220" ry="120" stroke="#1E293B" strokeWidth="1" strokeDasharray="4 8" />
-                <ellipse cx="250" cy="160" rx="160" ry="85" stroke="#334155" strokeWidth="1" strokeDasharray="6 6" />
+                {/* Perspective Coordinate Grid Background Ellipses */}
+                <ellipse cx="270" cy="180" rx="240" ry="110" stroke="#1E293B" strokeWidth="1" strokeDasharray="4 8" opacity="0.4" />
+                <ellipse cx="270" cy="180" rx="180" ry="75" stroke="#334155" strokeWidth="1" strokeDasharray="6 6" opacity="0.3" />
 
                 {/* Sweeping Parabolic Trajectory Arc */}
                 <path
-                  d="M 50,250 C 120,60 380,60 450,250"
+                  d="M 40,290 C 130,40 410,40 500,290"
                   stroke="url(#laser-arc-gradient)"
-                  strokeWidth="3.5"
-                  strokeDasharray="1000"
+                  strokeWidth="4"
+                  strokeDasharray="1200"
                   className="act3-laser-arc"
                   strokeLinecap="round"
                 />
 
-                {/* Milestone Node 1: Month 01 Position */}
-                <g transform="translate(110, 150)">
-                  <circle cx="0" cy="0" r="16" fill="url(#node-flare)" opacity="0.3" />
-                  <circle cx="0" cy="0" r="5" fill="#030508" stroke="#38BDF8" strokeWidth="2.5" />
-                  <text x="0" y="-14" fill="#94A3B8" fontSize="10" fontWeight="bold" textAnchor="middle" letterSpacing="1">
+                {/* ------------------------------------------------------------- */}
+                {/* Milestone Node 1: M1 BLUEPRINT                                */}
+                {/* ------------------------------------------------------------- */}
+                <g transform="translate(108, 172)">
+                  <circle cx="0" cy="0" r="14" fill="#38BDF8" opacity="0.15" />
+                  <circle cx="0" cy="0" r="6" fill="#000000" stroke="#38BDF8" strokeWidth="2.5" />
+                  {/* Clean Offset Label to Left/Top */}
+                  <text x="-16" y="-14" fill="#94A3B8" fontSize="11" fontWeight="800" textAnchor="end" letterSpacing="1">
                     M1: BLUEPRINT
                   </text>
                 </g>
 
-                {/* Milestone Node 2: Month 02 Trust Pre-Sales */}
-                <g transform="translate(250, 105)">
-                  <circle cx="0" cy="0" r="22" fill="url(#node-flare)" opacity="0.4" />
-                  <circle cx="0" cy="0" r="6" fill="#F5B800" stroke="#FFFFFF" strokeWidth="2" />
-                  <text x="0" y="-18" fill="#F5B800" fontSize="11" fontWeight="900" textAnchor="middle" letterSpacing="1.2">
+                {/* ------------------------------------------------------------- */}
+                {/* Milestone Node 2: M2 PRE-SALES TRUST (Apex Peak)             */}
+                {/* ------------------------------------------------------------- */}
+                <g transform="translate(270, 96)">
+                  <circle cx="0" cy="0" r="22" fill="#F5B800" opacity="0.25" filter="url(#gold-node-glow)" />
+                  <circle cx="0" cy="0" r="8" fill="#F5B800" stroke="#FFFFFF" strokeWidth="2.5" />
+                  {/* Clean Elevated Header above Node */}
+                  <text x="0" y="-22" fill="#F5B800" fontSize="12" fontWeight="900" textAnchor="middle" letterSpacing="1.5">
                     M2: PRE-SALES TRUST
                   </text>
-                  <text x="0" y="24" fill="#CBD5E1" fontSize="9" fontWeight="bold" textAnchor="middle">
-                    +4.2x Absorption
+                  {/* Sub-label below Node */}
+                  <text x="0" y="28" fill="#E2E8F0" fontSize="10" fontWeight="bold" textAnchor="middle" letterSpacing="0.5">
+                    +4.2x Absorption Velocity
                   </text>
                 </g>
 
-                {/* Milestone Node 3: 100% Target Delivered */}
-                <g transform="translate(390, 150)">
-                  <circle cx="0" cy="0" r="26" fill="url(#node-flare)" opacity="0.5" className="animate-pulse" />
-                  <circle cx="0" cy="0" r="8" fill="#10B981" stroke="#FFFFFF" strokeWidth="2.5" />
-                  <text x="0" y="-16" fill="#10B981" fontSize="11" fontWeight="900" textAnchor="middle" letterSpacing="1.5">
+                {/* ------------------------------------------------------------- */}
+                {/* Milestone Node 3: 100% SOLD OUT (Delivery Target)            */}
+                {/* ------------------------------------------------------------- */}
+                <g transform="translate(432, 172)">
+                  <circle cx="0" cy="0" r="26" fill="#10B981" opacity="0.3" filter="url(#green-node-glow)" />
+                  <circle cx="0" cy="0" r="9" fill="#10B981" stroke="#FFFFFF" strokeWidth="2.5" />
+                  {/* Clean Offset Header to Right/Top */}
+                  <text x="18" y="-14" fill="#10B981" fontSize="12" fontWeight="900" textAnchor="start" letterSpacing="1.2">
                     100% SOLD OUT
                   </text>
-                  <text x="0" y="24" fill="#6EE7B7" fontSize="9" fontWeight="bold" textAnchor="middle">
+                  <text x="18" y="24" fill="#6EE7B7" fontSize="10" fontWeight="bold" textAnchor="start">
                     On Planned Date
                   </text>
                 </g>

@@ -1,0 +1,16 @@
+ASSET PRIORITY
+
+FIRST CHOICE SUBJECT:
+01_PRIMARY_HERO_ASSETS/01_PRIMARY_Dipak_Seated_Armchair_Transparent.png
+
+FULL-BODY ALTERNATIVE:
+01_PRIMARY_HERO_ASSETS/02_FULL_BODY_Dipak_Standing_Transparent.png
+
+MAIN HERO VISUAL/COPY REFERENCE:
+03_REFERENCE_HERO_SCREENS/01_REFERENCE_Sales_Is_The_Transfer_Of_Certainty.png
+
+SECONDARY COMPOSITION REFERENCE:
+03_REFERENCE_HERO_SCREENS/02_REFERENCE_Why_Should_You_Know_Dipak_Vishwakarma.png
+
+OTHER CUTOUTS:
+Use only if the primary seated composition does not fit the final responsive layout.
