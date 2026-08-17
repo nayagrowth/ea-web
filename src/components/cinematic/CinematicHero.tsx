@@ -47,7 +47,7 @@ export const CinematicHero: React.FC = () => {
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
       gsap.set('.act3-typo-block', { x: -600, opacity: 0 });
-      gsap.set('.act3-mesh-wrap', { x: 500, opacity: 0, scale: 0.9 });
+      gsap.set('.act3-mesh-wrap', { opacity: 0, scale: 0.95 });
       gsap.set('.act4-stage', { autoAlpha: 0, y: 70, scale: 0.94 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
 
@@ -172,22 +172,21 @@ export const CinematicHero: React.FC = () => {
           duration: 0.1,
         })
 
-        // Act 3 sweeps in with Left Monumental Typography & Right 3D Wireframe Mesh
+        // Act 3 sweeps in with Left Monumental Typography & Organic Background Mesh
         .to('.act3-stage', {
           autoAlpha: 1,
           duration: 0.1,
         }, '-=0.4')
+        .to('.act3-mesh-wrap', {
+          opacity: 1,
+          scale: 1,
+          duration: 1.6,
+          ease: 'power3.out',
+        }, '-=0.3')
         .to('.act3-typo-block', {
           x: 0,
           opacity: 1,
           duration: 1.4,
-          ease: 'power3.out',
-        }, '-=0.3')
-        .to('.act3-mesh-wrap', {
-          x: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 1.6,
           ease: 'power3.out',
         }, '-=1.2')
 
@@ -207,7 +206,7 @@ export const CinematicHero: React.FC = () => {
           ease: 'power2.in',
         })
         .to('.act3-mesh-wrap', {
-          x: -600,
+          x: -400,
           opacity: 0,
           filter: 'blur(12px)',
           duration: 0.9,
@@ -330,19 +329,24 @@ export const CinematicHero: React.FC = () => {
         </div>
 
         {/* ===================================================================== */}
-        {/* ACT 3: MONUMENTAL TYPOGRAPHIC LOCKUP & 3D ARCHITECTURAL MESH           */}
+        {/* ACT 3: FREE-FLOWING 3D ARCHITECTURAL MESH & MONUMENTAL TYPOGRAPHY     */}
         {/* ===================================================================== */}
-        <div className="act3-stage absolute inset-0 z-20 w-full h-full flex items-center justify-center px-6 sm:px-12 lg:px-16 pointer-events-none">
-          <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center">
-            {/* Left Column: Unified Left-Aligned Monumental Typography */}
-            <div className="act3-typo-block flex flex-col text-left">
+        <div className="act3-stage absolute inset-0 z-20 w-full h-full flex items-center justify-center pointer-events-none overflow-hidden">
+          {/* Free-Flowing Borderless 3D Architectural Mesh in Background */}
+          <div className="act3-mesh-wrap absolute inset-0 z-0 pointer-events-none">
+            <ArchitecturalMesh progress={scrollProgress} />
+          </div>
+
+          {/* Foreground Left-Aligned Monumental Typography */}
+          <div className="relative z-10 w-full max-w-7xl px-6 sm:px-12 lg:px-16 flex flex-col justify-center text-left">
+            <div className="act3-typo-block flex flex-col max-w-2xl text-left">
               {/* Line 1: WITHIN YOUR (Uppercase Bold) */}
-              <h2 className="text-[clamp(3rem,6.8vw,6.4rem)] font-black text-white tracking-[-0.035em] leading-[0.96] uppercase drop-shadow-[0_10px_50px_rgba(0,0,0,0.95)]">
+              <h2 className="text-[clamp(3.2rem,7.2vw,6.8rem)] font-black text-white tracking-[-0.035em] leading-[0.96] uppercase drop-shadow-[0_10px_50px_rgba(0,0,0,0.95)]">
                 Within your
               </h2>
 
               {/* Line 2: planned timeline. (Luminous Liquid Gold Serif Italic) */}
-              <h2 className="text-[clamp(3.4rem,7.8vw,7.4rem)] font-black tracking-[-0.04em] leading-[0.96] mt-2 drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
+              <h2 className="text-[clamp(3.5rem,8.2vw,7.8rem)] font-black tracking-[-0.04em] leading-[0.96] mt-2 drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
                 <span className="text-[#F5B800] glow-gold-cinematic font-serif italic font-normal tracking-normal">
                   planned timeline.
                 </span>
@@ -362,11 +366,6 @@ export const CinematicHero: React.FC = () => {
                   </span>
                 </div>
               </div>
-            </div>
-
-            {/* Right Column: 3D Kinetic Topographic Architectural Mesh */}
-            <div className="act3-mesh-wrap relative w-full h-[380px] hidden sm:flex items-center justify-center rounded-3xl overflow-hidden border border-white/10 bg-black/40 backdrop-blur-md shadow-2xl">
-              <ArchitecturalMesh progress={scrollProgress} />
             </div>
           </div>
         </div>
