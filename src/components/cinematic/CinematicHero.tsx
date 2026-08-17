@@ -41,13 +41,15 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // 1. Initial State Setup (Zero overlap / 100% clean isolation)
+      // 1. Initial State Setup
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
+      gsap.set('.act3-top-left', { x: -600, opacity: 0 });
+      gsap.set('.act3-center-hero', { x: -800, opacity: 0 });
+      gsap.set('.act3-schedule-node', { x: -400, opacity: 0 });
       gsap.set('.act4-stage', { autoAlpha: 0, y: 70, scale: 0.94 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
-      gsap.set('.act3-schedule-node', { autoAlpha: 0, y: 20 });
 
       // 2. Master Scrubbed Timeline for 4 Acts (Total 800% scrub distance)
       const tl = gsap.timeline({
@@ -142,62 +144,56 @@ export const CinematicHero: React.FC = () => {
         })
 
         // =====================================================================
-        // ACT 2 STAGGERED OUTRO: Line-by-Line Left-Side Acceleration
+        // ACT 2 OUTRO & ACT 3 ENTRANCE: Seamless Left-to-Right Kinetic Flow
         // =====================================================================
+        // Act 2 sweeps rapidly to the left
         .to('.act2-line-1', {
-          x: -600,
+          x: -800,
           opacity: 0,
           filter: 'blur(12px)',
           duration: 1.0,
           ease: 'power3.in',
         })
         .to('.act2-line-2', {
-          x: -600,
+          x: -800,
           opacity: 0,
           filter: 'blur(12px)',
           duration: 1.0,
           ease: 'power3.in',
-        }, '-=0.8')
+        }, '-=0.85')
         .to('.act2-line-3', {
-          x: -600,
+          x: -800,
           opacity: 0,
           filter: 'blur(12px)',
           duration: 1.0,
           ease: 'power3.in',
-        }, '-=0.8')
+        }, '-=0.85')
         .to('.act2-stage', {
           autoAlpha: 0,
           duration: 0.1,
         })
 
-        // =====================================================================
-        // ACT 3 (46% to 74%): "Within your" (Top-Left) + "planned timeline." (Center)
-        // =====================================================================
+        // Act 3 immediately sweeps in from left to right with matching velocity
         .to('.act3-stage', {
           autoAlpha: 1,
           duration: 0.1,
-        })
-        .fromTo(
-          '.timeline-char-stream',
-          {
-            x: -350,
-            opacity: 0,
-            filter: 'blur(12px)',
-          },
-          {
-            x: 0,
-            opacity: 1,
-            filter: 'blur(0px)',
-            stagger: 0.02,
-            duration: 1.6,
-            ease: 'power3.out',
-          },
-          '-=0.1'
-        )
-        .to('.act3-schedule-node', {
-          autoAlpha: 1,
-          y: 0,
+        }, '-=0.4')
+        .to('.act3-top-left', {
+          x: 0,
+          opacity: 1,
           duration: 1.2,
+          ease: 'power3.out',
+        }, '-=0.3')
+        .to('.act3-center-hero', {
+          x: 0,
+          opacity: 1,
+          duration: 1.4,
+          ease: 'power3.out',
+        }, '-=1.0')
+        .to('.act3-schedule-node', {
+          x: 0,
+          opacity: 1,
+          duration: 1.0,
           ease: 'power3.out',
         }, '-=1.0')
 
@@ -208,21 +204,28 @@ export const CinematicHero: React.FC = () => {
           ease: 'none',
         })
 
-        // ACT 3 OUTRO: Words sweep off to the left
-        .to('.timeline-char-stream', {
-          x: -450,
+        // ACT 3 OUTRO: Sweeps rapidly to the left
+        .to('.act3-top-left', {
+          x: -700,
           opacity: 0,
           filter: 'blur(12px)',
-          stagger: 0.012,
-          duration: 1.1,
+          duration: 0.9,
           ease: 'power2.in',
         })
+        .to('.act3-center-hero', {
+          x: -900,
+          opacity: 0,
+          filter: 'blur(12px)',
+          duration: 1.0,
+          ease: 'power2.in',
+        }, '-=0.8')
         .to('.act3-schedule-node', {
-          autoAlpha: 0,
-          y: 15,
+          x: -600,
+          opacity: 0,
+          filter: 'blur(8px)',
           duration: 0.8,
           ease: 'power2.in',
-        }, '<')
+        }, '-=0.8')
         .to('.act3-stage', {
           autoAlpha: 0,
           duration: 0.1,
@@ -343,25 +346,25 @@ export const CinematicHero: React.FC = () => {
         {/* ACT 3: "Within your" (Top-Left) & "planned timeline." (Center Zone)    */}
         {/* ===================================================================== */}
         <div className="act3-stage absolute inset-0 z-20 w-full h-full flex flex-col justify-between p-6 sm:p-10 lg:p-16 pointer-events-none">
-          {/* Top Row: Left-Upper Corner Headline "Within your" */}
-          <div className="w-full flex items-start justify-start pl-2 sm:pl-8">
+          {/* Top Row: Left-Upper Corner Headline "Within your" (Swept from Left) */}
+          <div className="act3-top-left w-full flex items-start justify-start pl-2 sm:pl-8">
             <h2 className="text-[clamp(2.4rem,5.5vw,5.2rem)] font-black text-white tracking-[-0.03em] leading-none uppercase">
-              <SpatialChars text="Within your" charClass="timeline-char-stream inline-block text-white" />
+              Within your
             </h2>
           </div>
 
-          {/* Middle/Center Row: Bold Hero Inscription "planned timeline." */}
-          <div className="w-full max-w-6xl mx-auto text-left sm:text-center my-auto py-4">
+          {/* Middle/Center Row: Hero Inscription "planned timeline." (Swept from Left) */}
+          <div className="act3-center-hero w-full max-w-6xl mx-auto text-left sm:text-center my-auto py-4">
             <h2 className="text-[clamp(3.5rem,9.5vw,8.8rem)] font-black tracking-[-0.04em] leading-[0.96] drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
               <span className="text-[#F5B800] glow-gold-cinematic font-serif italic font-normal tracking-normal">
-                <SpatialChars text="planned timeline." charClass="timeline-char-stream inline-block text-[#F5B800]" />
+                planned timeline.
               </span>
             </h2>
           </div>
 
-          {/* Bottom Row: 100% Target On-Schedule Indicator */}
-          <div className="w-full flex items-end justify-start pl-2 sm:pl-8">
-            <div className="act3-schedule-node flex items-center gap-3 text-left">
+          {/* Bottom Row: 100% Target On-Schedule Indicator (Swept from Left) */}
+          <div className="act3-schedule-node w-full flex items-end justify-start pl-2 sm:pl-8">
+            <div className="flex items-center gap-3 text-left">
               <div className="w-8 h-8 rounded-full border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800] text-xs font-bold shadow-[0_0_15px_rgba(245,184,0,0.2)]">
                 ⏱
               </div>
