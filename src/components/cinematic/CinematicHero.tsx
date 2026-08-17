@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Act1Hook } from './acts/Act1Hook';
+import { Act1PosterHook } from './acts/Act1PosterHook';
 import { Act2SellOut } from './acts/Act2SellOut';
 import { Act3Timeline } from './acts/Act3Timeline';
 import { Act4TriPanel } from './acts/Act4TriPanel';
@@ -20,6 +20,9 @@ export const CinematicHero: React.FC = () => {
     const ctx = gsap.context(() => {
       // 1. Initial State Setup (Pure Hardware-Accelerated Transforms)
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
+      gsap.set('.act1-row-1', { yPercent: 0, opacity: 1 });
+      gsap.set('.act1-row-2', { scale: 1, opacity: 1 });
+      gsap.set('.act1-row-3', { yPercent: 0, opacity: 1 });
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
       gsap.set('.act3-line-1', { xPercent: -100, opacity: 0 });
@@ -32,7 +35,7 @@ export const CinematicHero: React.FC = () => {
       gsap.set('.act5-stage', { autoAlpha: 0, yPercent: 40, scale: 0.96 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
 
-      // 2. Mathematically Budgeted Master Scrubbed Timeline (900% scrub distance, 0.8s responsive scrub)
+      // 2. Mathematically Budgeted Master Scrubbed Timeline
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
@@ -46,22 +49,26 @@ export const CinematicHero: React.FC = () => {
       });
 
       // =====================================================================
-      // ACT 1 (0% to 20%): "Most agencies run your ads."
+      // ACT 1 (0% to 20%): SWISS MODERNIST POSTER HOOK ("Most agencies run your ads.")
       // =====================================================================
-      tl.to('.trap-char', {
-        z: () => gsap.utils.random(200, 600),
-        x: () => gsap.utils.random(-250, 250),
-        y: () => gsap.utils.random(-180, 180),
-        rotateX: () => gsap.utils.random(-60, 60),
-        rotateY: () => gsap.utils.random(-60, 60),
+      tl.to('.act1-row-1', {
+        yPercent: -100,
         opacity: 0,
-        stagger: {
-          each: 0.012,
-          from: 'random',
-        },
-        duration: 1.2,
+        duration: 1.0,
         ease: 'power2.inOut',
       })
+        .to('.act1-row-2', {
+          scale: 1.15,
+          opacity: 0,
+          duration: 1.1,
+          ease: 'power2.inOut',
+        }, '-=0.9')
+        .to('.act1-row-3', {
+          yPercent: 100,
+          opacity: 0,
+          duration: 1.0,
+          ease: 'power2.inOut',
+        }, '-=0.9')
         .to('.act1-stage', {
           autoAlpha: 0,
           duration: 0.2,
@@ -177,7 +184,6 @@ export const CinematicHero: React.FC = () => {
 
         // =====================================================================
         // ACT 3 OUTRO ➔ ACT 4 ENTRANCE: MATHEMATICAL SEAMLESS HANDSHAKE
-        // Text sweeps left while Panel 3, 2, and 1 rise in sequence
         // =====================================================================
         .to('.act3-line-1', {
           xPercent: -120,
@@ -317,7 +323,7 @@ export const CinematicHero: React.FC = () => {
         {/* ===================================================================== */}
         {/* MODULAR 5-ACT ARCHITECTURE                                            */}
         {/* ===================================================================== */}
-        <Act1Hook />
+        <Act1PosterHook />
         <Act2SellOut />
         <Act3Timeline />
         <Act4TriPanel />
