@@ -41,42 +41,48 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // 1. Explicitly Set Initial CSS States
+      // 1. Explicit Initial Element States
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
-      gsap.set('.act3-horizontal-stage', { autoAlpha: 0 });
-      gsap.set('.act4-credibility-stage', { autoAlpha: 0, scale: 0.95 });
+      gsap.set('.act3-stage', { autoAlpha: 0, y: 30 });
+      gsap.set('.act4-stage', { autoAlpha: 0, scale: 0.95 });
 
-      // Separate independent rotation animation for the circular seal (never inside scrub timeline)
+      // Background layer initial opacities
+      gsap.set('.bg-act1', { opacity: 0.45 });
+      gsap.set('.bg-act2', { opacity: 0 });
+      gsap.set('.bg-act3', { opacity: 0 });
+      gsap.set('.bg-act4', { opacity: 0 });
+
+      // Continuous independent rotation for the circular seal badge
       gsap.to('.act4-rotating-badge', {
         rotation: 360,
-        duration: 12,
+        duration: 16,
         repeat: -1,
         ease: 'none',
       });
 
-      // 2. Master Scrubbed Timeline for 4 Acts (Deterministic durations)
+      // 2. Master 800% Scrub Timeline with Mathematical Frame Pacing
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=600%',
+          end: '+=800%',
           pin: stageRef.current,
-          scrub: 1,
+          scrub: 1.2,
           anticipatePin: 1,
           onUpdate: (self) => setScrollProgress(self.progress),
         },
       });
 
-      // ---------------------------------------------------------------------
-      // ACT 1 (0% to 25%): "Most agencies run your ads." -> 3D Shatter
-      // ---------------------------------------------------------------------
+      // =====================================================================
+      // ACT 1 (0% to 22%): "Most agencies run your ads."
+      // =====================================================================
       tl.to('.trap-char', {
-        z: () => gsap.utils.random(200, 700),
-        x: () => gsap.utils.random(-300, 300),
-        y: () => gsap.utils.random(-200, 200),
-        rotateX: () => gsap.utils.random(-90, 90),
-        rotateY: () => gsap.utils.random(-90, 90),
+        z: () => gsap.utils.random(250, 750),
+        x: () => gsap.utils.random(-320, 320),
+        y: () => gsap.utils.random(-220, 220),
+        rotateX: () => gsap.utils.random(-100, 100),
+        rotateY: () => gsap.utils.random(-100, 100),
         opacity: 0,
         filter: 'blur(14px)',
         stagger: {
@@ -91,9 +97,13 @@ export const CinematicHero: React.FC = () => {
           duration: 0.3,
         }, '-=0.2')
 
-        // ---------------------------------------------------------------------
-        // ACT 2 (25% to 50%): "We sell-out your real estate project"
-        // ---------------------------------------------------------------------
+        // =====================================================================
+        // ACT 2 (22% to 48%): "We sell-out your real estate project"
+        // =====================================================================
+        // Crossfade background: Tower -> Township
+        .to('.bg-act1', { opacity: 0, duration: 1 }, '-=0.3')
+        .to('.bg-act2', { opacity: 0.5, duration: 1 }, '<')
+
         .to('.act2-stage', {
           autoAlpha: 1,
           duration: 0.1,
@@ -101,13 +111,13 @@ export const CinematicHero: React.FC = () => {
         .fromTo(
           '.sellout-char-angle',
           {
-            x: (i) => (i % 2 === 0 ? -160 : 160),
-            y: (i) => (i % 3 === 0 ? 100 : -100),
-            z: (i) => -350 - i * 15,
-            rotateX: (i) => (i % 2 === 0 ? 40 : -40),
-            rotateY: (i) => (i % 2 === 0 ? -50 : 50),
+            x: (i) => (i % 2 === 0 ? -180 : 180),
+            y: (i) => (i % 3 === 0 ? 120 : -120),
+            z: (i) => -400 - i * 15,
+            rotateX: (i) => (i % 2 === 0 ? 45 : -45),
+            rotateY: (i) => (i % 2 === 0 ? -60 : 60),
             opacity: 0,
-            filter: 'blur(12px)',
+            filter: 'blur(14px)',
           },
           {
             x: 0,
@@ -121,10 +131,10 @@ export const CinematicHero: React.FC = () => {
               each: 0.02,
               from: 'center',
             },
-            duration: 1.8,
+            duration: 2,
             ease: 'expo.out',
           },
-          '-=0.1'
+          '-=0.2'
         )
         .fromTo(
           '.sellout-gold-flare',
@@ -133,49 +143,86 @@ export const CinematicHero: React.FC = () => {
           '-=0.8'
         )
 
-        // ---------------------------------------------------------------------
-        // ACT 2 OUTRO -> ACT 3 INTRO (50% to 75%): Horizontal Sweep
-        // ---------------------------------------------------------------------
+        // Generous reading hold for Act 2
         .to('.act2-stage', {
-          x: -250,
+          y: -10,
+          duration: 1.8,
+          ease: 'none',
+        })
+
+        // Act 2 Exit
+        .to('.act2-stage', {
+          scale: 0.9,
           autoAlpha: 0,
-          filter: 'blur(10px)',
+          filter: 'blur(16px)',
           duration: 1.2,
           ease: 'power2.in',
-        }, '+=0.5')
+        })
 
-        // ACT 3: Massive Horizontal Kinetic "WITHIN YOUR PLANNED TIMELINE"
-        .to('.act3-horizontal-stage', {
+        // =====================================================================
+        // ACT 3 (48% to 76%): "WITHIN YOUR PLANNED TIMELINE"
+        // =====================================================================
+        // Crossfade background: Township -> Luxury Glass Elevation
+        .to('.bg-act2', { opacity: 0, duration: 1 }, '-=0.8')
+        .to('.bg-act3', { opacity: 0.45, duration: 1 }, '<')
+
+        .to('.act3-stage', {
           autoAlpha: 1,
-          duration: 0.2,
-        }, '-=0.4')
+          duration: 0.1,
+        })
         .fromTo(
-          '.act3-massive-marquee',
-          { x: '35vw', opacity: 0.4 },
-          { x: '-40vw', opacity: 1, duration: 3.5, ease: 'none' },
-          '-=0.2'
+          '.act3-line-1',
+          { y: 60, opacity: 0, filter: 'blur(12px)', scale: 0.9 },
+          { y: 0, opacity: 1, filter: 'blur(0px)', scale: 1, duration: 1.4, ease: 'power3.out' },
+          '-=0.1'
+        )
+        .fromTo(
+          '.act3-line-2',
+          { y: 60, opacity: 0, filter: 'blur(12px)', scale: 0.9 },
+          { y: 0, opacity: 1, filter: 'blur(0px)', scale: 1, duration: 1.4, ease: 'power3.out' },
+          '-=1.1'
+        )
+        .fromTo(
+          '.act3-timeline-bar',
+          { scaleX: 0, opacity: 0 },
+          { scaleX: 1, opacity: 1, duration: 1.6, ease: 'power2.out' },
+          '-=0.9'
         )
 
-        // ---------------------------------------------------------------------
-        // ACT 3 OUTRO -> ACT 4 INTRO (75% to 100%): "459+ Real Estate Projects Delivered"
-        // ---------------------------------------------------------------------
-        .to('.act3-horizontal-stage', {
-          autoAlpha: 0,
+        // GENEROUS EXTENDED READING HOLD FOR ACT 3
+        .to('.act3-stage', {
+          scale: 1.03,
+          duration: 3,
+          ease: 'none',
+        })
+
+        // Act 3 Exit
+        .to('.act3-stage', {
           scale: 0.92,
-          filter: 'blur(10px)',
-          duration: 1,
+          autoAlpha: 0,
+          filter: 'blur(14px)',
+          duration: 1.2,
           ease: 'power2.inOut',
         })
-        .to('.act4-credibility-stage', {
+
+        // =====================================================================
+        // ACT 4 (76% to 100%): "459+ Real Estate Projects Delivered on Schedule"
+        // =====================================================================
+        // Crossfade background: Elevation -> Panoramic Gold Skyline
+        .to('.bg-act3', { opacity: 0, duration: 1 }, '-=0.8')
+        .to('.bg-act4', { opacity: 0.55, duration: 1 }, '<')
+
+        .to('.act4-stage', {
           autoAlpha: 1,
           scale: 1,
           duration: 1.8,
           ease: 'power3.out',
-        }, '-=0.4')
-        // Prolonged hold for Act 4
-        .to('.act4-credibility-stage', {
+        }, '-=0.3')
+
+        // Final hold for Act 4
+        .to('.act4-stage', {
           scale: 1.02,
-          duration: 2,
+          duration: 2.5,
           ease: 'none',
         });
     }, containerRef);
@@ -191,34 +238,85 @@ export const CinematicHero: React.FC = () => {
         className="relative w-full h-screen min-h-[660px] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-20 py-4 overflow-hidden bg-[#030508] select-none"
         style={{ perspective: '1600px' }}
       >
-        {/* Luxury Architectural Backdrop with Parallax */}
+        {/* ===================================================================== */}
+        {/* 4 ATMOSPHERIC LUXURY REAL ESTATE BACKGROUNDS (SMOOTH CROSSFADE)       */}
+        {/* ===================================================================== */}
+        {/* Act 1 Backdrop: Midnight Luxury High-Rise Tower */}
         <div
-          className="absolute inset-0 z-0 pointer-events-none transition-transform duration-700 ease-out"
+          className="bg-act1 absolute inset-0 z-0 pointer-events-none transition-transform duration-700 ease-out"
           style={{
-            transform: `scale(${1 + scrollProgress * 0.18}) translateY(${scrollProgress * -40}px)`,
+            transform: `scale(${1 + scrollProgress * 0.15}) translateY(${scrollProgress * -30}px)`,
           }}
         >
           <img
             src="/cinematic_luxury_tower.jpg"
-            alt="Luxury Real Estate Elevation"
-            className="w-full h-full object-cover opacity-40 filter brightness-90 contrast-125"
+            alt="Luxury Tower Elevation"
+            className="w-full h-full object-cover filter brightness-90 contrast-125"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#030508]/85 via-[#030508]/45 to-[#030508]/95" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.16)_0%,transparent_65%)]" />
+        </div>
+
+        {/* Act 2 Backdrop: Twilight Waterfront Township & Villa Master Plan */}
+        <div
+          className="bg-act2 absolute inset-0 z-0 pointer-events-none transition-transform duration-700 ease-out"
+          style={{
+            transform: `scale(${1.05 + scrollProgress * 0.12}) translateY(${scrollProgress * -25}px)`,
+          }}
+        >
+          <img
+            src="/cinematic_township_estate.jpg"
+            alt="Master Planned Township"
+            className="w-full h-full object-cover filter brightness-95 contrast-120"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#030508]/80 via-[#030508]/40 to-[#030508]/95" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.2)_0%,transparent_65%)]" />
+        </div>
+
+        {/* Act 3 Backdrop: Contemporary Glass Elevation */}
+        <div
+          className="bg-act3 absolute inset-0 z-0 pointer-events-none transition-transform duration-700 ease-out"
+          style={{
+            transform: `scale(${1.08 + scrollProgress * 0.1}) translateY(${scrollProgress * -20}px)`,
+          }}
+        >
+          <img
+            src="/luxury_real_estate.jpg"
+            alt="Contemporary Glass Architecture"
+            className="w-full h-full object-cover filter brightness-90 contrast-125"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#030508]/85 via-[#030508]/45 to-[#030508]/95" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.18)_0%,transparent_65%)]" />
         </div>
 
-        {/* Ambient Subtle Grid */}
+        {/* Act 4 Backdrop: Panoramic Gold Skyline Marina with Beams */}
         <div
-          className="absolute inset-0 z-1 pointer-events-none opacity-25"
+          className="bg-act4 absolute inset-0 z-0 pointer-events-none transition-transform duration-700 ease-out"
+          style={{
+            transform: `scale(${1.12 + scrollProgress * 0.08}) translateY(${scrollProgress * -15}px)`,
+          }}
+        >
+          <img
+            src="/cinematic_gold_skyline.jpg"
+            alt="Luxury Skyline Marina"
+            className="w-full h-full object-cover filter brightness-95 contrast-120"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#030508]/75 via-[#030508]/35 to-[#030508]/90" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.25)_0%,transparent_60%)]" />
+        </div>
+
+        {/* Ambient Architectural Blueprint Grid Overlay */}
+        <div
+          className="absolute inset-0 z-1 pointer-events-none opacity-20"
           style={{
             backgroundImage: `radial-gradient(rgba(245, 184, 0, 0.4) 1px, transparent 1px)`,
             backgroundSize: '48px 48px',
           }}
         />
 
-        {/* ========================================================================= */}
-        {/* ACT 1: THE INITIAL HOOK ("Most agencies run your ads.")                    */}
-        {/* ========================================================================= */}
+        {/* ===================================================================== */}
+        {/* ACT 1: THE HOOK ("Most agencies run your ads.")                        */}
+        {/* ===================================================================== */}
         <div className="act1-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
           <div className="max-w-5xl flex flex-col items-center justify-center gap-2">
             <h1 className="text-[clamp(3.2rem,8.2vw,7.8rem)] font-black text-white tracking-tight leading-[1.02] drop-shadow-[0_10px_50px_rgba(0,0,0,0.95)]">
@@ -238,9 +336,9 @@ export const CinematicHero: React.FC = () => {
           </div>
         </div>
 
-        {/* ========================================================================= */}
-        {/* ACT 2: MULTI-ANGLE CONVERGENCE ("We sell-out your real estate project")   */}
-        {/* ========================================================================= */}
+        {/* ===================================================================== */}
+        {/* ACT 2: MULTI-ANGLE CONVERGENCE ("We sell-out your real estate project")*/}
+        {/* ===================================================================== */}
         <div className="act2-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
           <div className="relative max-w-6xl flex flex-col items-center justify-center">
             {/* Ambient Gold Focal Light Flare */}
@@ -260,25 +358,61 @@ export const CinematicHero: React.FC = () => {
           </div>
         </div>
 
-        {/* ========================================================================= */}
-        {/* ACT 3: MASSIVE HORIZONTAL KINETIC TEXT ("WITHIN YOUR PLANNED TIMELINE")    */}
-        {/* ========================================================================= */}
-        <div className="act3-horizontal-stage absolute inset-0 z-20 flex items-center justify-start pointer-events-none overflow-hidden whitespace-nowrap">
-          <div className="act3-massive-marquee flex items-center gap-12 font-black tracking-tighter uppercase text-[clamp(4.5rem,14vw,14rem)] leading-none text-white drop-shadow-[0_10px_60px_rgba(0,0,0,0.95)]">
-            <span className="text-white">Within</span>
-            <span className="text-[#F5B800] glow-gold-cinematic font-serif italic tracking-normal">Your</span>
-            <span className="text-white">Planned</span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F5B800] to-white">Timeline.</span>
+        {/* ===================================================================== */}
+        {/* ACT 3: HIGH-PRECISION TIMELINE ("WITHIN YOUR PLANNED TIMELINE")       */}
+        {/* ===================================================================== */}
+        <div className="act3-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+          <div className="max-w-6xl flex flex-col items-center justify-center gap-4">
+            {/* Top Eyebrow Precision Pill */}
+            <div className="inline-flex items-center gap-2 bg-[#F5B800]/15 border border-[#F5B800]/40 text-[#F5B800] px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase backdrop-blur-md shadow-[0_0_20px_rgba(245,184,0,0.2)] mb-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#F5B800] animate-pulse" />
+              Precision Schedule Execution
+            </div>
+
+            {/* Line 1: WITHIN YOUR */}
+            <h2 className="act3-line-1 text-[clamp(2.8rem,7vw,6.4rem)] font-black text-white tracking-tight leading-none uppercase drop-shadow-[0_10px_50px_rgba(0,0,0,0.95)]">
+              Within Your
+            </h2>
+
+            {/* Line 2: PLANNED TIMELINE */}
+            <h2 className="act3-line-2 text-[clamp(3.2rem,8.2vw,7.6rem)] font-black tracking-tight leading-none uppercase drop-shadow-[0_12px_60px_rgba(0,0,0,0.95)]">
+              <span className="text-white">Planned </span>
+              <span className="text-[#F5B800] glow-gold-cinematic font-serif italic font-normal tracking-normal lowercase">
+                timeline.
+              </span>
+            </h2>
+
+            {/* Precision Laser Timeline Progress Bar & Milestones */}
+            <div className="act3-timeline-bar relative w-full max-w-2xl mt-6 flex flex-col items-center">
+              {/* Luminous Golden Laser Track */}
+              <div className="w-full h-1 bg-gradient-to-r from-transparent via-[#F5B800] to-transparent rounded-full shadow-[0_0_15px_#F5B800]" />
+
+              {/* Milestone Indicator Nodes */}
+              <div className="w-full flex items-center justify-between mt-3 text-[11px] sm:text-[12px] font-extrabold tracking-wider uppercase text-gray-300">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#F5B800]" />
+                  M1: Positioning
+                </span>
+                <span className="flex items-center gap-1.5 text-[#F5B800]">
+                  <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-ping" />
+                  M2: Buyer Trust
+                </span>
+                <span className="flex items-center gap-1.5 text-emerald-400">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  100% Sell-Out
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* ========================================================================= */}
-        {/* ACT 4: CREDIBILITY CLIMAX ("459+ Real Estate Projects Delivered on Schedule") */}
-        {/* ========================================================================= */}
-        <div className="act4-credibility-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+        {/* ===================================================================== */}
+        {/* ACT 4: CREDIBILITY CLIMAX ("459+ Real Estate Projects Delivered")      */}
+        {/* ===================================================================== */}
+        <div className="act4-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
           <div className="max-w-5xl flex flex-col items-center justify-center gap-6">
             {/* Top Rotating Circular Seal Emblem & Glowing Pill */}
-            <div className="flex items-center justify-center gap-4 flex-wrap mb-2">
+            <div className="flex items-center justify-center gap-4 flex-wrap mb-1">
               <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center flex-shrink-0">
                 {/* Spinning Outer SVG Text Ring */}
                 <svg viewBox="0 0 100 100" className="act4-rotating-badge w-full h-full">
