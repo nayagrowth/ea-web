@@ -41,36 +41,44 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // 1. Initial State Setup
-      gsap.set('.act2-stage', { autoAlpha: 0 });
+      // 1. Explicitly Set Initial CSS States
+      gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
+      gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-horizontal-stage', { autoAlpha: 0 });
-      gsap.set('.act4-credibility-stage', { autoAlpha: 0, scale: 0.9 });
+      gsap.set('.act4-credibility-stage', { autoAlpha: 0, scale: 0.95 });
 
-      // 2. Master 700% Scrub Timeline for 4 Grand Acts
+      // Separate independent rotation animation for the circular seal (never inside scrub timeline)
+      gsap.to('.act4-rotating-badge', {
+        rotation: 360,
+        duration: 12,
+        repeat: -1,
+        ease: 'none',
+      });
+
+      // 2. Master Scrubbed Timeline for 4 Acts (Deterministic durations)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=700%',
+          end: '+=600%',
           pin: stageRef.current,
-          scrub: 1.3,
+          scrub: 1,
           anticipatePin: 1,
           onUpdate: (self) => setScrollProgress(self.progress),
         },
       });
 
       // ---------------------------------------------------------------------
-      // ACT 1: "Most agencies run your ads." -> 3D Vortex Shatter
+      // ACT 1 (0% to 25%): "Most agencies run your ads." -> 3D Shatter
       // ---------------------------------------------------------------------
       tl.to('.trap-char', {
-        z: () => gsap.utils.random(200, 800),
-        x: () => gsap.utils.random(-350, 350),
-        y: () => gsap.utils.random(-250, 250),
-        rotateX: () => gsap.utils.random(-120, 120),
-        rotateY: () => gsap.utils.random(-120, 120),
-        rotateZ: () => gsap.utils.random(-60, 60),
+        z: () => gsap.utils.random(200, 700),
+        x: () => gsap.utils.random(-300, 300),
+        y: () => gsap.utils.random(-200, 200),
+        rotateX: () => gsap.utils.random(-90, 90),
+        rotateY: () => gsap.utils.random(-90, 90),
         opacity: 0,
-        filter: 'blur(16px)',
+        filter: 'blur(14px)',
         stagger: {
           each: 0.015,
           from: 'random',
@@ -84,7 +92,7 @@ export const CinematicHero: React.FC = () => {
         }, '-=0.2')
 
         // ---------------------------------------------------------------------
-        // ACT 2: "We sell-out your real estate project" -> Inward Snap
+        // ACT 2 (25% to 50%): "We sell-out your real estate project"
         // ---------------------------------------------------------------------
         .to('.act2-stage', {
           autoAlpha: 1,
@@ -93,14 +101,13 @@ export const CinematicHero: React.FC = () => {
         .fromTo(
           '.sellout-char-angle',
           {
-            x: (i) => (i % 2 === 0 ? -180 : 180),
-            y: (i) => (i % 3 === 0 ? 120 : -120),
-            z: (i) => -400 - i * 15,
-            rotateX: (i) => (i % 2 === 0 ? 45 : -45),
-            rotateY: (i) => (i % 2 === 0 ? -60 : 60),
-            rotateZ: (i) => (i % 3 === 0 ? 25 : -25),
+            x: (i) => (i % 2 === 0 ? -160 : 160),
+            y: (i) => (i % 3 === 0 ? 100 : -100),
+            z: (i) => -350 - i * 15,
+            rotateX: (i) => (i % 2 === 0 ? 40 : -40),
+            rotateY: (i) => (i % 2 === 0 ? -50 : 50),
             opacity: 0,
-            filter: 'blur(14px)',
+            filter: 'blur(12px)',
           },
           {
             x: 0,
@@ -108,11 +115,10 @@ export const CinematicHero: React.FC = () => {
             z: 0,
             rotateX: 0,
             rotateY: 0,
-            rotateZ: 0,
             opacity: 1,
             filter: 'blur(0px)',
             stagger: {
-              each: 0.025,
+              each: 0.02,
               from: 'center',
             },
             duration: 1.8,
@@ -128,15 +134,15 @@ export const CinematicHero: React.FC = () => {
         )
 
         // ---------------------------------------------------------------------
-        // ACT 2 OUTRO -> ACT 3 INTRO: Dynamic Horizontal Sweep
+        // ACT 2 OUTRO -> ACT 3 INTRO (50% to 75%): Horizontal Sweep
         // ---------------------------------------------------------------------
         .to('.act2-stage', {
-          x: -300,
-          opacity: 0,
-          filter: 'blur(12px)',
+          x: -250,
+          autoAlpha: 0,
+          filter: 'blur(10px)',
           duration: 1.2,
           ease: 'power2.in',
-        }, '+=0.6')
+        }, '+=0.5')
 
         // ACT 3: Massive Horizontal Kinetic "WITHIN YOUR PLANNED TIMELINE"
         .to('.act3-horizontal-stage', {
@@ -145,17 +151,17 @@ export const CinematicHero: React.FC = () => {
         }, '-=0.4')
         .fromTo(
           '.act3-massive-marquee',
-          { x: '40vw', opacity: 0.4 },
-          { x: '-45vw', opacity: 1, duration: 3.5, ease: 'none' },
+          { x: '35vw', opacity: 0.4 },
+          { x: '-40vw', opacity: 1, duration: 3.5, ease: 'none' },
           '-=0.2'
         )
 
         // ---------------------------------------------------------------------
-        // ACT 3 OUTRO -> ACT 4 INTRO: "459+ Real Estate Projects Delivered on Schedule"
+        // ACT 3 OUTRO -> ACT 4 INTRO (75% to 100%): "459+ Real Estate Projects Delivered"
         // ---------------------------------------------------------------------
         .to('.act3-horizontal-stage', {
           autoAlpha: 0,
-          scale: 0.9,
+          scale: 0.92,
           filter: 'blur(10px)',
           duration: 1,
           ease: 'power2.inOut',
@@ -163,16 +169,10 @@ export const CinematicHero: React.FC = () => {
         .to('.act4-credibility-stage', {
           autoAlpha: 1,
           scale: 1,
-          duration: 1.6,
+          duration: 1.8,
           ease: 'power3.out',
         }, '-=0.4')
-        .fromTo(
-          '.act4-rotating-badge',
-          { rotation: 0 },
-          { rotation: 360, duration: 8, repeat: -1, ease: 'none' },
-          '-=1.6'
-        )
-        // Hold Act 4 firmly in view
+        // Prolonged hold for Act 4
         .to('.act4-credibility-stage', {
           scale: 1.02,
           duration: 2,
@@ -191,7 +191,7 @@ export const CinematicHero: React.FC = () => {
         className="relative w-full h-screen min-h-[660px] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-20 py-4 overflow-hidden bg-[#030508] select-none"
         style={{ perspective: '1600px' }}
       >
-        {/* Luxury Architectural Backdrop with Scroll Parallax */}
+        {/* Luxury Architectural Backdrop with Parallax */}
         <div
           className="absolute inset-0 z-0 pointer-events-none transition-transform duration-700 ease-out"
           style={{
@@ -217,7 +217,7 @@ export const CinematicHero: React.FC = () => {
         />
 
         {/* ========================================================================= */}
-        {/* ACT 1: THE HOOK ("Most agencies run your ads.")                            */}
+        {/* ACT 1: THE INITIAL HOOK ("Most agencies run your ads.")                    */}
         {/* ========================================================================= */}
         <div className="act1-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
           <div className="max-w-5xl flex flex-col items-center justify-center gap-2">
@@ -323,7 +323,7 @@ export const CinematicHero: React.FC = () => {
               Zero Delays. Zero Junk Enquiries. <span className="text-[#F5B800] font-bold">100% Mandate Velocity</span> across Residential, Commercial, Plotting & Townships.
             </p>
 
-            {/* CTA Trigger */}
+            {/* Strategy Call Action Trigger */}
             <div className="pt-4 pointer-events-auto">
               <a
                 href="#book-strategy-session"
