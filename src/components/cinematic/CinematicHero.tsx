@@ -336,7 +336,7 @@ export const CinematicHero: React.FC = () => {
       {/* Pinned Stage: 100vh locked viewport */}
       <div
         ref={stageRef}
-        className="relative w-full h-screen min-h-[660px] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-20 py-4 overflow-hidden bg-[#000000] select-none"
+        className="relative w-full h-screen min-h-[660px] flex flex-col justify-center items-center p-0 m-0 overflow-hidden bg-[#000000] select-none"
         style={{ perspective: '1600px' }}
       >
         {/* Frame 1 Real Estate Tower Backdrop (Fades out to pitch black on scroll) */}

@@ -1,216 +1,181 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 export const Act1ArtboardPoster: React.FC = () => {
-  const [scale, setScale] = useState(1);
-
-  useEffect(() => {
-    const handleResize = () => {
-      // Scale 1920x1080 artboard to fit screen proportionally
-      const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-      setScale(s);
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   return (
-    <div className="act1-stage absolute inset-0 z-20 w-full h-full flex items-center justify-center pointer-events-none select-none bg-black overflow-hidden">
-      {/* 1920x1080 Fixed Editorial Artboard Canvas */}
-      <div
-        className="act1-artboard relative bg-[#000000] overflow-hidden"
-        style={{
-          width: 1920,
-          height: 1080,
-          transform: `scale(${scale})`,
-          transformOrigin: 'center center',
-          flexShrink: 0,
-        }}
+    <div className="act1-stage absolute inset-0 z-20 w-screen h-screen flex items-center justify-center pointer-events-none select-none bg-[#09090b] overflow-hidden">
+      {/* Edge-to-Edge 1920x1080 Vector Typographic Stage */}
+      <svg
+        viewBox="0 0 1920 1080"
+        className="w-full h-full block absolute inset-0"
+        preserveAspectRatio="none"
       >
+        <defs>
+          <style>{`
+            @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,900;1,900&family=Playfair+Display:ital,wght@1,400;1,700&family=Oswald:wght@700&display=swap');
+            .font-most {
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              font-weight: 900;
+            }
+            .font-agencies {
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              font-weight: 900;
+            }
+            .font-run {
+              font-family: 'Oswald', 'Impact', 'Arial Black', sans-serif;
+              font-weight: 700;
+            }
+            .font-your {
+              font-family: 'Playfair Display', 'Instrument Serif', Georgia, serif;
+              font-style: italic;
+            }
+            .font-ads {
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              font-weight: 900;
+              font-style: italic;
+            }
+          `}</style>
+        </defs>
+
         {/* ===================================================================== */}
-        {/* ROW 1: "Most" + Continuous Hairline Rule (x: 76, y: 50)               */}
+        {/* ROW 1: "Most" + Continuous Hairline Rule (y: 0 to 260)                 */}
         {/* ===================================================================== */}
-        <div
-          className="act1-most-zone absolute flex items-center"
-          style={{ left: 76, top: 48, width: 1768, height: 180 }}
-        >
-          <div className="overflow-hidden">
-            <span
-              className="act1-most-word block font-black text-white"
-              style={{
-                fontSize: 210,
-                lineHeight: 0.85,
-                letterSpacing: '-0.065em',
-                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                fontWeight: 900,
-              }}
-            >
-              Most
-            </span>
-          </div>
-          {/* Horizontal Hairline Rule */}
-          <div
+        <g className="act1-row-1">
+          {/* "Most" */}
+          <text
+            x="40"
+            y="225"
+            className="act1-most-word font-most"
+            fontSize="235"
+            letterSpacing="-12"
+            fill="#FFFFFF"
+          >
+            Most
+          </text>
+          {/* Hairline Rule */}
+          <line
+            x1="620"
+            y1="140"
+            x2="1880"
+            y2="140"
             className="act1-top-rule"
-            style={{
-              flex: 1,
-              height: 2,
-              backgroundColor: 'rgba(255, 255, 255, 0.45)',
-              marginLeft: 45,
-              marginTop: 15,
-            }}
+            stroke="rgba(255, 255, 255, 0.45)"
+            strokeWidth="2"
           />
-        </div>
+        </g>
 
         {/* ===================================================================== */}
-        {/* ROW 2: "agencies" INVERTED WHITE SLAB (x: 72, y: 260, w: 1772, h: 365)*/}
+        {/* ROW 2: "agencies" INVERTED WHITE SLAB (y: 260 to 640)                  */}
         {/* ===================================================================== */}
-        <div
-          className="act1-agencies-slab absolute flex items-center justify-center bg-[#ECECEC]"
-          style={{
-            left: 72,
-            top: 260,
-            width: 1772,
-            height: 365,
-            zIndex: 2,
-            overflow: 'hidden',
-          }}
-        >
-          <svg
-            viewBox="0 0 1772 365"
-            width="1772"
-            height="365"
-            className="act1-agencies-word block"
-            style={{ overflow: 'visible' }}
+        <g className="act1-row-2">
+          {/* White Slab Rectangle - Spans from x:40 to full right edge */}
+          <rect
+            x="40"
+            y="260"
+            width="1880"
+            height="380"
+            fill="#EBEBEB"
+            className="act1-agencies-slab"
+          />
+          {/* Exact Full-Width "agencies" Typography */}
+          <text
+            x="980"
+            y="575"
+            textAnchor="middle"
+            className="act1-agencies-word font-agencies"
+            fontSize="360"
+            letterSpacing="-24"
+            lengthAdjust="spacingAndGlyphs"
+            textLength="1820"
+            fill="#000000"
           >
-            <text
-              x="886"
-              y="285"
-              textAnchor="middle"
-              fontSize="330"
-              fontWeight="900"
-              letterSpacing="-0.075em"
-              lengthAdjust="spacingAndGlyphs"
-              textLength="1730"
-              fontFamily='Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-              fill="#000000"
-            >
-              agencies
-            </text>
-          </svg>
-        </div>
+            agencies
+          </text>
+        </g>
 
         {/* ===================================================================== */}
-        {/* ROW 3 - LEFT: "run" CONDENSED TALL TYPOGRAPHY (x: 72, y: 645, h: 390) */}
+        {/* ROW 3 - LEFT: "run" CONDENSED MONUMENTAL (x: 40, y: 640 to 1080)       */}
         {/* ===================================================================== */}
-        <div
-          className="act1-run-zone absolute flex items-center overflow-hidden"
-          style={{
-            left: 72,
-            top: 645,
-            width: 490,
-            height: 390,
-            zIndex: 1,
-          }}
-        >
-          <svg
-            viewBox="0 0 490 390"
-            width="490"
-            height="390"
-            className="act1-run-word block"
-            style={{ overflow: 'visible' }}
+        <g className="act1-run-zone">
+          <text
+            x="40"
+            y="1025"
+            className="act1-run-word font-run"
+            fontSize="450"
+            letterSpacing="-6"
+            lengthAdjust="spacingAndGlyphs"
+            textLength="480"
+            fill="#FFFFFF"
           >
-            <text
-              x="245"
-              y="325"
-              textAnchor="middle"
-              fontSize="370"
-              fontWeight="900"
-              transform="scale(0.85, 1.28) translate(40, -55)"
-              letterSpacing="-0.05em"
-              lengthAdjust="spacingAndGlyphs"
-              textLength="470"
-              fontFamily='Impact, "Arial Black", Inter, sans-serif'
-              fill="#FFFFFF"
-            >
-              run
-            </text>
-          </svg>
-        </div>
+            run
+          </text>
+        </g>
 
         {/* ===================================================================== */}
-        {/* ROW 3 - CENTER: "your" DELICATE SERIF BETWEEN RULES (x: 590, y: 675)  */}
+        {/* ROW 3 - CENTER: "your" DELICATE SERIF BETWEEN RULES (x: 560 to 1060) */}
         {/* ===================================================================== */}
-        <div
-          className="act1-your-zone absolute flex flex-col items-center justify-center"
-          style={{
-            left: 590,
-            top: 675,
-            width: 440,
-            height: 330,
-            zIndex: 1,
-          }}
-        >
-          <div
+        <g className="act1-your-zone">
+          {/* Top Hairline */}
+          <line
+            x1="570"
+            y1="730"
+            x2="1030"
+            y2="730"
             className="act1-your-rule-top"
-            style={{ width: '100%', height: 2, backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
+            stroke="rgba(255, 255, 255, 0.45)"
+            strokeWidth="2"
           />
-          <span
-            className="act1-your-word block font-serif italic text-white"
-            style={{
-              fontSize: 135,
-              lineHeight: 1.05,
-              padding: '16px 0',
-              fontFamily: '"Playfair Display", "Instrument Serif", Georgia, serif',
-            }}
+          {/* "your" */}
+          <text
+            x="800"
+            y="885"
+            textAnchor="middle"
+            className="act1-your-word font-your"
+            fontSize="180"
+            fill="#FFFFFF"
           >
             your
-          </span>
-          <div
+          </text>
+          {/* Bottom Hairline */}
+          <line
+            x1="570"
+            y1="1010"
+            x2="1030"
+            y2="1010"
             className="act1-your-rule-bottom"
-            style={{ width: '100%', height: 2, backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
+            stroke="rgba(255, 255, 255, 0.45)"
+            strokeWidth="2"
           />
-        </div>
+        </g>
 
         {/* ===================================================================== */}
-        {/* ROW 3 - RIGHT: "ads." CHARCOAL BOX OVERLAPPING SLAB (x: 1060, y: 615) */}
+        {/* ROW 3 - RIGHT: "ads." CHARCOAL BOX (x: 1070, y: 640 to 1080, w: 850)  */}
         {/* ===================================================================== */}
-        <div
-          className="act1-ads-slab absolute flex items-center justify-center bg-[#2B2B2B] border border-white/10"
-          style={{
-            left: 1060,
-            top: 615, // Cuts 10px upward into the agencies slab!
-            width: 784,
-            height: 425,
-            zIndex: 4,
-            overflow: 'hidden',
-          }}
-        >
-          <svg
-            viewBox="0 0 784 425"
-            width="784"
-            height="425"
-            className="act1-ads-word block"
-            style={{ overflow: 'visible' }}
+        <g className="act1-ads-zone">
+          {/* Charcoal Box — EXACTLY flush with the bottom of white slab (y: 640) */}
+          <rect
+            x="1070"
+            y="640"
+            width="850"
+            height="440"
+            fill="#343434"
+            className="act1-ads-slab"
+          />
+          {/* Slanted Bold "ads." Typography */}
+          <text
+            x="1110"
+            y="1015"
+            className="act1-ads-word font-ads"
+            fontSize="450"
+            letterSpacing="-22"
+            fill="#EBEBEB"
           >
-            <text
-              x="20"
-              y="345"
-              fontSize="390"
-              fontWeight="900"
-              fontStyle="italic"
-              letterSpacing="-0.06em"
-              fontFamily='Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-              fill="#ECECEC"
-            >
-              ads.
-            </text>
-          </svg>
-        </div>
-      </div>
+            ads.
+          </text>
+        </g>
+      </svg>
 
-      {/* Floating Scroll Cue */}
-      <div className="absolute bottom-6 flex items-center gap-2.5 text-[11px] font-mono tracking-widest uppercase text-gray-400 bg-black/85 border border-white/10 px-5 py-2 rounded-full backdrop-blur-md shadow-2xl z-30">
+      {/* Floating Minimal Scroll Cue */}
+      <div className="absolute bottom-6 flex items-center gap-2.5 text-[11px] font-mono tracking-widest uppercase text-gray-400 bg-black/85 border border-white/10 px-5 py-2 rounded-full backdrop-blur-md shadow-2xl z-30 pointer-events-none">
         <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-ping" />
         <span>Scroll to continue</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5B800" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce ml-1">
