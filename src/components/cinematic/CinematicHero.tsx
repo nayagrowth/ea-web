@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { BackgroundMesh } from '../common/BackgroundMesh';
 import { HeroDiagram } from '../homepage/HeroDiagram';
 import { StatsBar } from '../homepage/StatsBar';
 import {
@@ -16,6 +15,30 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Helper to split text into animated character spans for fine-grained kinetic letter control
+const SplitChars: React.FC<{ text: string; className?: string; charClassName?: string }> = ({
+  text,
+  className = '',
+  charClassName = 'cine-char',
+}) => {
+  return (
+    <span className={`inline-block ${className}`}>
+      {text.split(' ').map((word, wordIdx) => (
+        <span key={wordIdx} className="inline-block whitespace-nowrap mr-[0.28em]">
+          {word.split('').map((char, charIdx) => (
+            <span
+              key={charIdx}
+              className={`inline-block transition-colors duration-200 ${charClassName}`}
+            >
+              {char}
+            </span>
+          ))}
+        </span>
+      ))}
+    </span>
+  );
+};
+
 export const CinematicHero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
@@ -24,58 +47,71 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Set initial states cleanly
-      gsap.set('.scene-solution', { autoAlpha: 0, y: 60, scale: 0.95 });
-      gsap.set('.consequence-pill', { autoAlpha: 0, scale: 0.85, y: 20 });
+      // Set initial states
+      gsap.set('.scene-transformation', { autoAlpha: 0, y: 50, scale: 0.96 });
+      gsap.set('.consequence-text-line', { autoAlpha: 0, y: 20, filter: 'blur(8px)' });
 
-      // Master Scroll Scrub Timeline (350% scroll distance)
+      // Master Scroll Scrub Timeline (400% scroll distance for luxurious pacing)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=350%',
+          end: '+=400%',
           pin: stageRef.current,
-          scrub: 1,
+          scrub: 1.2,
           anticipatePin: 1,
         },
       });
 
-      // 1. Hook spotlight holds, then consequence pops in
-      tl.to('.consequence-pill', {
-        autoAlpha: 1,
-        scale: 1,
-        y: 0,
-        duration: 1,
-        ease: 'back.out(1.7)',
+      // -------------------------------------------------------------
+      // ACT 1: "Most agencies run your ads." -> Dissolves on scrub
+      // -------------------------------------------------------------
+      tl.to('.agency-char', {
+        y: -30,
+        opacity: 0.15,
+        filter: 'blur(6px)',
+        stagger: {
+          each: 0.02,
+          from: 'random',
+        },
+        duration: 1.2,
+        ease: 'power2.inOut',
       })
-        // 2. Strike-out/fade the agency trap
-        .to('.trap-headline', {
-          scale: 0.9,
+        // Consequence text reveals with kinetic un-blurring
+        .to('.consequence-text-line', {
+          autoAlpha: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 1,
+          ease: 'power3.out',
+        }, '-=0.4')
+
+        // -------------------------------------------------------------
+        // ACT 2: Full Transformation to "We SELL-OUT your project"
+        // -------------------------------------------------------------
+        .to('.scene-agency-hook', {
           autoAlpha: 0,
-          y: -40,
+          scale: 0.9,
+          y: -60,
           duration: 1.2,
           ease: 'power2.inOut',
         })
-        .to('.consequence-pill', {
-          autoAlpha: 0,
-          y: -30,
-          duration: 0.8,
-        }, '-=0.8')
-
-        // 3. Reveal the Solution Stage (Headline + 4-Phase System Engine)
-        .to('.scene-solution', {
+        .to('.scene-transformation', {
           autoAlpha: 1,
           y: 0,
           scale: 1,
           duration: 1.5,
           ease: 'power3.out',
-        })
-        // 4. Stagger asset class chips
+        }, '-=0.6')
+
+        // -------------------------------------------------------------
+        // ACT 3: Dynamic 3D Asset Category Chips & System Elements Lock
+        // -------------------------------------------------------------
         .fromTo(
           '.cine-chip',
-          { autoAlpha: 0, y: 15, scale: 0.9 },
+          { autoAlpha: 0, y: 15, scale: 0.85 },
           { autoAlpha: 1, y: 0, scale: 1, stagger: 0.08, duration: 0.8, ease: 'back.out(1.5)' },
-          '-=0.6'
+          '-=0.8'
         );
     }, containerRef);
 
@@ -83,47 +119,72 @@ export const CinematicHero: React.FC = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative w-full bg-white">
-      {/* Pinned Stage: 100vh locked during scroll progression */}
+    <div ref={containerRef} className="relative w-full bg-[#0B0F17]">
+      {/* Pinned Viewport Container */}
       <div
         ref={stageRef}
-        className="relative w-full h-screen min-h-[640px] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-20 py-4 overflow-hidden bg-white"
+        className="relative w-full h-screen min-h-[640px] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-20 py-4 overflow-hidden"
       >
-        {/* Ambient Quincunx Background */}
-        <BackgroundMesh />
+        {/* Deep Luxury Architectural Backdrop with Vignette */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/cinematic_luxury_tower.jpg"
+            alt="Luxury Architecture"
+            className="w-full h-full object-cover opacity-20 filter brightness-75 scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0B0F17]/90 via-[#0B0F17]/70 to-[#0B0F17]/95" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.08)_0%,transparent_70%)]" />
+        </div>
+
+        {/* Ambient Subtle Grid Pattern Overlay */}
+        <div
+          className="absolute inset-0 z-1 pointer-events-none opacity-20"
+          style={{
+            backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px)`,
+            backgroundSize: '32px 32px',
+          }}
+        />
 
         {/* ========================================================================= */}
-        {/* SCENE 1: THE HOOK (ONLY "Most agencies run your ads." on Load)             */}
+        {/* ACT 1: KINETIC HOOK STAGE (Pure Typographic Artistry)                     */}
         {/* ========================================================================= */}
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 pointer-events-none">
-          {/* Main Huge Headline */}
-          <div className="trap-headline max-w-4xl">
-            <h1 className="text-[clamp(3rem,7vw,6.5rem)] font-extrabold text-[#0F172A] tracking-tight leading-[1.05]">
-              Most agencies <span className="text-gray-400">run your ads.</span>
-            </h1>
+        <div className="scene-agency-hook absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+          {/* Subtle Ambient Pulse Aura */}
+          <div className="w-2 h-2 rounded-full bg-[#F5B800] animate-beacon mb-6 shadow-[0_0_20px_#F5B800]" />
+
+          {/* Main Huge Kinetic Headline */}
+          <h1 className="text-[clamp(2.8rem,6.8vw,6.4rem)] font-black text-white tracking-tight leading-[1.06] max-w-5xl">
+            <SplitChars
+              text="Most agencies run your ads."
+              className="text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.8)]"
+              charClassName="agency-char inline-block text-white transition-all duration-300"
+            />
+          </h1>
+
+          {/* Consequence Subtext: Kinetic Un-blurring Reveal */}
+          <div className="consequence-text-line mt-8 max-w-2xl px-6 py-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl">
+            <p className="text-[clamp(1rem,1.6vw,1.35rem)] font-medium text-gray-300 tracking-wide">
+              Burning ad spend on junk enquiries while <span className="text-[#F5B800] font-bold">inventory sits stagnant</span>.
+            </p>
           </div>
 
-          {/* Consequence Subline: Pops in dynamically on scroll */}
-          <div className="consequence-pill mt-6 max-w-xl bg-red-50 border border-red-200 rounded-2xl px-6 py-3.5 shadow-sm pointer-events-auto">
-            <p className="text-[clamp(1.05rem,1.7vw,1.4rem)] font-bold text-red-600 leading-snug">
-              Burning ad spend on junk enquiries while inventory sits stagnant.
-            </p>
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 mt-2 tracking-wide uppercase">
-              <span>Scroll to discover the Sell-Out Model</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce text-[#F5B800]">
-                <line x1="12" y1="5" x2="12" y2="19" /><polyline points="19 12 12 19 5 12" />
-              </svg>
-            </span>
+          {/* Scroll Cue Indicator */}
+          <div className="mt-12 flex items-center gap-2.5 text-[11px] font-bold tracking-widest uppercase text-gray-400 bg-black/40 border border-white/10 px-4 py-2 rounded-full backdrop-blur-md">
+            <span>Scroll to explore the Sell-Out Model</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5B800" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <polyline points="19 12 12 19 5 12" />
+            </svg>
           </div>
         </div>
 
         {/* ========================================================================= */}
-        {/* SCENE 2: THE SELL-OUT TRANSFORMATION & 4-PHASE SYSTEM ENGINE              */}
+        {/* ACT 2 & 3: THE SELL-OUT TRANSFORMATION & 4-PHASE SYSTEM ENGINE            */}
         {/* ========================================================================= */}
-        <div className="scene-solution relative z-10 w-full grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] xl:grid-cols-[1.02fr_1.18fr] gap-6 lg:gap-10 xl:gap-14 items-center my-auto pt-2">
+        <div className="scene-transformation relative z-10 w-full grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] xl:grid-cols-[1.02fr_1.18fr] gap-6 lg:gap-10 xl:gap-14 items-center my-auto pt-2 bg-white rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl border border-gray-100">
           {/* Left Column: Solution Narrative */}
           <div className="flex flex-col justify-between py-0 max-w-[620px]">
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3.5">
               {/* Eyebrow Badges */}
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="inline-flex items-center gap-2 bg-[#F3F4F6] border border-gray-200 text-gray-800 text-[11.5px] sm:text-[12.5px] font-semibold px-3.5 py-1.5 rounded-full shadow-2xs">
