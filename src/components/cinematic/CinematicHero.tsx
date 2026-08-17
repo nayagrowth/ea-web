@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Act1PosterHook } from './acts/Act1PosterHook';
+import { Act1ArtboardPoster } from './acts/Act1ArtboardPoster';
 import { Act2SellOut } from './acts/Act2SellOut';
 import { Act3Timeline } from './acts/Act3Timeline';
 import { Act4TriPanel } from './acts/Act4TriPanel';
@@ -18,11 +18,19 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // 1. Initial State Setup (Pure Hardware-Accelerated Transforms)
+      // 1. Initial State Setup
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
-      gsap.set('.act1-row-1', { yPercent: 0, opacity: 1 });
-      gsap.set('.act1-row-2', { scale: 1, opacity: 1 });
-      gsap.set('.act1-row-3', { yPercent: 0, opacity: 1 });
+      gsap.set('.act1-most-word', { yPercent: 0, opacity: 1 });
+      gsap.set('.act1-top-rule', { scaleX: 1, transformOrigin: 'left center' });
+      gsap.set('.act1-agencies-slab', { scaleX: 1, transformOrigin: 'left center' });
+      gsap.set('.act1-agencies-word', { scaleX: 1, opacity: 1, transformOrigin: 'left center' });
+      gsap.set('.act1-run-word', { scaleY: 1, transformOrigin: 'bottom center' });
+      gsap.set('.act1-your-word', { opacity: 1, y: 0 });
+      gsap.set('.act1-your-rule-top', { scaleX: 1 });
+      gsap.set('.act1-your-rule-bottom', { scaleX: 1 });
+      gsap.set('.act1-ads-slab', { scaleX: 1, transformOrigin: 'right center' });
+      gsap.set('.act1-ads-word', { yPercent: 0, scaleX: 1, transformOrigin: 'left bottom' });
+
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
       gsap.set('.act3-line-1', { xPercent: -100, opacity: 0 });
@@ -35,7 +43,7 @@ export const CinematicHero: React.FC = () => {
       gsap.set('.act5-stage', { autoAlpha: 0, yPercent: 40, scale: 0.96 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
 
-      // 2. Mathematically Budgeted Master Scrubbed Timeline
+      // 2. Mathematically Budgeted Master Scrubbed Timeline (900% scrub distance, 0.8s responsive scrub)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
@@ -49,26 +57,56 @@ export const CinematicHero: React.FC = () => {
       });
 
       // =====================================================================
-      // ACT 1 (0% to 20%): SWISS MODERNIST POSTER HOOK ("Most agencies run your ads.")
+      // ACT 1 (0% to 20%): 1920x1080 POSTER FRAME ARCHITECTURAL OUTRO
       // =====================================================================
-      tl.to('.act1-row-1', {
-        yPercent: -100,
-        opacity: 0,
+      tl.to('.act1-most-word', {
+        yPercent: -120,
         duration: 1.0,
-        ease: 'power2.inOut',
+        ease: 'power2.in',
       })
-        .to('.act1-row-2', {
-          scale: 1.15,
-          opacity: 0,
+        .to('.act1-top-rule', {
+          scaleX: 0,
+          duration: 0.9,
+          ease: 'power2.in',
+        }, '-=0.85')
+        .to('.act1-agencies-slab', {
+          scaleX: 0,
           duration: 1.1,
           ease: 'power2.inOut',
-        }, '-=0.9')
-        .to('.act1-row-3', {
-          yPercent: 100,
+        }, '-=0.8')
+        .to('.act1-agencies-word', {
+          scaleX: 0.45,
           opacity: 0,
           duration: 1.0,
+          ease: 'power2.in',
+        }, '-=0.95')
+        .to('.act1-run-word', {
+          scaleY: 0.05,
+          duration: 1.0,
+          ease: 'power2.in',
+        }, '-=0.85')
+        .to('.act1-your-word', {
+          opacity: 0,
+          y: 20,
+          duration: 0.7,
+          ease: 'power2.in',
+        }, '-=0.8')
+        .to(['.act1-your-rule-top', '.act1-your-rule-bottom'], {
+          scaleX: 0,
+          duration: 0.7,
+          ease: 'power2.in',
+        }, '-=0.7')
+        .to('.act1-ads-slab', {
+          scaleX: 0,
+          duration: 1.0,
           ease: 'power2.inOut',
-        }, '-=0.9')
+        }, '-=0.85')
+        .to('.act1-ads-word', {
+          yPercent: 100,
+          scaleX: 0.55,
+          duration: 1.0,
+          ease: 'power2.in',
+        }, '-=0.95')
         .to('.act1-stage', {
           autoAlpha: 0,
           duration: 0.2,
@@ -323,7 +361,7 @@ export const CinematicHero: React.FC = () => {
         {/* ===================================================================== */}
         {/* MODULAR 5-ACT ARCHITECTURE                                            */}
         {/* ===================================================================== */}
-        <Act1PosterHook />
+        <Act1ArtboardPoster />
         <Act2SellOut />
         <Act3Timeline />
         <Act4TriPanel />
