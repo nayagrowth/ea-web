@@ -16,44 +16,9 @@ export const Act3Timeline: React.FC = () => {
           </span>
         </h2>
 
-        {/* Underneath elements: Horizon trajectory line & Metadata Ribbon (Sweeps in 3rd) */}
-        <div className="act3-sub-block flex flex-col items-start w-full">
-          {/* Minimalist Golden Horizon Trajectory Line with Precision Markers */}
-          <div className="act3-horizon-wrap relative w-full max-w-3xl mt-8 sm:mt-10 flex flex-col items-start">
-            {/* Luminous Gold Laser Track */}
-            <div className="act3-laser-bar w-full h-[2px] bg-gradient-to-r from-[#F5B800] via-[#F5B800]/80 to-transparent shadow-[0_0_20px_#F5B800]" />
-
-            {/* Precision Milestone Nodes */}
-            <div className="w-full flex items-center justify-between mt-3 text-[11px] sm:text-[12px] font-mono tracking-widest text-gray-400 uppercase">
-              <span className="flex items-center gap-1.5 text-white font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#F5B800]" />
-                01 &bull; Blueprint
-              </span>
-              <span className="flex items-center gap-1.5 text-[#F5B800] font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#F5B800] animate-ping" />
-                02 &bull; Pre-Sales Trust
-              </span>
-              <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                100% Sold Out On-Schedule
-              </span>
-            </div>
-          </div>
-
-          {/* Aligned Precision Guarantee Metadata Ribbon */}
-          <div className="mt-8 flex items-center gap-3 text-left">
-            <div className="w-9 h-9 rounded-full bg-[#F5B800]/10 border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800] text-sm font-black shadow-[0_0_20px_rgba(245,184,0,0.25)]">
-              ⏱
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-extrabold text-white tracking-wide">
-                100% Target On-Schedule
-              </span>
-              <span className="text-[11px] font-mono text-gray-400 tracking-wider">
-                ZERO PROJECT DELAY GUARANTEE &bull; MANDATE DISCIPLINE
-              </span>
-            </div>
-          </div>
+        {/* Minimalist Pure Golden Horizon Laser Bar (Clean, Uncluttered) */}
+        <div className="act3-horizon-wrap relative w-full max-w-3xl mt-8 sm:mt-10">
+          <div className="act3-laser-bar w-full h-[2px] bg-gradient-to-r from-[#F5B800] via-[#F5B800]/80 to-transparent shadow-[0_0_24px_#F5B800]" />
         </div>
       </div>
     </div>

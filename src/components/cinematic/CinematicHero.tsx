@@ -4,7 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Act1Hook } from './acts/Act1Hook';
 import { Act2SellOut } from './acts/Act2SellOut';
 import { Act3Timeline } from './acts/Act3Timeline';
-import { Act4Credibility } from './acts/Act4Credibility';
+import { Act4TriPanel } from './acts/Act4TriPanel';
+import { Act5Credibility } from './acts/Act5Credibility';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,32 +18,35 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // 1. Initial State Setup
+      // 1. Initial States
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
       gsap.set('.act3-line-1', { x: -800, opacity: 0 });
       gsap.set('.act3-line-2', { x: -800, opacity: 0 });
-      gsap.set('.act3-sub-block', { x: -600, opacity: 0 });
-      gsap.set('.act3-laser-bar', { scaleX: 0, transformOrigin: 'left center' });
-      gsap.set('.act4-stage', { autoAlpha: 0, y: 80, scale: 0.94 });
+      gsap.set('.act3-horizon-wrap', { scaleX: 0, transformOrigin: 'left center' });
+      gsap.set('.act4-tri-stage', { autoAlpha: 0 });
+      gsap.set('.act4-panel-1', { y: 120, opacity: 0 });
+      gsap.set('.act4-panel-2', { y: 160, opacity: 0 });
+      gsap.set('.act4-panel-3', { y: 200, opacity: 0 });
+      gsap.set('.act5-stage', { autoAlpha: 0, y: 80, scale: 0.94 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
 
-      // 2. Master Scrubbed Timeline for 4 Acts (Total 1000% scrub distance)
+      // 2. Master Scrubbed Timeline for 5 Acts (1300% scrub distance)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=1000%',
+          end: '+=1300%',
           pin: stageRef.current,
-          scrub: 1.15,
+          scrub: 1.2,
           anticipatePin: 1,
           onUpdate: (self) => setScrollProgress(self.progress),
         },
       });
 
       // =====================================================================
-      // ACT 1 (0% to 22%): "Most agencies run your ads." (Architectural Dusk)
+      // ACT 1: "Most agencies run your ads."
       // =====================================================================
       tl.to('.trap-char', {
         z: () => gsap.utils.random(250, 750),
@@ -64,7 +68,7 @@ export const CinematicHero: React.FC = () => {
           duration: 0.2,
         }, '-=0.2')
 
-        // Fade out tower background -> Transition to Pure Pitch Black
+        // Transition background to pitch black
         .to('.bg-real-estate-tower', {
           opacity: 0,
           duration: 1.2,
@@ -72,7 +76,7 @@ export const CinematicHero: React.FC = () => {
         }, '-=0.5')
 
         // =====================================================================
-        // ACT 2 (22% to 46%): "We sell-out your real estate project"
+        // ACT 2: "We sell-out your real estate project"
         // =====================================================================
         .to('.act2-stage', {
           autoAlpha: 1,
@@ -116,14 +120,13 @@ export const CinematicHero: React.FC = () => {
         // Reading hold for Act 2
         .to('.act2-stage', {
           scale: 1.02,
-          duration: 2.5,
+          duration: 2.4,
           ease: 'none',
         })
 
         // =====================================================================
-        // ACT 2 OUTRO & ACT 3 ENTRANCE: Cascading Staggered Left-to-Right Flow
+        // ACT 2 OUTRO & ACT 3 ENTRANCE: Cascading Left-to-Right Flow
         // =====================================================================
-        // Act 2 Line 1 ("We sell-out") sweeps left 1st
         .to('.act2-line-1', {
           x: -900,
           opacity: 0,
@@ -131,7 +134,6 @@ export const CinematicHero: React.FC = () => {
           duration: 1.1,
           ease: 'power3.in',
         })
-        // Act 2 Line 2 ("your real estate") sweeps left 2nd
         .to('.act2-line-2', {
           x: -900,
           opacity: 0,
@@ -139,7 +141,6 @@ export const CinematicHero: React.FC = () => {
           duration: 1.1,
           ease: 'power3.in',
         }, '-=0.85')
-        // Act 2 Line 3 ("project") sweeps left 3rd
         .to('.act2-line-3', {
           x: -900,
           opacity: 0,
@@ -153,49 +154,38 @@ export const CinematicHero: React.FC = () => {
         })
 
         // ---------------------------------------------------------------------
-        // Act 3 Enters Staggered Line-by-Line from the Left
+        // Act 3 Enters Cascading Line-by-Line
         // ---------------------------------------------------------------------
         .to('.act3-stage', {
           autoAlpha: 1,
           duration: 0.1,
         }, '-=0.4')
-        // Line 1 ("Within your") comes in 1st
         .to('.act3-line-1', {
           x: 0,
           opacity: 1,
           duration: 1.4,
           ease: 'power3.out',
         }, '-=0.3')
-        // Line 2 ("planned timeline.") comes in 2nd
         .to('.act3-line-2', {
           x: 0,
           opacity: 1,
           duration: 1.4,
           ease: 'power3.out',
         }, '-=1.0')
-        // Line 3 (Underneath horizon track & metadata) comes in 3rd
-        .to('.act3-sub-block', {
-          x: 0,
-          opacity: 1,
-          duration: 1.4,
-          ease: 'power3.out',
-        }, '-=1.0')
-        .to('.act3-laser-bar', {
+        .to('.act3-horizon-wrap', {
           scaleX: 1,
           duration: 1.6,
           ease: 'power2.out',
         }, '-=1.0')
 
-        // GENEROUS EXTENDED READING HOLD FOR ACT 3
+        // Generous Reading Hold for Act 3
         .to('.act3-stage', {
           scale: 1.02,
-          duration: 3.5,
+          duration: 3.2,
           ease: 'none',
         })
 
-        // ---------------------------------------------------------------------
-        // ACT 3 OUTRO: Cascading Staggered Leftward Exit
-        // ---------------------------------------------------------------------
+        // ACT 3 OUTRO: Cascading Leftward Exit
         .to('.act3-line-1', {
           x: -900,
           opacity: 0,
@@ -210,11 +200,9 @@ export const CinematicHero: React.FC = () => {
           duration: 1.0,
           ease: 'power2.in',
         }, '-=0.8')
-        .to('.act3-sub-block', {
-          x: -700,
-          opacity: 0,
-          filter: 'blur(8px)',
-          duration: 0.9,
+        .to('.act3-horizon-wrap', {
+          scaleX: 0,
+          duration: 0.8,
           ease: 'power2.in',
         }, '-=0.8')
         .to('.act3-stage', {
@@ -223,9 +211,56 @@ export const CinematicHero: React.FC = () => {
         })
 
         // =====================================================================
-        // ACT 4 (74% to 100%): ORTHOGONAL VERTICAL SPATIAL RISE (Editorial Luxury)
+        // ACT 4: TRI-PANEL PUNE ARCHITECTURAL DELIVERY ENGINE
         // =====================================================================
-        .to('.act4-stage', {
+        .to('.act4-tri-stage', {
+          autoAlpha: 1,
+          duration: 0.2,
+        })
+        .to('.act4-panel-1', {
+          y: 0,
+          opacity: 1,
+          duration: 1.4,
+          ease: 'power3.out',
+        })
+        .to('.act4-panel-2', {
+          y: 0,
+          opacity: 1,
+          duration: 1.4,
+          ease: 'power3.out',
+        }, '-=1.1')
+        .to('.act4-panel-3', {
+          y: 0,
+          opacity: 1,
+          duration: 1.4,
+          ease: 'power3.out',
+        }, '-=1.1')
+
+        // Slow cinematic image scale zoom during Act 4 reading hold
+        .to(['.act4-img-1', '.act4-img-2', '.act4-img-3'], {
+          scale: 1.08,
+          duration: 3.5,
+          ease: 'none',
+        })
+
+        // ACT 4 OUTRO: Panels slide out with depth
+        .to(['.act4-panel-1', '.act4-panel-2', '.act4-panel-3'], {
+          y: -100,
+          opacity: 0,
+          filter: 'blur(12px)',
+          stagger: 0.12,
+          duration: 1.0,
+          ease: 'power2.in',
+        })
+        .to('.act4-tri-stage', {
+          autoAlpha: 0,
+          duration: 0.1,
+        })
+
+        // =====================================================================
+        // ACT 5: ORTHOGONAL VERTICAL SPATIAL RISE ("459+ Real Estate Projects")
+        // =====================================================================
+        .to('.act5-stage', {
           autoAlpha: 1,
           y: 0,
           scale: 1,
@@ -233,22 +268,22 @@ export const CinematicHero: React.FC = () => {
           ease: 'power3.out',
         })
         .fromTo(
-          '.act4-metric-val',
+          '.act5-metric-val',
           { y: 60, opacity: 0, filter: 'blur(10px)' },
           { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.6, ease: 'power3.out' },
           '-=1.5'
         )
         .fromTo(
-          '.act4-headline',
+          '.act5-headline',
           { y: 30, opacity: 0 },
           { y: 0, opacity: 1, duration: 1.4, ease: 'power3.out' },
           '-=1.1'
         )
 
-        // Final hold for Act 4
-        .to('.act4-stage', {
+        // Final hold for Act 5
+        .to('.act5-stage', {
           scale: 1.01,
-          duration: 3.0,
+          duration: 3.2,
           ease: 'none',
         });
     }, containerRef);
@@ -284,12 +319,13 @@ export const CinematicHero: React.FC = () => {
         <div className="absolute inset-0 z-1 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.08)_0%,transparent_70%)]" />
 
         {/* ===================================================================== */}
-        {/* MODULAR ACTS 1, 2, 3 & 4                                              */}
+        {/* MODULAR 5-ACT ARCHITECTURE                                            */}
         {/* ===================================================================== */}
         <Act1Hook />
         <Act2SellOut />
         <Act3Timeline />
-        <Act4Credibility />
+        <Act4TriPanel />
+        <Act5Credibility />
       </div>
     </div>
   );
