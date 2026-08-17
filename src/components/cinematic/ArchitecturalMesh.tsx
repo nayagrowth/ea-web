@@ -31,38 +31,40 @@ export const ArchitecturalMesh: React.FC<ArchitecturalMeshProps> = ({
     resize();
     window.addEventListener('resize', resize);
 
-    const COLS = 26;
-    const ROWS = 18;
+    const COLS = 24;
+    const ROWS = 16;
 
     const render = () => {
-      time += 0.022;
+      time += 0.02;
       const rect = canvas.getBoundingClientRect();
       const width = rect.width;
       const height = rect.height;
 
       ctx.clearRect(0, 0, width, height);
 
-      const fov = 380;
-      const cx = width * 0.65;
-      const cy = height * 0.55;
+      const fov = 420;
+      // Positioned firmly in the Right-Centered Quadrant
+      const cx = width * 0.74;
+      const cy = height * 0.50;
 
-      // Isometric 3D pitch/yaw angles
+      // 3D Isometric Pitch and Yaw Angles
       const rotX = 1.12;
-      const rotZ = -0.28;
+      const rotZ = -0.32;
 
       const points: { x: number; y: number; z: number; px: number; py: number; alpha: number }[][] = [];
 
       for (let r = 0; r < ROWS; r++) {
         points[r] = [];
         for (let c = 0; c < COLS; c++) {
-          const x0 = (c - COLS / 2) * 36;
-          const y0 = (r - ROWS / 2) * 36;
+          const x0 = (c - COLS / 2) * 32;
+          const y0 = (r - ROWS / 2) * 32;
 
           const dist = Math.sqrt(x0 * x0 + y0 * y0);
+          // Elevation reacts dynamically to scroll progress + continuous time wave
           const z0 =
-            Math.sin(dist * 0.035 - time + progress * 3) * 32 +
-            Math.cos(x0 * 0.04 + time) * 16 +
-            (1 - r / ROWS) * 30;
+            Math.sin(dist * 0.04 - time + progress * 4) * (24 + progress * 15) +
+            Math.cos(x0 * 0.05 + time) * 16 +
+            (1 - r / ROWS) * 38;
 
           // 3D rotation transform
           const x1 = x0 * Math.cos(rotZ) - y0 * Math.sin(rotZ);
@@ -71,7 +73,7 @@ export const ArchitecturalMesh: React.FC<ArchitecturalMeshProps> = ({
 
           const x2 = x1;
           const y2 = y1 * Math.cos(rotX) - z1 * Math.sin(rotX);
-          const z2 = y1 * Math.sin(rotX) + z1 * Math.cos(rotX) + 400;
+          const z2 = y1 * Math.sin(rotX) + z1 * Math.cos(rotX) + 420;
 
           const scale = fov / (fov + z2);
           const px = cx + x2 * scale;
@@ -83,7 +85,7 @@ export const ArchitecturalMesh: React.FC<ArchitecturalMeshProps> = ({
       }
 
       // Draw Rows (Champagne Gold wireframe)
-      ctx.lineWidth = 1.1;
+      ctx.lineWidth = 1.2;
       for (let r = 0; r < ROWS; r++) {
         ctx.beginPath();
         for (let c = 0; c < COLS; c++) {
@@ -93,9 +95,8 @@ export const ArchitecturalMesh: React.FC<ArchitecturalMeshProps> = ({
         }
         const grad = ctx.createLinearGradient(0, 0, width, 0);
         grad.addColorStop(0, 'rgba(245, 184, 0, 0.0)');
-        grad.addColorStop(0.3, `rgba(245, 184, 0, ${0.25 * (1 - r / ROWS)})`);
-        grad.addColorStop(0.8, `rgba(245, 184, 0, ${0.45 * (1 - r / ROWS)})`);
-        grad.addColorStop(1, 'rgba(255, 255, 255, 0.05)');
+        grad.addColorStop(0.5, `rgba(245, 184, 0, ${0.45 * (1 - r / ROWS)})`);
+        grad.addColorStop(1, 'rgba(255, 255, 255, 0.12)');
         ctx.strokeStyle = grad;
         ctx.stroke();
       }
@@ -109,7 +110,7 @@ export const ArchitecturalMesh: React.FC<ArchitecturalMeshProps> = ({
           else ctx.lineTo(pt.px, pt.py);
         }
         const grad = ctx.createLinearGradient(0, 0, 0, height);
-        grad.addColorStop(0, 'rgba(245, 184, 0, 0.4)');
+        grad.addColorStop(0, 'rgba(245, 184, 0, 0.5)');
         grad.addColorStop(1, 'rgba(255, 255, 255, 0.02)');
         ctx.strokeStyle = grad;
         ctx.stroke();
@@ -124,10 +125,10 @@ export const ArchitecturalMesh: React.FC<ArchitecturalMeshProps> = ({
           const isScanning = c === scanCol || c === scanCol + 1;
 
           ctx.beginPath();
-          ctx.arc(pt.px, pt.py, isScanning ? 3.2 : 1.6, 0, Math.PI * 2);
+          ctx.arc(pt.px, pt.py, isScanning ? 3.4 : 1.8, 0, Math.PI * 2);
           ctx.fillStyle = isScanning ? '#FFFFFF' : '#F5B800';
           ctx.shadowColor = '#F5B800';
-          ctx.shadowBlur = isScanning ? 12 : 3;
+          ctx.shadowBlur = isScanning ? 14 : 3;
           ctx.fill();
           ctx.shadowBlur = 0;
         }
