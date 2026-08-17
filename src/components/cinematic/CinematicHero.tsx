@@ -18,7 +18,7 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // 1. Initial States
+      // 1. Initial States Setup
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
@@ -26,27 +26,27 @@ export const CinematicHero: React.FC = () => {
       gsap.set('.act3-line-2', { x: -800, opacity: 0 });
       gsap.set('.act3-horizon-wrap', { scaleX: 0, transformOrigin: 'left center' });
       gsap.set('.act4-tri-stage', { autoAlpha: 0 });
-      gsap.set('.act4-panel-1', { y: 120, opacity: 0 });
-      gsap.set('.act4-panel-2', { y: 160, opacity: 0 });
-      gsap.set('.act4-panel-3', { y: 200, opacity: 0 });
+      gsap.set('.act4-panel-3', { y: '100%', opacity: 0 });
+      gsap.set('.act4-panel-2', { y: '100%', opacity: 0 });
+      gsap.set('.act4-panel-1', { y: '100%', opacity: 0 });
       gsap.set('.act5-stage', { autoAlpha: 0, y: 80, scale: 0.94 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
 
-      // 2. Master Scrubbed Timeline for 5 Acts (1300% scrub distance)
+      // 2. Master Scrubbed Timeline for 5 Acts (1400% scrub distance)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=1300%',
+          end: '+=1400%',
           pin: stageRef.current,
-          scrub: 1.2,
+          scrub: 1.15,
           anticipatePin: 1,
           onUpdate: (self) => setScrollProgress(self.progress),
         },
       });
 
       // =====================================================================
-      // ACT 1: "Most agencies run your ads."
+      // ACT 1: "Most agencies run your ads." (Architectural Dusk Hook)
       // =====================================================================
       tl.to('.trap-char', {
         z: () => gsap.utils.random(250, 750),
@@ -185,71 +185,83 @@ export const CinematicHero: React.FC = () => {
           ease: 'none',
         })
 
-        // ACT 3 OUTRO: Cascading Leftward Exit
+        // =====================================================================
+        // ACT 3 OUTRO ➔ ACT 4 ENTRANCE: MATHEMATICAL SEAMLESS HANDSHAKE
+        // As "planned timeline." sweeps left, Panel 3 (Right) rises FIRST,
+        // then Panel 2 (Center) rises, and finally Panel 1 (Left) rises as text exits!
+        // =====================================================================
+        // Step A: Act 3 starts sliding left
         .to('.act3-line-1', {
-          x: -900,
+          x: -950,
           opacity: 0,
-          filter: 'blur(12px)',
-          duration: 1.0,
-          ease: 'power2.in',
+          filter: 'blur(14px)',
+          duration: 1.6,
+          ease: 'power2.inOut',
         })
         .to('.act3-line-2', {
-          x: -900,
+          x: -950,
           opacity: 0,
-          filter: 'blur(12px)',
-          duration: 1.0,
-          ease: 'power2.in',
-        }, '-=0.8')
+          filter: 'blur(14px)',
+          duration: 1.6,
+          ease: 'power2.inOut',
+        }, '-=1.4')
         .to('.act3-horizon-wrap', {
+          x: -700,
+          opacity: 0,
           scaleX: 0,
-          duration: 0.8,
-          ease: 'power2.in',
-        }, '-=0.8')
+          duration: 1.2,
+          ease: 'power2.inOut',
+        }, '-=1.4')
+
+        // Step B: Mathematical Handshake — Panel 3 (Right) rises immediately as "timeline." starts clearing the right side
+        .to('.act4-tri-stage', {
+          autoAlpha: 1,
+          duration: 0.1,
+        }, '-=1.5')
+        .to('.act4-panel-3', {
+          y: '0%',
+          opacity: 1,
+          duration: 1.3,
+          ease: 'power3.out',
+        }, '-=1.4')
+
+        // Step C: Panel 2 (Center) rises as text sweeps across the center
+        .to('.act4-panel-2', {
+          y: '0%',
+          opacity: 1,
+          duration: 1.3,
+          ease: 'power3.out',
+        }, '-=1.05')
+
+        // Step D: Panel 1 (Left) rises exactly as the text completely exits off the left edge
+        .to('.act4-panel-1', {
+          y: '0%',
+          opacity: 1,
+          duration: 1.3,
+          ease: 'power3.out',
+        }, '-=0.7')
+
         .to('.act3-stage', {
           autoAlpha: 0,
           duration: 0.1,
-        })
+        }, '-=0.3')
 
         // =====================================================================
-        // ACT 4: TRI-PANEL PUNE ARCHITECTURAL DELIVERY ENGINE
+        // ACT 4 READING HOLD & SLOW PARALLAX ZOOM
         // =====================================================================
-        .to('.act4-tri-stage', {
-          autoAlpha: 1,
-          duration: 0.2,
-        })
-        .to('.act4-panel-1', {
-          y: 0,
-          opacity: 1,
-          duration: 1.4,
-          ease: 'power3.out',
-        })
-        .to('.act4-panel-2', {
-          y: 0,
-          opacity: 1,
-          duration: 1.4,
-          ease: 'power3.out',
-        }, '-=1.1')
-        .to('.act4-panel-3', {
-          y: 0,
-          opacity: 1,
-          duration: 1.4,
-          ease: 'power3.out',
-        }, '-=1.1')
-
-        // Slow cinematic image scale zoom during Act 4 reading hold
         .to(['.act4-img-1', '.act4-img-2', '.act4-img-3'], {
           scale: 1.08,
           duration: 3.5,
           ease: 'none',
         })
 
-        // ACT 4 OUTRO: Panels slide out with depth
+        // ACT 4 OUTRO: Panels slide out with spatial depth
         .to(['.act4-panel-1', '.act4-panel-2', '.act4-panel-3'], {
-          y: -100,
+          y: '-100%',
           opacity: 0,
           filter: 'blur(12px)',
           stagger: 0.12,
-          duration: 1.0,
+          duration: 1.2,
           ease: 'power2.in',
         })
         .to('.act4-tri-stage', {
