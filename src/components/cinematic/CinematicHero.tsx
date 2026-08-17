@@ -18,65 +18,64 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // 1. Initial States Setup
+      // 1. Initial State Setup (Pure Hardware-Accelerated Transforms)
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
-      gsap.set('.act3-line-1', { x: -800, opacity: 0 });
-      gsap.set('.act3-line-2', { x: -800, opacity: 0 });
+      gsap.set('.act3-line-1', { xPercent: -100, opacity: 0 });
+      gsap.set('.act3-line-2', { xPercent: -100, opacity: 0 });
       gsap.set('.act3-horizon-wrap', { scaleX: 0, transformOrigin: 'left center' });
       gsap.set('.act4-tri-stage', { autoAlpha: 0 });
-      gsap.set('.act4-panel-3', { y: '100%', opacity: 0 });
-      gsap.set('.act4-panel-2', { y: '100%', opacity: 0 });
-      gsap.set('.act4-panel-1', { y: '100%', opacity: 0 });
-      gsap.set('.act5-stage', { autoAlpha: 0, y: 80, scale: 0.94 });
+      gsap.set('.act4-panel-3', { yPercent: 100, opacity: 0 });
+      gsap.set('.act4-panel-2', { yPercent: 100, opacity: 0 });
+      gsap.set('.act4-panel-1', { yPercent: 100, opacity: 0 });
+      gsap.set('.act5-stage', { autoAlpha: 0, yPercent: 40, scale: 0.96 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
 
-      // 2. Master Scrubbed Timeline for 5 Acts (1400% scrub distance)
+      // 2. Mathematically Budgeted Master Scrubbed Timeline (900% scrub distance, 0.8s responsive scrub)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=1400%',
+          end: '+=900%',
           pin: stageRef.current,
-          scrub: 1.15,
+          scrub: 0.8,
           anticipatePin: 1,
           onUpdate: (self) => setScrollProgress(self.progress),
         },
       });
 
       // =====================================================================
-      // ACT 1: "Most agencies run your ads." (Architectural Dusk Hook)
+      // ACT 1 (0% to 20%): "Most agencies run your ads."
       // =====================================================================
       tl.to('.trap-char', {
-        z: () => gsap.utils.random(250, 750),
-        x: () => gsap.utils.random(-320, 320),
-        y: () => gsap.utils.random(-220, 220),
-        rotateX: () => gsap.utils.random(-90, 90),
-        rotateY: () => gsap.utils.random(-90, 90),
+        z: () => gsap.utils.random(200, 600),
+        x: () => gsap.utils.random(-250, 250),
+        y: () => gsap.utils.random(-180, 180),
+        rotateX: () => gsap.utils.random(-60, 60),
+        rotateY: () => gsap.utils.random(-60, 60),
         opacity: 0,
-        filter: 'blur(14px)',
         stagger: {
-          each: 0.015,
+          each: 0.012,
           from: 'random',
         },
-        duration: 1.6,
-        ease: 'power3.inOut',
+        duration: 1.2,
+        ease: 'power2.inOut',
       })
         .to('.act1-stage', {
           autoAlpha: 0,
           duration: 0.2,
         }, '-=0.2')
 
-        // Transition background to pitch black
+        // Tower background fades to pitch black
         .to('.bg-real-estate-tower', {
           opacity: 0,
-          duration: 1.2,
+          duration: 1.0,
           ease: 'power2.inOut',
-        }, '-=0.5')
+        }, '-=0.4')
 
         // =====================================================================
-        // ACT 2: "We sell-out your real estate project"
+        // ACT 2 (20% to 40%): "We sell-out your real estate project"
         // =====================================================================
         .to('.act2-stage', {
           autoAlpha: 1,
@@ -85,183 +84,168 @@ export const CinematicHero: React.FC = () => {
         .fromTo(
           '.sellout-char-angle',
           {
-            x: (i) => (i % 2 === 0 ? -160 : 160),
-            y: (i) => (i % 3 === 0 ? 100 : -100),
-            z: (i) => -350 - i * 15,
-            rotateX: (i) => (i % 2 === 0 ? 40 : -40),
-            rotateY: (i) => (i % 2 === 0 ? -50 : 50),
+            x: (i) => (i % 2 === 0 ? -120 : 120),
+            y: (i) => (i % 3 === 0 ? 80 : -80),
+            z: (i) => -250 - i * 10,
             opacity: 0,
-            filter: 'blur(12px)',
           },
           {
             x: 0,
             y: 0,
             z: 0,
-            rotateX: 0,
-            rotateY: 0,
             opacity: 1,
-            filter: 'blur(0px)',
             stagger: {
-              each: 0.02,
+              each: 0.015,
               from: 'center',
             },
-            duration: 2.0,
-            ease: 'expo.out',
+            duration: 1.4,
+            ease: 'power3.out',
           },
           '-=0.1'
         )
         .fromTo(
           '.sellout-gold-flare',
           { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 1, duration: 1.4, ease: 'power3.out' },
-          '-=0.8'
+          { scaleX: 1, opacity: 1, duration: 1.0, ease: 'power3.out' },
+          '-=0.6'
         )
 
         // Reading hold for Act 2
         .to('.act2-stage', {
-          scale: 1.02,
-          duration: 2.4,
+          scale: 1.015,
+          duration: 1.8,
           ease: 'none',
         })
 
         // =====================================================================
-        // ACT 2 OUTRO & ACT 3 ENTRANCE: Cascading Left-to-Right Flow
+        // ACT 2 OUTRO & ACT 3 ENTRANCE: Clean Staggered Leftward Flow
         // =====================================================================
         .to('.act2-line-1', {
-          x: -900,
+          xPercent: -120,
           opacity: 0,
-          filter: 'blur(12px)',
-          duration: 1.1,
-          ease: 'power3.in',
+          duration: 0.9,
+          ease: 'power2.in',
         })
         .to('.act2-line-2', {
-          x: -900,
+          xPercent: -120,
           opacity: 0,
-          filter: 'blur(12px)',
-          duration: 1.1,
-          ease: 'power3.in',
-        }, '-=0.85')
+          duration: 0.9,
+          ease: 'power2.in',
+        }, '-=0.75')
         .to('.act2-line-3', {
-          x: -900,
+          xPercent: -120,
           opacity: 0,
-          filter: 'blur(12px)',
-          duration: 1.1,
-          ease: 'power3.in',
-        }, '-=0.85')
+          duration: 0.9,
+          ease: 'power2.in',
+        }, '-=0.75')
         .to('.act2-stage', {
           autoAlpha: 0,
           duration: 0.1,
         })
 
         // ---------------------------------------------------------------------
-        // Act 3 Enters Cascading Line-by-Line
+        // Act 3 Enters Staggered Line-by-Line from the Left
         // ---------------------------------------------------------------------
         .to('.act3-stage', {
           autoAlpha: 1,
           duration: 0.1,
-        }, '-=0.4')
-        .to('.act3-line-1', {
-          x: 0,
-          opacity: 1,
-          duration: 1.4,
-          ease: 'power3.out',
         }, '-=0.3')
-        .to('.act3-line-2', {
-          x: 0,
+        .to('.act3-line-1', {
+          xPercent: 0,
           opacity: 1,
-          duration: 1.4,
+          duration: 1.0,
           ease: 'power3.out',
-        }, '-=1.0')
+        }, '-=0.2')
+        .to('.act3-line-2', {
+          xPercent: 0,
+          opacity: 1,
+          duration: 1.0,
+          ease: 'power3.out',
+        }, '-=0.8')
         .to('.act3-horizon-wrap', {
           scaleX: 1,
-          duration: 1.6,
+          duration: 1.2,
           ease: 'power2.out',
-        }, '-=1.0')
+        }, '-=0.8')
 
-        // Generous Reading Hold for Act 3
+        // Comfortable Reading Hold for Act 3
         .to('.act3-stage', {
-          scale: 1.02,
-          duration: 3.2,
+          scale: 1.015,
+          duration: 2.0,
           ease: 'none',
         })
 
         // =====================================================================
         // ACT 3 OUTRO ➔ ACT 4 ENTRANCE: MATHEMATICAL SEAMLESS HANDSHAKE
-        // As "planned timeline." sweeps left, Panel 3 (Right) rises FIRST,
-        // then Panel 2 (Center) rises, and finally Panel 1 (Left) rises as text exits!
+        // Text sweeps left while Panel 3, 2, and 1 rise in sequence
         // =====================================================================
-        // Step A: Act 3 starts sliding left
         .to('.act3-line-1', {
-          x: -950,
+          xPercent: -120,
           opacity: 0,
-          filter: 'blur(14px)',
-          duration: 1.6,
+          duration: 1.2,
           ease: 'power2.inOut',
         })
         .to('.act3-line-2', {
-          x: -950,
+          xPercent: -120,
           opacity: 0,
-          filter: 'blur(14px)',
-          duration: 1.6,
-          ease: 'power2.inOut',
-        }, '-=1.4')
-        .to('.act3-horizon-wrap', {
-          x: -700,
-          opacity: 0,
-          scaleX: 0,
           duration: 1.2,
           ease: 'power2.inOut',
-        }, '-=1.4')
+        }, '-=1.1')
+        .to('.act3-horizon-wrap', {
+          xPercent: -100,
+          opacity: 0,
+          duration: 0.9,
+          ease: 'power2.inOut',
+        }, '-=1.1')
 
-        // Step B: Mathematical Handshake — Panel 3 (Right) rises immediately as "timeline." starts clearing the right side
+        // Handshake: Panel 3 (Right) rises as text begins sweeping left
         .to('.act4-tri-stage', {
           autoAlpha: 1,
           duration: 0.1,
-        }, '-=1.5')
+        }, '-=1.2')
         .to('.act4-panel-3', {
-          y: '0%',
+          yPercent: 0,
           opacity: 1,
-          duration: 1.3,
+          duration: 1.1,
           ease: 'power3.out',
-        }, '-=1.4')
+        }, '-=1.15')
 
-        // Step C: Panel 2 (Center) rises as text sweeps across the center
+        // Panel 2 (Center) rises as text clears middle
         .to('.act4-panel-2', {
-          y: '0%',
+          yPercent: 0,
           opacity: 1,
-          duration: 1.3,
+          duration: 1.1,
           ease: 'power3.out',
-        }, '-=1.05')
+        }, '-=0.85')
 
-        // Step D: Panel 1 (Left) rises exactly as the text completely exits off the left edge
+        // Panel 1 (Left) rises as text exits off the screen
         .to('.act4-panel-1', {
-          y: '0%',
+          yPercent: 0,
           opacity: 1,
-          duration: 1.3,
+          duration: 1.1,
           ease: 'power3.out',
-        }, '-=0.7')
+        }, '-=0.55')
 
         .to('.act3-stage', {
           autoAlpha: 0,
           duration: 0.1,
-        }, '-=0.3')
+        }, '-=0.2')
 
         // =====================================================================
-        // ACT 4 READING HOLD & SLOW PARALLAX ZOOM
+        // ACT 4 READING HOLD & CINEMATIC SCALE
         // =====================================================================
         .to(['.act4-img-1', '.act4-img-2', '.act4-img-3'], {
-          scale: 1.08,
-          duration: 3.5,
+          scale: 1.06,
+          duration: 2.5,
           ease: 'none',
         })
 
-        // ACT 4 OUTRO: Panels slide out with spatial depth
+        // ACT 4 OUTRO: Panels slide out vertically
         .to(['.act4-panel-1', '.act4-panel-2', '.act4-panel-3'], {
-          y: '-100%',
+          yPercent: -100,
           opacity: 0,
-          filter: 'blur(12px)',
-          stagger: 0.12,
-          duration: 1.2,
+          stagger: 0.08,
+          duration: 1.0,
           ease: 'power2.in',
         })
         .to('.act4-tri-stage', {
@@ -274,28 +258,28 @@ export const CinematicHero: React.FC = () => {
         // =====================================================================
         .to('.act5-stage', {
           autoAlpha: 1,
-          y: 0,
+          yPercent: 0,
           scale: 1,
-          duration: 2.0,
+          duration: 1.4,
           ease: 'power3.out',
         })
         .fromTo(
           '.act5-metric-val',
-          { y: 60, opacity: 0, filter: 'blur(10px)' },
-          { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.6, ease: 'power3.out' },
-          '-=1.5'
+          { yPercent: 40, opacity: 0 },
+          { yPercent: 0, opacity: 1, duration: 1.2, ease: 'power3.out' },
+          '-=1.2'
         )
         .fromTo(
           '.act5-headline',
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1.4, ease: 'power3.out' },
-          '-=1.1'
+          { yPercent: 25, opacity: 0 },
+          { yPercent: 0, opacity: 1, duration: 1.0, ease: 'power3.out' },
+          '-=0.9'
         )
 
         // Final hold for Act 5
         .to('.act5-stage', {
           scale: 1.01,
-          duration: 3.2,
+          duration: 2.5,
           ease: 'none',
         });
     }, containerRef);

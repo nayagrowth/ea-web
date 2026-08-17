@@ -7,16 +7,19 @@ export const Act4TriPanel: React.FC = () => {
         {/* ===================================================================== */}
         {/* PANEL 1: PHASE 01 — POSITIONING BLUEPRINT (Pune Commercial elevation) */}
         {/* ===================================================================== */}
-        <div className="act4-panel-1 relative h-full flex flex-col justify-end p-8 sm:p-10 lg:p-14 overflow-hidden group">
+        <div
+          className="act4-panel-1 relative h-full flex flex-col justify-end p-8 sm:p-10 lg:p-14 overflow-hidden bg-black"
+          style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
+        >
           {/* Real Estate Backdrop Image */}
-          <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 z-0 overflow-hidden">
             <img
               src="/pune_commercial.jpg"
               alt="Pune Commercial Architecture"
-              className="act4-img-1 w-full h-full object-cover filter brightness-[0.70] contrast-125 transition-transform duration-700"
+              className="act4-img-1 w-full h-full object-cover filter brightness-[0.72] contrast-125"
+              style={{ willChange: 'transform', transform: 'translateZ(0)' }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
-            <div className="absolute inset-0 bg-black/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20" />
           </div>
 
           {/* Foreground Panel Content */}
@@ -37,16 +40,20 @@ export const Act4TriPanel: React.FC = () => {
         {/* ===================================================================== */}
         {/* PANEL 2: PHASE 02 — PRE-SALES TRUST (Pune Luxury Residential Tower)   */}
         {/* ===================================================================== */}
-        <div className="act4-panel-2 relative h-full flex flex-col justify-end p-8 sm:p-10 lg:p-14 overflow-hidden group">
+        <div
+          className="act4-panel-2 relative h-full flex flex-col justify-end p-8 sm:p-10 lg:p-14 overflow-hidden bg-black"
+          style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
+        >
           {/* Real Estate Backdrop Image */}
-          <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 z-0 overflow-hidden">
             <img
               src="/pune_residential.jpg"
               alt="Pune Luxury Residential Tower"
-              className="act4-img-2 w-full h-full object-cover filter brightness-[0.70] contrast-125 transition-transform duration-700"
+              className="act4-img-2 w-full h-full object-cover filter brightness-[0.72] contrast-125"
+              style={{ willChange: 'transform', transform: 'translateZ(0)' }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.15)_0%,transparent_75%)]" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.18)_0%,transparent_75%)]" />
           </div>
 
           {/* Foreground Panel Content */}
@@ -67,16 +74,19 @@ export const Act4TriPanel: React.FC = () => {
         {/* ===================================================================== */}
         {/* PANEL 3: PHASE 03 — 100% TARGET DELIVERED (Pune Township & Estate)    */}
         {/* ===================================================================== */}
-        <div className="act4-panel-3 relative h-full flex flex-col justify-end p-8 sm:p-10 lg:p-14 overflow-hidden group">
+        <div
+          className="act4-panel-3 relative h-full flex flex-col justify-end p-8 sm:p-10 lg:p-14 overflow-hidden bg-black"
+          style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
+        >
           {/* Real Estate Backdrop Image */}
-          <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 z-0 overflow-hidden">
             <img
               src="/pune_township.jpg"
               alt="Pune Master-Planned Township"
-              className="act4-img-3 w-full h-full object-cover filter brightness-[0.70] contrast-125 transition-transform duration-700"
+              className="act4-img-3 w-full h-full object-cover filter brightness-[0.72] contrast-125"
+              style={{ willChange: 'transform', transform: 'translateZ(0)' }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
-            <div className="absolute inset-0 bg-black/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20" />
           </div>
 
           {/* Foreground Panel Content */}
