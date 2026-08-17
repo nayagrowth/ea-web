@@ -47,7 +47,7 @@ export const CinematicHero: React.FC = () => {
       gsap.set('.act3-stage', { autoAlpha: 0 });
       gsap.set('.act4-stage', { autoAlpha: 0, y: 70, scale: 0.94 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
-      gsap.set('.act3-architectural-decor', { autoAlpha: 0, scale: 0.9 });
+      gsap.set('.act3-schedule-node', { autoAlpha: 0, y: 20 });
 
       // 2. Master Scrubbed Timeline for 4 Acts (Total 800% scrub distance)
       const tl = gsap.timeline({
@@ -171,7 +171,7 @@ export const CinematicHero: React.FC = () => {
         })
 
         // =====================================================================
-        // ACT 3 (46% to 74%): Character-by-Character Stream from Left with Asymmetrical Luxury Layout
+        // ACT 3 (46% to 74%): "Within your" (Top-Left) + "planned timeline." (Center)
         // =====================================================================
         .to('.act3-stage', {
           autoAlpha: 1,
@@ -194,9 +194,9 @@ export const CinematicHero: React.FC = () => {
           },
           '-=0.1'
         )
-        .to('.act3-architectural-decor', {
+        .to('.act3-schedule-node', {
           autoAlpha: 1,
-          scale: 1,
+          y: 0,
           duration: 1.2,
           ease: 'power3.out',
         }, '-=1.0')
@@ -217,9 +217,9 @@ export const CinematicHero: React.FC = () => {
           duration: 1.1,
           ease: 'power2.in',
         })
-        .to('.act3-architectural-decor', {
+        .to('.act3-schedule-node', {
           autoAlpha: 0,
-          scale: 0.95,
+          y: 15,
           duration: 0.8,
           ease: 'power2.in',
         }, '<')
@@ -340,28 +340,14 @@ export const CinematicHero: React.FC = () => {
         </div>
 
         {/* ===================================================================== */}
-        {/* ACT 3: ASYMMETRICAL LUXURY EDITORIAL COMPOSITION ("Within your planned timeline.") */}
+        {/* ACT 3: "Within your" (Top-Left) & "planned timeline." (Center Zone)    */}
         {/* ===================================================================== */}
         <div className="act3-stage absolute inset-0 z-20 w-full h-full flex flex-col justify-between p-6 sm:p-10 lg:p-16 pointer-events-none">
-          {/* Top Row: Architectural Telemetry & Upper-Right Offset Headline */}
-          <div className="w-full flex items-start justify-between">
-            {/* Top-Left Architectural Precision Node */}
-            <div className="act3-architectural-decor flex flex-col gap-1.5 text-left">
-              <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-[11px] font-mono text-gray-300 tracking-wider backdrop-blur-md">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#F5B800] animate-ping" />
-                MANDATE TIMELINE DISCIPLINE
-              </div>
-              <span className="text-[10px] font-mono text-gray-500 tracking-widest uppercase pl-1">
-                SYSTEM: 4-PHASE INTEGRATED SELL-OUT
-              </span>
-            </div>
-
-            {/* Upper-Right Headline Part: "Within your" */}
-            <div className="text-right pr-2 sm:pr-8">
-              <h2 className="text-[clamp(2.4rem,5.5vw,5.2rem)] font-black text-white tracking-[-0.03em] leading-none uppercase">
-                <SpatialChars text="Within your" charClass="timeline-char-stream inline-block text-white" />
-              </h2>
-            </div>
+          {/* Top Row: Left-Upper Corner Headline "Within your" */}
+          <div className="w-full flex items-start justify-start pl-2 sm:pl-8">
+            <h2 className="text-[clamp(2.4rem,5.5vw,5.2rem)] font-black text-white tracking-[-0.03em] leading-none uppercase">
+              <SpatialChars text="Within your" charClass="timeline-char-stream inline-block text-white" />
+            </h2>
           </div>
 
           {/* Middle/Center Row: Bold Hero Inscription "planned timeline." */}
@@ -373,25 +359,16 @@ export const CinematicHero: React.FC = () => {
             </h2>
           </div>
 
-          {/* Bottom Row: Micro-Coordinates & 4.2x Absorption Metric Capsule */}
-          <div className="w-full flex items-end justify-between">
-            {/* Bottom-Left Vector Arc Indicator */}
-            <div className="act3-architectural-decor flex items-center gap-3 text-left">
-              <div className="w-8 h-8 rounded-full border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800] text-xs font-bold">
+          {/* Bottom Row: 100% Target On-Schedule Indicator */}
+          <div className="w-full flex items-end justify-start pl-2 sm:pl-8">
+            <div className="act3-schedule-node flex items-center gap-3 text-left">
+              <div className="w-8 h-8 rounded-full border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800] text-xs font-bold shadow-[0_0_15px_rgba(245,184,0,0.2)]">
                 ⏱
               </div>
               <div className="flex flex-col">
-                <span className="text-[12px] font-bold text-gray-200">100% Target On-Schedule</span>
-                <span className="text-[10px] font-mono text-gray-500">ZERO PROJECT DELAY GUARANTEE</span>
+                <span className="text-[12px] font-bold text-gray-200 tracking-wide">100% Target On-Schedule</span>
+                <span className="text-[10px] font-mono text-gray-500 tracking-wider">ZERO PROJECT DELAY GUARANTEE</span>
               </div>
-            </div>
-
-            {/* Bottom-Right Luxury Metric Pill */}
-            <div className="act3-architectural-decor flex items-center gap-3 bg-black/60 border border-white/10 px-4 py-2 rounded-2xl backdrop-blur-md shadow-xl">
-              <span className="text-xs font-mono text-gray-400">ABSORPTION VELOCITY</span>
-              <span className="text-sm font-black text-[#F5B800] bg-[#F5B800]/10 px-2 py-0.5 rounded-md border border-[#F5B800]/30">
-                +4.2x
-              </span>
             </div>
           </div>
         </div>
