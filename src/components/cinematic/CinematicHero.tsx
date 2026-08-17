@@ -43,17 +43,15 @@ export const CinematicHero: React.FC = () => {
     const ctx = gsap.context(() => {
       // 1. Initial State Setup
       gsap.set('.act2-stage', { autoAlpha: 0 });
-      gsap.set('.act3-stage', { autoAlpha: 0 });
-      gsap.set('.hologram-ring-1', { rotation: 0, scale: 0.8, opacity: 0 });
-      gsap.set('.hologram-ring-2', { rotation: 0, scale: 0.8, opacity: 0 });
-      gsap.set('.chronometer-hud', { autoAlpha: 0, y: 30 });
+      gsap.set('.act3-horizontal-stage', { autoAlpha: 0 });
+      gsap.set('.act4-credibility-stage', { autoAlpha: 0, scale: 0.9 });
 
-      // 2. Master 600% Scrub Timeline for Luxurious Multi-Angle Choreography
+      // 2. Master 700% Scrub Timeline for 4 Grand Acts
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=600%',
+          end: '+=700%',
           pin: stageRef.current,
           scrub: 1.3,
           anticipatePin: 1,
@@ -86,7 +84,7 @@ export const CinematicHero: React.FC = () => {
         }, '-=0.2')
 
         // ---------------------------------------------------------------------
-        // ACT 2: "We sell-out your real estate project" -> Multi-Angle Inward Snap
+        // ACT 2: "We sell-out your real estate project" -> Inward Snap
         // ---------------------------------------------------------------------
         .to('.act2-stage', {
           autoAlpha: 1,
@@ -130,67 +128,52 @@ export const CinematicHero: React.FC = () => {
         )
 
         // ---------------------------------------------------------------------
-        // ACT 2 -> ACT 3: Spatial Dissolve to "Within your planned timeline."
+        // ACT 2 OUTRO -> ACT 3 INTRO: Dynamic Horizontal Sweep
         // ---------------------------------------------------------------------
         .to('.act2-stage', {
-          autoAlpha: 0,
-          scale: 0.9,
-          y: -60,
-          rotateX: 30,
+          x: -300,
+          opacity: 0,
           filter: 'blur(12px)',
-          duration: 1.4,
-          ease: 'power2.inOut',
+          duration: 1.2,
+          ease: 'power2.in',
         }, '+=0.6')
 
-        // ACT 3: Extended Hold & Holographic Chronometer Sweep
-        .to('.act3-stage', {
+        // ACT 3: Massive Horizontal Kinetic "WITHIN YOUR PLANNED TIMELINE"
+        .to('.act3-horizontal-stage', {
           autoAlpha: 1,
           duration: 0.2,
-        })
+        }, '-=0.4')
         .fromTo(
-          '.timeline-char-spatial',
-          {
-            y: 120,
-            z: -500,
-            rotateX: -70,
-            opacity: 0,
-            filter: 'blur(16px)',
-          },
-          {
-            y: 0,
-            z: 0,
-            rotateX: 0,
-            opacity: 1,
-            filter: 'blur(0px)',
-            stagger: 0.02,
-            duration: 2,
-            ease: 'expo.out',
-          },
-          '-=0.1'
+          '.act3-massive-marquee',
+          { x: '40vw', opacity: 0.4 },
+          { x: '-45vw', opacity: 1, duration: 3.5, ease: 'none' },
+          '-=0.2'
         )
-        // Holographic Rings & Chronometer HUD Activation
-        .to('.hologram-ring-1', {
-          scale: 1,
-          opacity: 0.9,
-          rotation: 180,
-          duration: 2.2,
-          ease: 'power2.out',
-        }, '-=1.8')
-        .to('.hologram-ring-2', {
-          scale: 1,
-          opacity: 0.7,
-          rotation: -180,
-          duration: 2.2,
-          ease: 'power2.out',
-        }, '-=2.2')
-        .to('.chronometer-hud', {
+
+        // ---------------------------------------------------------------------
+        // ACT 3 OUTRO -> ACT 4 INTRO: "459+ Real Estate Projects Delivered on Schedule"
+        // ---------------------------------------------------------------------
+        .to('.act3-horizontal-stage', {
+          autoAlpha: 0,
+          scale: 0.9,
+          filter: 'blur(10px)',
+          duration: 1,
+          ease: 'power2.inOut',
+        })
+        .to('.act4-credibility-stage', {
           autoAlpha: 1,
-          y: 0,
-          duration: 1.4,
+          scale: 1,
+          duration: 1.6,
           ease: 'power3.out',
-        }, '-=1.4')
-        // Prolonged hold for Act 3 so it stays in full view
-        .to('.act3-stage', {
+        }, '-=0.4')
+        .fromTo(
+          '.act4-rotating-badge',
+          { rotation: 0 },
+          { rotation: 360, duration: 8, repeat: -1, ease: 'none' },
+          '-=1.6'
+        )
+        // Hold Act 4 firmly in view
+        .to('.act4-credibility-stage', {
           scale: 1.02,
           duration: 2,
           ease: 'none',
@@ -208,7 +191,7 @@ export const CinematicHero: React.FC = () => {
         className="relative w-full h-screen min-h-[660px] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-20 py-4 overflow-hidden bg-[#030508] select-none"
         style={{ perspective: '1600px' }}
       >
-        {/* Luxury Architectural Backdrop with Parallax */}
+        {/* Luxury Architectural Backdrop with Scroll Parallax */}
         <div
           className="absolute inset-0 z-0 pointer-events-none transition-transform duration-700 ease-out"
           style={{
@@ -224,7 +207,7 @@ export const CinematicHero: React.FC = () => {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.18)_0%,transparent_65%)]" />
         </div>
 
-        {/* Ambient Grid */}
+        {/* Ambient Subtle Grid */}
         <div
           className="absolute inset-0 z-1 pointer-events-none opacity-25"
           style={{
@@ -278,86 +261,79 @@ export const CinematicHero: React.FC = () => {
         </div>
 
         {/* ========================================================================= */}
-        {/* ACT 3: HOLOGRAPHIC CHRONOMETER ("Within your planned timeline.")          */}
+        {/* ACT 3: MASSIVE HORIZONTAL KINETIC TEXT ("WITHIN YOUR PLANNED TIMELINE")    */}
         {/* ========================================================================= */}
-        <div className="act3-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-          <div className="relative max-w-6xl flex flex-col items-center justify-center gap-8">
-            {/* Act 3 Main Statement */}
-            <h2 className="text-[clamp(3.2rem,8vw,7.6rem)] font-black text-white tracking-tight leading-[1.04] drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
-              <SpatialChars
-                text="Within your planned timeline."
-                charClass="timeline-char-spatial inline-block text-white"
-              />
-            </h2>
+        <div className="act3-horizontal-stage absolute inset-0 z-20 flex items-center justify-start pointer-events-none overflow-hidden whitespace-nowrap">
+          <div className="act3-massive-marquee flex items-center gap-12 font-black tracking-tighter uppercase text-[clamp(4.5rem,14vw,14rem)] leading-none text-white drop-shadow-[0_10px_60px_rgba(0,0,0,0.95)]">
+            <span className="text-white">Within</span>
+            <span className="text-[#F5B800] glow-gold-cinematic font-serif italic tracking-normal">Your</span>
+            <span className="text-white">Planned</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F5B800] to-white">Timeline.</span>
+          </div>
+        </div>
 
-            {/* High-Tech Holographic Orbital Chronometer HUD */}
-            <div className="relative w-full max-w-4xl h-[160px] flex items-center justify-center">
-              <svg viewBox="0 0 900 160" className="w-full h-full overflow-visible" fill="none">
-                {/* Outer Orbital Hologram Ring */}
-                <ellipse
-                  cx="450"
-                  cy="80"
-                  rx="400"
-                  ry="40"
-                  stroke="#F5B800"
-                  strokeWidth="1.5"
-                  strokeDasharray="8 12"
-                  className="hologram-ring-1"
-                  opacity="0.8"
-                />
-
-                {/* Inner Counter-Rotating Orbit Ring */}
-                <ellipse
-                  cx="450"
-                  cy="80"
-                  rx="340"
-                  ry="32"
-                  stroke="#38BDF8"
-                  strokeWidth="1.2"
-                  strokeDasharray="16 16"
-                  className="hologram-ring-2"
-                  opacity="0.6"
-                />
-
-                {/* Center Laser Precision Flight Axis */}
-                <line x1="100" y1="80" x2="800" y2="80" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" opacity="0.9" />
-
-                {/* Micro Telemetry HUD Coordinate Nodes */}
-                {/* Node 1: Month 01 */}
-                <g transform="translate(180, 80)">
-                  <circle cx="0" cy="0" r="6" fill="#030508" stroke="#F5B800" strokeWidth="2.5" />
-                  <text x="0" y="32" fill="#94A3B8" fontSize="11" fontWeight="800" textAnchor="middle" letterSpacing="1.5">
-                    M1: TRUST BLUEPRINT
+        {/* ========================================================================= */}
+        {/* ACT 4: CREDIBILITY CLIMAX ("459+ Real Estate Projects Delivered on Schedule") */}
+        {/* ========================================================================= */}
+        <div className="act4-credibility-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+          <div className="max-w-5xl flex flex-col items-center justify-center gap-6">
+            {/* Top Rotating Circular Seal Emblem & Glowing Pill */}
+            <div className="flex items-center justify-center gap-4 flex-wrap mb-2">
+              <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center flex-shrink-0">
+                {/* Spinning Outer SVG Text Ring */}
+                <svg viewBox="0 0 100 100" className="act4-rotating-badge w-full h-full">
+                  <path
+                    id="sealCirclePath"
+                    d="M 50, 50 m -38, 0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"
+                    fill="none"
+                  />
+                  <text fill="#F5B800" fontSize="8.2" fontWeight="900" letterSpacing="2.2">
+                    <textPath href="#sealCirclePath" startOffset="0%">
+                      ESTATE AUTOPILOTS &bull; 100% ON SCHEDULE &bull;
+                    </textPath>
                   </text>
-                </g>
+                </svg>
 
-                {/* Node 2: Month 02 */}
-                <g transform="translate(450, 80)">
-                  <circle cx="0" cy="0" r="6" fill="#030508" stroke="#F5B800" strokeWidth="2.5" />
-                  <text x="0" y="-22" fill="#F5B800" fontSize="11" fontWeight="900" textAnchor="middle" letterSpacing="1.5">
-                    M2: 3.8x ABSORPTION
-                  </text>
-                </g>
+                {/* Central Verified Shield Icon */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-[#F5B800] text-gray-950 flex items-center justify-center font-black shadow-[0_0_20px_#F5B800]">
+                    ✓
+                  </div>
+                </div>
+              </div>
 
-                {/* Node 3: 100% Target Sell-Out */}
-                <g transform="translate(720, 80)">
-                  <circle cx="0" cy="0" r="9" fill="#10B981" stroke="#FFFFFF" strokeWidth="2.5" className="animate-pulse" />
-                  <text x="0" y="32" fill="#10B981" fontSize="12" fontWeight="900" textAnchor="middle" letterSpacing="2">
-                    100% SELL-OUT ACHIEVED
-                  </text>
-                </g>
-              </svg>
+              <div className="inline-flex items-center gap-2 bg-[#F5B800]/15 border border-[#F5B800]/40 text-[#F5B800] px-4 py-2 rounded-full text-xs font-black tracking-widest uppercase backdrop-blur-md shadow-[0_0_25px_rgba(245,184,0,0.25)]">
+                <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+                Track Record & Timeline Reliability
+              </div>
             </div>
 
-            {/* Precision Chronometer Telemetry Pill */}
-            <div className="chronometer-hud flex items-center gap-4 bg-black/70 border border-[#F5B800]/40 px-6 py-2.5 rounded-full backdrop-blur-md shadow-2xl">
-              <span className="text-sm font-extrabold text-[#F5B800] tracking-widest uppercase">
-                ⏱ Planned Timeline Guarantee
+            {/* Massive Metric Counter Inscription */}
+            <div className="flex flex-col items-center justify-center">
+              <span className="text-[clamp(4.5rem,12vw,10rem)] font-black text-[#F5B800] leading-none tracking-tight glow-gold-cinematic drop-shadow-[0_10px_60px_rgba(245,184,0,0.4)]">
+                459+
               </span>
-              <span className="text-gray-500">&bull;</span>
-              <span className="text-sm font-black text-white">
-                459+ Real Estate Projects Delivered on Schedule
-              </span>
+              <h3 className="text-[clamp(1.6rem,3.4vw,3.2rem)] font-extrabold text-white tracking-tight leading-tight mt-3">
+                Real Estate Projects Delivered On Schedule
+              </h3>
+            </div>
+
+            {/* Supporting Core Punchline */}
+            <p className="text-gray-300 text-[clamp(1rem,1.5vw,1.3rem)] max-w-2xl mx-auto leading-relaxed font-medium">
+              Zero Delays. Zero Junk Enquiries. <span className="text-[#F5B800] font-bold">100% Mandate Velocity</span> across Residential, Commercial, Plotting & Townships.
+            </p>
+
+            {/* CTA Trigger */}
+            <div className="pt-4 pointer-events-auto">
+              <a
+                href="#book-strategy-session"
+                className="inline-flex items-center gap-3 bg-[#F5B800] hover:bg-[#E5AB00] text-gray-950 font-black text-sm sm:text-base px-8 py-4 rounded-2xl border border-[#D99A00] transition-all shadow-[0_0_35px_rgba(245,184,0,0.45)] active:scale-95"
+              >
+                <span>Book Your Project Sell-Out Strategy Session</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12" /><polyline points="19 12 12 19 5 12" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>
