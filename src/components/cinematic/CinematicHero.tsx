@@ -47,7 +47,7 @@ export const CinematicHero: React.FC = () => {
       gsap.set('.act3-stage', { autoAlpha: 0 });
       gsap.set('.act4-stage', { autoAlpha: 0, y: 70, scale: 0.94 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
-      gsap.set('.act3-laser-line', { scaleX: 0, transformOrigin: 'left center' });
+      gsap.set('.act3-architectural-decor', { autoAlpha: 0, scale: 0.9 });
 
       // 2. Master Scrubbed Timeline for 4 Acts (Total 800% scrub distance)
       const tl = gsap.timeline({
@@ -171,7 +171,7 @@ export const CinematicHero: React.FC = () => {
         })
 
         // =====================================================================
-        // ACT 3 (46% to 74%): Character-by-Character Sweep from Far Left
+        // ACT 3 (46% to 74%): Character-by-Character Stream from Left with Asymmetrical Luxury Layout
         // =====================================================================
         .to('.act3-stage', {
           autoAlpha: 1,
@@ -194,10 +194,11 @@ export const CinematicHero: React.FC = () => {
           },
           '-=0.1'
         )
-        .to('.act3-laser-line', {
-          scaleX: 1,
-          duration: 1.6,
-          ease: 'power2.out',
+        .to('.act3-architectural-decor', {
+          autoAlpha: 1,
+          scale: 1,
+          duration: 1.2,
+          ease: 'power3.out',
         }, '-=1.0')
 
         // Extended Clean Reading Hold for Act 3
@@ -216,9 +217,9 @@ export const CinematicHero: React.FC = () => {
           duration: 1.1,
           ease: 'power2.in',
         })
-        .to('.act3-laser-line', {
-          scaleX: 0,
-          opacity: 0,
+        .to('.act3-architectural-decor', {
+          autoAlpha: 0,
+          scale: 0.95,
           duration: 0.8,
           ease: 'power2.in',
         }, '<')
@@ -339,27 +340,58 @@ export const CinematicHero: React.FC = () => {
         </div>
 
         {/* ===================================================================== */}
-        {/* ACT 3: CHARACTER-BY-CHARACTER SWEEP FROM LEFT ("Within your planned timeline.") */}
+        {/* ACT 3: ASYMMETRICAL LUXURY EDITORIAL COMPOSITION ("Within your planned timeline.") */}
         {/* ===================================================================== */}
-        <div className="act3-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-          <div className="max-w-5xl flex flex-col items-center justify-center gap-6">
-            <h2 className="text-[clamp(3.2rem,8vw,7.4rem)] font-black text-white tracking-[-0.035em] leading-[1.02] drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
-              <span className="block">
-                <SpatialChars text="Within your" charClass="timeline-char-stream inline-block text-white" />
+        <div className="act3-stage absolute inset-0 z-20 w-full h-full flex flex-col justify-between p-6 sm:p-10 lg:p-16 pointer-events-none">
+          {/* Top Row: Architectural Telemetry & Upper-Right Offset Headline */}
+          <div className="w-full flex items-start justify-between">
+            {/* Top-Left Architectural Precision Node */}
+            <div className="act3-architectural-decor flex flex-col gap-1.5 text-left">
+              <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-[11px] font-mono text-gray-300 tracking-wider backdrop-blur-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#F5B800] animate-ping" />
+                MANDATE TIMELINE DISCIPLINE
+              </div>
+              <span className="text-[10px] font-mono text-gray-500 tracking-widest uppercase pl-1">
+                SYSTEM: 4-PHASE INTEGRATED SELL-OUT
               </span>
-              <span className="block mt-1 text-[#F5B800] glow-gold-cinematic font-serif italic font-normal tracking-normal">
+            </div>
+
+            {/* Upper-Right Headline Part: "Within your" */}
+            <div className="text-right pr-2 sm:pr-8">
+              <h2 className="text-[clamp(2.4rem,5.5vw,5.2rem)] font-black text-white tracking-[-0.03em] leading-none uppercase">
+                <SpatialChars text="Within your" charClass="timeline-char-stream inline-block text-white" />
+              </h2>
+            </div>
+          </div>
+
+          {/* Middle/Center Row: Bold Hero Inscription "planned timeline." */}
+          <div className="w-full max-w-6xl mx-auto text-left sm:text-center my-auto py-4">
+            <h2 className="text-[clamp(3.5rem,9.5vw,8.8rem)] font-black tracking-[-0.04em] leading-[0.96] drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
+              <span className="text-[#F5B800] glow-gold-cinematic font-serif italic font-normal tracking-normal">
                 <SpatialChars text="planned timeline." charClass="timeline-char-stream inline-block text-[#F5B800]" />
               </span>
             </h2>
+          </div>
 
-            {/* Ultra-Minimal Luminous Gold Timeline Laser Line */}
-            <div className="relative w-full max-w-xl mt-4 flex flex-col items-center">
-              <div className="act3-laser-line w-full h-[2px] bg-gradient-to-r from-[#F5B800]/20 via-[#F5B800] to-[#F5B800]/20 rounded-full shadow-[0_0_20px_#F5B800]" />
-              <div className="w-full flex items-center justify-between mt-3 text-[11px] font-mono tracking-widest text-gray-400 uppercase">
-                <span>01 &bull; Blueprint</span>
-                <span className="text-[#F5B800] font-bold">02 &bull; Pre-Sales</span>
-                <span className="text-emerald-400 font-bold">03 &bull; 100% Sold Out</span>
+          {/* Bottom Row: Micro-Coordinates & 4.2x Absorption Metric Capsule */}
+          <div className="w-full flex items-end justify-between">
+            {/* Bottom-Left Vector Arc Indicator */}
+            <div className="act3-architectural-decor flex items-center gap-3 text-left">
+              <div className="w-8 h-8 rounded-full border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800] text-xs font-bold">
+                ⏱
               </div>
+              <div className="flex flex-col">
+                <span className="text-[12px] font-bold text-gray-200">100% Target On-Schedule</span>
+                <span className="text-[10px] font-mono text-gray-500">ZERO PROJECT DELAY GUARANTEE</span>
+              </div>
+            </div>
+
+            {/* Bottom-Right Luxury Metric Pill */}
+            <div className="act3-architectural-decor flex items-center gap-3 bg-black/60 border border-white/10 px-4 py-2 rounded-2xl backdrop-blur-md shadow-xl">
+              <span className="text-xs font-mono text-gray-400">ABSORPTION VELOCITY</span>
+              <span className="text-sm font-black text-[#F5B800] bg-[#F5B800]/10 px-2 py-0.5 rounded-md border border-[#F5B800]/30">
+                +4.2x
+              </span>
             </div>
           </div>
         </div>
