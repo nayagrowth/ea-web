@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArchitecturalMesh } from './ArchitecturalMesh';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -46,8 +47,7 @@ export const CinematicHero: React.FC = () => {
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
       gsap.set('.act3-typo-block', { x: -600, opacity: 0 });
-      gsap.set('.act3-visual-graphic', { x: 400, opacity: 0, scale: 0.88 });
-      gsap.set('.act3-laser-arc', { strokeDashoffset: 1200 });
+      gsap.set('.act3-mesh-wrap', { x: 500, opacity: 0, scale: 0.9 });
       gsap.set('.act4-stage', { autoAlpha: 0, y: 70, scale: 0.94 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
 
@@ -144,7 +144,7 @@ export const CinematicHero: React.FC = () => {
         })
 
         // =====================================================================
-        // ACT 2 OUTRO & ACT 3 ENTRANCE: Kinetic Swipe Flow with Architectural Graphic
+        // ACT 2 OUTRO & ACT 3 ENTRANCE: Kinetic Swipe with 3D Architectural Mesh
         // =====================================================================
         .to('.act2-line-1', {
           x: -800,
@@ -172,7 +172,7 @@ export const CinematicHero: React.FC = () => {
           duration: 0.1,
         })
 
-        // Act 3 sweeps in from the left with unified typographic lockup & right visual graphic
+        // Act 3 sweeps in with Left Monumental Typography & Right 3D Wireframe Mesh
         .to('.act3-stage', {
           autoAlpha: 1,
           duration: 0.1,
@@ -183,17 +183,12 @@ export const CinematicHero: React.FC = () => {
           duration: 1.4,
           ease: 'power3.out',
         }, '-=0.3')
-        .to('.act3-visual-graphic', {
+        .to('.act3-mesh-wrap', {
           x: 0,
           opacity: 1,
           scale: 1,
           duration: 1.6,
           ease: 'power3.out',
-        }, '-=1.2')
-        .to('.act3-laser-arc', {
-          strokeDashoffset: 0,
-          duration: 1.8,
-          ease: 'power2.out',
         }, '-=1.2')
 
         // Extended Clean Reading Hold for Act 3
@@ -211,7 +206,7 @@ export const CinematicHero: React.FC = () => {
           duration: 1.0,
           ease: 'power2.in',
         })
-        .to('.act3-visual-graphic', {
+        .to('.act3-mesh-wrap', {
           x: -600,
           opacity: 0,
           filter: 'blur(12px)',
@@ -335,7 +330,7 @@ export const CinematicHero: React.FC = () => {
         </div>
 
         {/* ===================================================================== */}
-        {/* ACT 3: MONUMENTAL TYPOGRAPHIC LOCKUP & ARCHITECTURAL TIMELINE GRAPHIC */}
+        {/* ACT 3: MONUMENTAL TYPOGRAPHIC LOCKUP & 3D ARCHITECTURAL MESH           */}
         {/* ===================================================================== */}
         <div className="act3-stage absolute inset-0 z-20 w-full h-full flex items-center justify-center px-6 sm:px-12 lg:px-16 pointer-events-none">
           <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center">
@@ -369,92 +364,9 @@ export const CinematicHero: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Column: Holographic Architectural Timeline Vector Graphic */}
-            <div className="act3-visual-graphic relative w-full h-[360px] hidden sm:flex items-center justify-center">
-              <svg viewBox="0 0 540 340" className="w-full h-full overflow-visible" fill="none">
-                <defs>
-                  {/* Glowing Laser Trajectory Gradient */}
-                  <linearGradient id="laser-arc-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#EAB308" stopOpacity="0.9" />
-                    <stop offset="45%" stopColor="#F5B800" stopOpacity="1" />
-                    <stop offset="85%" stopColor="#10B981" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#059669" stopOpacity="0.8" />
-                  </linearGradient>
-
-                  {/* High-Intensity Radial Glow Filters */}
-                  <filter id="gold-node-glow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="6" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                  <filter id="green-node-glow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="8" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
-
-                {/* Perspective Coordinate Grid Background Ellipses */}
-                <ellipse cx="270" cy="180" rx="240" ry="110" stroke="#1E293B" strokeWidth="1" strokeDasharray="4 8" opacity="0.4" />
-                <ellipse cx="270" cy="180" rx="180" ry="75" stroke="#334155" strokeWidth="1" strokeDasharray="6 6" opacity="0.3" />
-
-                {/* Sweeping Parabolic Trajectory Arc */}
-                <path
-                  d="M 40,290 C 130,40 410,40 500,290"
-                  stroke="url(#laser-arc-gradient)"
-                  strokeWidth="4"
-                  strokeDasharray="1200"
-                  className="act3-laser-arc"
-                  strokeLinecap="round"
-                />
-
-                {/* ------------------------------------------------------------- */}
-                {/* Milestone Node 1: M1 BLUEPRINT                                */}
-                {/* ------------------------------------------------------------- */}
-                <g transform="translate(108, 172)">
-                  <circle cx="0" cy="0" r="14" fill="#38BDF8" opacity="0.15" />
-                  <circle cx="0" cy="0" r="6" fill="#000000" stroke="#38BDF8" strokeWidth="2.5" />
-                  {/* Clean Offset Label to Left/Top */}
-                  <text x="-16" y="-14" fill="#94A3B8" fontSize="11" fontWeight="800" textAnchor="end" letterSpacing="1">
-                    M1: BLUEPRINT
-                  </text>
-                </g>
-
-                {/* ------------------------------------------------------------- */}
-                {/* Milestone Node 2: M2 PRE-SALES TRUST (Apex Peak)             */}
-                {/* ------------------------------------------------------------- */}
-                <g transform="translate(270, 96)">
-                  <circle cx="0" cy="0" r="22" fill="#F5B800" opacity="0.25" filter="url(#gold-node-glow)" />
-                  <circle cx="0" cy="0" r="8" fill="#F5B800" stroke="#FFFFFF" strokeWidth="2.5" />
-                  {/* Clean Elevated Header above Node */}
-                  <text x="0" y="-22" fill="#F5B800" fontSize="12" fontWeight="900" textAnchor="middle" letterSpacing="1.5">
-                    M2: PRE-SALES TRUST
-                  </text>
-                  {/* Sub-label below Node */}
-                  <text x="0" y="28" fill="#E2E8F0" fontSize="10" fontWeight="bold" textAnchor="middle" letterSpacing="0.5">
-                    +4.2x Absorption Velocity
-                  </text>
-                </g>
-
-                {/* ------------------------------------------------------------- */}
-                {/* Milestone Node 3: 100% SOLD OUT (Delivery Target)            */}
-                {/* ------------------------------------------------------------- */}
-                <g transform="translate(432, 172)">
-                  <circle cx="0" cy="0" r="26" fill="#10B981" opacity="0.3" filter="url(#green-node-glow)" />
-                  <circle cx="0" cy="0" r="9" fill="#10B981" stroke="#FFFFFF" strokeWidth="2.5" />
-                  {/* Clean Offset Header to Right/Top */}
-                  <text x="18" y="-14" fill="#10B981" fontSize="12" fontWeight="900" textAnchor="start" letterSpacing="1.2">
-                    100% SOLD OUT
-                  </text>
-                  <text x="18" y="24" fill="#6EE7B7" fontSize="10" fontWeight="bold" textAnchor="start">
-                    On Planned Date
-                  </text>
-                </g>
-              </svg>
+            {/* Right Column: 3D Kinetic Topographic Architectural Mesh */}
+            <div className="act3-mesh-wrap relative w-full h-[380px] hidden sm:flex items-center justify-center rounded-3xl overflow-hidden border border-white/10 bg-black/40 backdrop-blur-md shadow-2xl">
+              <ArchitecturalMesh progress={scrollProgress} />
             </div>
           </div>
         </div>
