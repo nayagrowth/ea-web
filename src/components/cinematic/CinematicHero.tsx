@@ -1,37 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArchitecturalMesh } from './ArchitecturalMesh';
+import { Act1Hook } from './acts/Act1Hook';
+import { Act2SellOut } from './acts/Act2SellOut';
+import { Act3Timeline } from './acts/Act3Timeline';
+import { Act4Credibility } from './acts/Act4Credibility';
 
 gsap.registerPlugin(ScrollTrigger);
-
-// 3D Spatial Character Engine with Dynamic Vector Trajectories
-const SpatialChars: React.FC<{ text: string; className?: string; charClass?: string }> = ({
-  text,
-  className = '',
-  charClass = 'spatial-char',
-}) => {
-  return (
-    <span className={`inline-block ${className}`} style={{ perspective: '1400px' }}>
-      {text.split(' ').map((word, wIdx) => (
-        <span key={wIdx} className="inline-block whitespace-nowrap mr-[0.25em]">
-          {word.split('').map((char, cIdx) => (
-            <span
-              key={cIdx}
-              className={`inline-block ${charClass}`}
-              style={{
-                transformStyle: 'preserve-3d',
-                willChange: 'transform, opacity, filter',
-              }}
-            >
-              {char}
-            </span>
-          ))}
-        </span>
-      ))}
-    </span>
-  );
-};
 
 export const CinematicHero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -46,19 +21,19 @@ export const CinematicHero: React.FC = () => {
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
-      gsap.set('.act3-typo-block', { x: -600, opacity: 0 });
-      gsap.set('.act3-mesh-wrap', { opacity: 0, scale: 0.2, filter: 'blur(16px)' });
-      gsap.set('.act4-stage', { autoAlpha: 0, y: 70, scale: 0.94 });
+      gsap.set('.act3-typo-block', { x: -700, opacity: 0 });
+      gsap.set('.act3-laser-bar', { scaleX: 0, transformOrigin: 'left center' });
+      gsap.set('.act4-stage', { autoAlpha: 0, y: 80, scale: 0.94 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
 
-      // 2. Master Scrubbed Timeline for 4 Acts (Total 800% scrub distance)
+      // 2. Master Scrubbed Timeline for 4 Acts (1000% scrub distance for smooth reading holds)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=800%',
+          end: '+=1000%',
           pin: stageRef.current,
-          scrub: 1.1,
+          scrub: 1.2,
           anticipatePin: 1,
           onUpdate: (self) => setScrollProgress(self.progress),
         },
@@ -79,7 +54,7 @@ export const CinematicHero: React.FC = () => {
           each: 0.015,
           from: 'random',
         },
-        duration: 1.5,
+        duration: 1.6,
         ease: 'power3.inOut',
       })
         .to('.act1-stage', {
@@ -90,7 +65,7 @@ export const CinematicHero: React.FC = () => {
         // Fade out tower background -> Transition to Pure Pitch Black
         .to('.bg-real-estate-tower', {
           opacity: 0,
-          duration: 1,
+          duration: 1.2,
           ease: 'power2.inOut',
         }, '-=0.5')
 
@@ -124,7 +99,7 @@ export const CinematicHero: React.FC = () => {
               each: 0.02,
               from: 'center',
             },
-            duration: 1.8,
+            duration: 2.0,
             ease: 'expo.out',
           },
           '-=0.1'
@@ -132,87 +107,78 @@ export const CinematicHero: React.FC = () => {
         .fromTo(
           '.sellout-gold-flare',
           { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 1, duration: 1.2, ease: 'power3.out' },
+          { scaleX: 1, opacity: 1, duration: 1.4, ease: 'power3.out' },
           '-=0.8'
         )
 
-        // Reading hold for Act 2
+        // Generous reading hold for Act 2
         .to('.act2-stage', {
           scale: 1.02,
-          duration: 1.8,
+          duration: 2.5,
           ease: 'none',
         })
 
         // =====================================================================
-        // ACT 2 OUTRO & ACT 3 ENTRANCE: Kinetic Swipe with Spatial Depth Mesh
+        // ACT 2 OUTRO & ACT 3 ENTRANCE: Kinetic Swipe Flow with Horizon Line
         // =====================================================================
         .to('.act2-line-1', {
-          x: -800,
+          x: -900,
           opacity: 0,
           filter: 'blur(12px)',
-          duration: 1.0,
+          duration: 1.1,
           ease: 'power3.in',
         })
         .to('.act2-line-2', {
-          x: -800,
+          x: -900,
           opacity: 0,
           filter: 'blur(12px)',
-          duration: 1.0,
+          duration: 1.1,
           ease: 'power3.in',
-        }, '-=0.85')
+        }, '-=0.9')
         .to('.act2-line-3', {
-          x: -800,
+          x: -900,
           opacity: 0,
           filter: 'blur(12px)',
-          duration: 1.0,
+          duration: 1.1,
           ease: 'power3.in',
-        }, '-=0.85')
+        }, '-=0.9')
         .to('.act2-stage', {
           autoAlpha: 0,
           duration: 0.1,
         })
 
-        // Act 3 sweeps in from left (Typo) while 3D Mesh materializes from depth
+        // Act 3 sweeps in from the left with Left-Aligned Monumental Typography
         .to('.act3-stage', {
           autoAlpha: 1,
           duration: 0.1,
         }, '-=0.4')
-        .to('.act3-mesh-wrap', {
-          opacity: 1,
-          scale: 1,
-          filter: 'blur(0px)',
-          duration: 1.8,
-          ease: 'power3.out',
-        }, '-=0.3')
         .to('.act3-typo-block', {
           x: 0,
           opacity: 1,
-          duration: 1.4,
+          duration: 1.6,
           ease: 'power3.out',
-        }, '-=1.4')
+        }, '-=0.3')
+        .to('.act3-laser-bar', {
+          scaleX: 1,
+          duration: 1.8,
+          ease: 'power2.out',
+        }, '-=1.0')
 
-        // Extended Clean Reading Hold for Act 3
+        // GENEROUS EXTENDED READING HOLD FOR ACT 3
         .to('.act3-stage', {
           scale: 1.02,
-          duration: 2.8,
+          duration: 3.5,
           ease: 'none',
         })
 
         // ACT 3 OUTRO: Sweeps rapidly to the left
         .to('.act3-typo-block', {
-          x: -800,
+          x: -900,
           opacity: 0,
           filter: 'blur(12px)',
-          duration: 1.0,
+          duration: 1.1,
           ease: 'power2.in',
         })
-        .to('.act3-mesh-wrap', {
-          scale: 0.4,
-          opacity: 0,
-          filter: 'blur(16px)',
-          duration: 0.9,
-          ease: 'power2.in',
-        }, '-=0.8')
         .to('.act3-stage', {
           autoAlpha: 0,
           duration: 0.1,
@@ -225,26 +191,26 @@ export const CinematicHero: React.FC = () => {
           autoAlpha: 1,
           y: 0,
           scale: 1,
-          duration: 1.8,
+          duration: 2.0,
           ease: 'power3.out',
         })
         .fromTo(
           '.act4-metric-val',
-          { y: 50, opacity: 0, filter: 'blur(10px)' },
-          { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.4, ease: 'power3.out' },
-          '-=1.4'
+          { y: 60, opacity: 0, filter: 'blur(10px)' },
+          { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.6, ease: 'power3.out' },
+          '-=1.5'
         )
         .fromTo(
           '.act4-headline',
           { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' },
-          '-=1.0'
+          { y: 0, opacity: 1, duration: 1.4, ease: 'power3.out' },
+          '-=1.1'
         )
 
         // Final hold for Act 4
         .to('.act4-stage', {
           scale: 1.01,
-          duration: 2.5,
+          duration: 3.0,
           ease: 'none',
         });
     }, containerRef);
@@ -280,136 +246,12 @@ export const CinematicHero: React.FC = () => {
         <div className="absolute inset-0 z-1 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.08)_0%,transparent_70%)]" />
 
         {/* ===================================================================== */}
-        {/* ACT 1: THE INITIAL HOOK ("Most agencies run your ads.")                */}
+        {/* MODULAR ACTS 1, 2, 3 & 4                                              */}
         {/* ===================================================================== */}
-        <div className="act1-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-          <div className="max-w-5xl flex flex-col items-center justify-center gap-2">
-            <h1 className="text-[clamp(3.4rem,8.6vw,7.6rem)] font-black text-white tracking-[-0.035em] leading-[0.98] drop-shadow-[0_10px_50px_rgba(0,0,0,0.95)]">
-              <SpatialChars
-                text="Most agencies run your ads."
-                charClass="trap-char inline-block"
-              />
-            </h1>
-          </div>
-
-          <div className="mt-14 flex items-center gap-2.5 text-[11px] font-black tracking-widest uppercase text-gray-400 bg-black/70 border border-white/10 px-5 py-2.5 rounded-full backdrop-blur-md shadow-2xl">
-            <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-ping" />
-            <span>Scroll to continue</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5B800" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce ml-1">
-              <line x1="12" y1="5" x2="12" y2="19" /><polyline points="19 12 12 19 5 12" />
-            </svg>
-          </div>
-        </div>
-
-        {/* ===================================================================== */}
-        {/* ACT 2: "We sell-out your real estate project" (Staggered Left Outro)  */}
-        {/* ===================================================================== */}
-        <div className="act2-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-          <div className="relative max-w-6xl flex flex-col items-center justify-center">
-            {/* Ambient Gold Flare */}
-            <div className="sellout-gold-flare absolute -top-12 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-r from-transparent via-[#F5B800]/25 to-transparent blur-2xl pointer-events-none" />
-
-            <h2 className="text-[clamp(3.4rem,8.4vw,7.6rem)] font-black text-white tracking-[-0.035em] leading-[1.04] drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
-              {/* Line 1: We sell-out */}
-              <span className="act2-line-1 block">
-                <SpatialChars text="We" charClass="sellout-char-angle inline-block" />{' '}
-                <span className="inline-block text-[#F5B800] glow-gold-cinematic font-serif italic font-normal tracking-normal mx-2.5">
-                  <SpatialChars text="sell-out" charClass="sellout-char-angle inline-block text-[#F5B800]" />
-                </span>
-              </span>
-              {/* Line 2: your real estate */}
-              <span className="act2-line-2 block mt-2">
-                <SpatialChars text="your real estate" charClass="sellout-char-angle inline-block text-white" />
-              </span>
-              {/* Line 3: project */}
-              <span className="act2-line-3 block mt-2">
-                <SpatialChars text="project" charClass="sellout-char-angle inline-block text-gray-300" />
-              </span>
-            </h2>
-          </div>
-        </div>
-
-        {/* ===================================================================== */}
-        {/* ACT 3: TWO CRISP LINES & RIGHT-CENTERED 3D ARCHITECTURAL MESH         */}
-        {/* ===================================================================== */}
-        <div className="act3-stage absolute inset-0 z-20 w-full h-full flex items-center justify-center pointer-events-none overflow-hidden">
-          {/* Free-Flowing 3D Architectural Mesh Born in Right-Center Zone */}
-          <div className="act3-mesh-wrap absolute inset-0 z-0 pointer-events-none">
-            <ArchitecturalMesh progress={scrollProgress} />
-          </div>
-
-          {/* Foreground Left-Aligned Monumental Typography (STRICTLY 2 LINES) */}
-          <div className="relative z-10 w-full max-w-7xl px-6 sm:px-12 lg:px-16 flex flex-col justify-center text-left">
-            <div className="act3-typo-block flex flex-col max-w-3xl text-left">
-              {/* Line 1: WITHIN YOUR (1 Crisp Line) */}
-              <h2 className="whitespace-nowrap text-[clamp(2.8rem,5.8vw,5.8rem)] font-black text-white tracking-[-0.035em] leading-none uppercase drop-shadow-[0_10px_50px_rgba(0,0,0,0.95)]">
-                Within your
-              </h2>
-
-              {/* Line 2: planned timeline. (1 Crisp Line in Glowing Gold Serif Italic) */}
-              <h2 className="whitespace-nowrap text-[clamp(3.2rem,7.2vw,7.2rem)] font-black tracking-[-0.04em] leading-none mt-2.5 drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
-                <span className="text-[#F5B800] glow-gold-cinematic font-serif italic font-normal tracking-normal">
-                  planned timeline.
-                </span>
-              </h2>
-
-              {/* Aligned Precision Guarantee Metadata Ribbon */}
-              <div className="mt-8 flex items-center gap-3 text-left">
-                <div className="w-9 h-9 rounded-full bg-[#F5B800]/10 border border-[#F5B800]/40 flex items-center justify-center text-[#F5B800] text-sm font-black shadow-[0_0_20px_rgba(245,184,0,0.25)]">
-                  ⏱
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm font-extrabold text-white tracking-wide">
-                    100% Target On-Schedule
-                  </span>
-                  <span className="text-[11px] font-mono text-gray-400 tracking-wider">
-                    ZERO PROJECT DELAY GUARANTEE &bull; MANDATE DISCIPLINE
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ===================================================================== */}
-        {/* ACT 4: ORTHOGONAL VERTICAL SPATIAL RISE ("459+ Real Estate Projects") */}
-        {/* ===================================================================== */}
-        <div className="act4-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-          <div className="max-w-4xl flex flex-col items-center justify-center gap-5">
-            {/* Minimalist Champagne Eyebrow Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/15 text-gray-300 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase backdrop-blur-md">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
-              100% On-Schedule Execution
-            </div>
-
-            {/* Crisp Monumental Counter without Gaudy Glow */}
-            <div className="flex flex-col items-center justify-center">
-              <span className="act4-metric-val text-[clamp(5rem,14vw,11rem)] font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-[#F5B800] to-[#D97706] leading-none tracking-[-0.04em] drop-shadow-[0_10px_40px_rgba(0,0,0,0.9)]">
-                459+
-              </span>
-              <h3 className="act4-headline text-[clamp(1.8rem,3.8vw,3.4rem)] font-black text-white tracking-tight leading-tight mt-3">
-                Real Estate Projects Delivered On Schedule
-              </h3>
-            </div>
-
-            <p className="text-gray-400 text-[clamp(1rem,1.4vw,1.25rem)] max-w-xl mx-auto leading-relaxed">
-              Zero Delays. Zero Junk Enquiries. <span className="text-white font-bold">100% Mandate Velocity.</span>
-            </p>
-
-            {/* High-End Clean Gold CTA Button */}
-            <div className="pt-3 pointer-events-auto">
-              <a
-                href="#book-strategy-session"
-                className="inline-flex items-center gap-3 bg-[#F5B800] hover:bg-[#E5AB00] text-gray-950 font-black text-sm sm:text-base px-8 py-4 rounded-2xl transition-all shadow-[0_0_30px_rgba(245,184,0,0.35)] active:scale-95"
-              >
-                <span>Book Your Project Sell-Out Strategy Session</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12" /><polyline points="19 12 12 19 5 12" />
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
+        <Act1Hook />
+        <Act2SellOut />
+        <Act3Timeline />
+        <Act4Credibility />
       </div>
     </div>
   );
