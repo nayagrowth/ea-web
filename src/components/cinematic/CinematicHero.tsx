@@ -17,23 +17,25 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // 1. Initial State Setup (Guaranteed clean separation)
+      // 1. Initial State Setup
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
-      gsap.set('.act3-typo-block', { x: -700, opacity: 0 });
+      gsap.set('.act3-line-1', { x: -800, opacity: 0 });
+      gsap.set('.act3-line-2', { x: -800, opacity: 0 });
+      gsap.set('.act3-sub-block', { x: -600, opacity: 0 });
       gsap.set('.act3-laser-bar', { scaleX: 0, transformOrigin: 'left center' });
       gsap.set('.act4-stage', { autoAlpha: 0, y: 80, scale: 0.94 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
 
-      // 2. Master Scrubbed Timeline for 4 Acts (1000% scrub distance for smooth reading holds)
+      // 2. Master Scrubbed Timeline for 4 Acts (Total 1000% scrub distance)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
           end: '+=1000%',
           pin: stageRef.current,
-          scrub: 1.2,
+          scrub: 1.15,
           anticipatePin: 1,
           onUpdate: (self) => setScrollProgress(self.progress),
         },
@@ -111,7 +113,7 @@ export const CinematicHero: React.FC = () => {
           '-=0.8'
         )
 
-        // Generous reading hold for Act 2
+        // Reading hold for Act 2
         .to('.act2-stage', {
           scale: 1.02,
           duration: 2.5,
@@ -119,8 +121,9 @@ export const CinematicHero: React.FC = () => {
         })
 
         // =====================================================================
-        // ACT 2 OUTRO & ACT 3 ENTRANCE: Kinetic Swipe Flow with Horizon Line
+        // ACT 2 OUTRO & ACT 3 ENTRANCE: Cascading Staggered Left-to-Right Flow
         // =====================================================================
+        // Act 2 Line 1 ("We sell-out") sweeps left 1st
         .to('.act2-line-1', {
           x: -900,
           opacity: 0,
@@ -128,39 +131,58 @@ export const CinematicHero: React.FC = () => {
           duration: 1.1,
           ease: 'power3.in',
         })
+        // Act 2 Line 2 ("your real estate") sweeps left 2nd
         .to('.act2-line-2', {
           x: -900,
           opacity: 0,
           filter: 'blur(12px)',
           duration: 1.1,
           ease: 'power3.in',
-        }, '-=0.9')
+        }, '-=0.85')
+        // Act 2 Line 3 ("project") sweeps left 3rd
         .to('.act2-line-3', {
           x: -900,
           opacity: 0,
           filter: 'blur(12px)',
           duration: 1.1,
           ease: 'power3.in',
-        }, '-=0.9')
+        }, '-=0.85')
         .to('.act2-stage', {
           autoAlpha: 0,
           duration: 0.1,
         })
 
-        // Act 3 sweeps in from the left with Left-Aligned Monumental Typography
+        // ---------------------------------------------------------------------
+        // Act 3 Enters Staggered Line-by-Line from the Left
+        // ---------------------------------------------------------------------
         .to('.act3-stage', {
           autoAlpha: 1,
           duration: 0.1,
         }, '-=0.4')
-        .to('.act3-typo-block', {
+        // Line 1 ("Within your") comes in 1st
+        .to('.act3-line-1', {
           x: 0,
           opacity: 1,
-          duration: 1.6,
+          duration: 1.4,
           ease: 'power3.out',
         }, '-=0.3')
+        // Line 2 ("planned timeline.") comes in 2nd
+        .to('.act3-line-2', {
+          x: 0,
+          opacity: 1,
+          duration: 1.4,
+          ease: 'power3.out',
+        }, '-=1.0')
+        // Line 3 (Underneath horizon track & metadata) comes in 3rd
+        .to('.act3-sub-block', {
+          x: 0,
+          opacity: 1,
+          duration: 1.4,
+          ease: 'power3.out',
+        }, '-=1.0')
         .to('.act3-laser-bar', {
           scaleX: 1,
-          duration: 1.8,
+          duration: 1.6,
           ease: 'power2.out',
         }, '-=1.0')
 
@@ -171,14 +193,30 @@ export const CinematicHero: React.FC = () => {
           ease: 'none',
         })
 
-        // ACT 3 OUTRO: Sweeps rapidly to the left
-        .to('.act3-typo-block', {
+        // ---------------------------------------------------------------------
+        // ACT 3 OUTRO: Cascading Staggered Leftward Exit
+        // ---------------------------------------------------------------------
+        .to('.act3-line-1', {
           x: -900,
           opacity: 0,
           filter: 'blur(12px)',
-          duration: 1.1,
+          duration: 1.0,
           ease: 'power2.in',
         })
+        .to('.act3-line-2', {
+          x: -900,
+          opacity: 0,
+          filter: 'blur(12px)',
+          duration: 1.0,
+          ease: 'power2.in',
+        }, '-=0.8')
+        .to('.act3-sub-block', {
+          x: -700,
+          opacity: 0,
+          filter: 'blur(8px)',
+          duration: 0.9,
+          ease: 'power2.in',
+        }, '-=0.8')
         .to('.act3-stage', {
           autoAlpha: 0,
           duration: 0.1,
