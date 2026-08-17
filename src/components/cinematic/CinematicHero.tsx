@@ -41,20 +41,20 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // 1. Initial State Setup (Mathematically Isolated Layers)
+      // 1. Initial State Setup (Zero overlap / 100% clean isolation)
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
-      gsap.set('.act3-stage', { autoAlpha: 0, x: 120, y: 0 });
-      gsap.set('.act4-stage', { autoAlpha: 0, scale: 0.96 });
+      gsap.set('.act3-stage', { autoAlpha: 0 });
+      gsap.set('.act4-stage', { autoAlpha: 0, y: 70, scale: 0.94 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
       gsap.set('.act3-laser-line', { scaleX: 0, transformOrigin: 'left center' });
 
-      // 2. Master 750% Scrubbed Timeline with Fluid Horizontal Transitions
+      // 2. Master Scrubbed Timeline for 4 Acts (Total 800% scrub distance)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=750%',
+          end: '+=800%',
           pin: stageRef.current,
           scrub: 1.1,
           anticipatePin: 1,
@@ -82,18 +82,18 @@ export const CinematicHero: React.FC = () => {
       })
         .to('.act1-stage', {
           autoAlpha: 0,
-          duration: 0.25,
+          duration: 0.2,
         }, '-=0.2')
 
         // Fade out tower background -> Transition to Pure Pitch Black
         .to('.bg-real-estate-tower', {
           opacity: 0,
-          duration: 1.2,
+          duration: 1,
           ease: 'power2.inOut',
         }, '-=0.5')
 
         // =====================================================================
-        // ACT 2 (22% to 48%): "We sell-out your real estate project"
+        // ACT 2 (22% to 46%): "We sell-out your real estate project"
         // =====================================================================
         .to('.act2-stage', {
           autoAlpha: 1,
@@ -125,7 +125,7 @@ export const CinematicHero: React.FC = () => {
             duration: 1.8,
             ease: 'expo.out',
           },
-          '-=0.2'
+          '-=0.1'
         )
         .fromTo(
           '.sellout-gold-flare',
@@ -142,28 +142,63 @@ export const CinematicHero: React.FC = () => {
         })
 
         // =====================================================================
-        // ACT 2 OUTRO -> ACT 3 INTRO: Horizontal Left Sweep to Planned Timeline
+        // ACT 2 STAGGERED OUTRO: Line-by-Line Left-Side Acceleration
         // =====================================================================
+        .to('.act2-line-1', {
+          x: -600,
+          opacity: 0,
+          filter: 'blur(12px)',
+          duration: 1.0,
+          ease: 'power3.in',
+        })
+        .to('.act2-line-2', {
+          x: -600,
+          opacity: 0,
+          filter: 'blur(12px)',
+          duration: 1.0,
+          ease: 'power3.in',
+        }, '-=0.8')
+        .to('.act2-line-3', {
+          x: -600,
+          opacity: 0,
+          filter: 'blur(12px)',
+          duration: 1.0,
+          ease: 'power3.in',
+        }, '-=0.8')
         .to('.act2-stage', {
-          x: -380,
           autoAlpha: 0,
-          filter: 'blur(14px)',
-          duration: 1.4,
-          ease: 'power2.in',
+          duration: 0.1,
         })
 
-        // ACT 3: Emergence of "Within your planned timeline" in Pitch Black
+        // =====================================================================
+        // ACT 3 (46% to 74%): Character-by-Character Sweep from Far Left
+        // =====================================================================
         .to('.act3-stage', {
           autoAlpha: 1,
-          x: 0,
-          duration: 1.4,
-          ease: 'power3.out',
-        }, '-=0.8')
+          duration: 0.1,
+        })
+        .fromTo(
+          '.timeline-char-stream',
+          {
+            x: -350,
+            opacity: 0,
+            filter: 'blur(12px)',
+          },
+          {
+            x: 0,
+            opacity: 1,
+            filter: 'blur(0px)',
+            stagger: 0.02,
+            duration: 1.6,
+            ease: 'power3.out',
+          },
+          '-=0.1'
+        )
         .to('.act3-laser-line', {
           scaleX: 1,
           duration: 1.6,
           ease: 'power2.out',
-        }, '-=0.6')
+        }, '-=1.0')
 
         // Extended Clean Reading Hold for Act 3
         .to('.act3-stage', {
@@ -172,26 +207,52 @@ export const CinematicHero: React.FC = () => {
           ease: 'none',
         })
 
-        // =====================================================================
-        // ACT 3 OUTRO -> ACT 4 INTRO: Minimalist "459+ Projects" Climax
-        // =====================================================================
-        .to('.act3-stage', {
-          x: -300,
-          autoAlpha: 0,
+        // ACT 3 OUTRO: Words sweep off to the left
+        .to('.timeline-char-stream', {
+          x: -450,
+          opacity: 0,
           filter: 'blur(12px)',
-          duration: 1.2,
-          ease: 'power2.inOut',
+          stagger: 0.012,
+          duration: 1.1,
+          ease: 'power2.in',
         })
+        .to('.act3-laser-line', {
+          scaleX: 0,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power2.in',
+        }, '<')
+        .to('.act3-stage', {
+          autoAlpha: 0,
+          duration: 0.1,
+        })
+
+        // =====================================================================
+        // ACT 4 (74% to 100%): ORTHOGONAL VERTICAL SPATIAL RISE (Editorial Luxury)
+        // =====================================================================
         .to('.act4-stage', {
           autoAlpha: 1,
+          y: 0,
           scale: 1,
-          duration: 1.6,
+          duration: 1.8,
           ease: 'power3.out',
-        }, '-=0.4')
+        })
+        .fromTo(
+          '.act4-metric-val',
+          { y: 50, opacity: 0, filter: 'blur(10px)' },
+          { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.4, ease: 'power3.out' },
+          '-=1.4'
+        )
+        .fromTo(
+          '.act4-headline',
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' },
+          '-=1.0'
+        )
 
         // Final hold for Act 4
         .to('.act4-stage', {
-          scale: 1.02,
+          scale: 1.01,
           duration: 2.5,
           ease: 'none',
         });
@@ -250,36 +311,44 @@ export const CinematicHero: React.FC = () => {
         </div>
 
         {/* ===================================================================== */}
-        {/* ACT 2: "We sell-out your real estate project"                          */}
+        {/* ACT 2: "We sell-out your real estate project" (Staggered Left Outro)  */}
         {/* ===================================================================== */}
         <div className="act2-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
           <div className="relative max-w-6xl flex flex-col items-center justify-center">
             {/* Ambient Gold Flare */}
             <div className="sellout-gold-flare absolute -top-12 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-r from-transparent via-[#F5B800]/25 to-transparent blur-2xl pointer-events-none" />
 
-            <h2 className="text-[clamp(3.4rem,8.4vw,7.6rem)] font-black text-white tracking-[-0.035em] leading-[1.02] drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
-              <span className="block">
+            <h2 className="text-[clamp(3.4rem,8.4vw,7.6rem)] font-black text-white tracking-[-0.035em] leading-[1.04] drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
+              {/* Line 1: We sell-out */}
+              <span className="act2-line-1 block">
                 <SpatialChars text="We" charClass="sellout-char-angle inline-block" />{' '}
                 <span className="inline-block text-[#F5B800] glow-gold-cinematic font-serif italic font-normal tracking-normal mx-2.5">
                   <SpatialChars text="sell-out" charClass="sellout-char-angle inline-block text-[#F5B800]" />
                 </span>
               </span>
-              <span className="block mt-2">
-                <SpatialChars text="your real estate project" charClass="sellout-char-angle inline-block text-white" />
+              {/* Line 2: your real estate */}
+              <span className="act2-line-2 block mt-2">
+                <SpatialChars text="your real estate" charClass="sellout-char-angle inline-block text-white" />
+              </span>
+              {/* Line 3: project */}
+              <span className="act2-line-3 block mt-2">
+                <SpatialChars text="project" charClass="sellout-char-angle inline-block text-gray-300" />
               </span>
             </h2>
           </div>
         </div>
 
         {/* ===================================================================== */}
-        {/* ACT 3: PITCH BLACK WITH GOLDEN LASER TIMELINE ("Within your planned timeline.") */}
+        {/* ACT 3: CHARACTER-BY-CHARACTER SWEEP FROM LEFT ("Within your planned timeline.") */}
         {/* ===================================================================== */}
         <div className="act3-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
           <div className="max-w-5xl flex flex-col items-center justify-center gap-6">
             <h2 className="text-[clamp(3.2rem,8vw,7.4rem)] font-black text-white tracking-[-0.035em] leading-[1.02] drop-shadow-[0_12px_60px_rgba(0,0,0,0.98)]">
-              <span className="block">Within your</span>
+              <span className="block">
+                <SpatialChars text="Within your" charClass="timeline-char-stream inline-block text-white" />
+              </span>
               <span className="block mt-1 text-[#F5B800] glow-gold-cinematic font-serif italic font-normal tracking-normal">
-                planned timeline.
+                <SpatialChars text="planned timeline." charClass="timeline-char-stream inline-block text-[#F5B800]" />
               </span>
             </h2>
 
@@ -296,17 +365,23 @@ export const CinematicHero: React.FC = () => {
         </div>
 
         {/* ===================================================================== */}
-        {/* ACT 4: MINIMALIST LUXURY CLIMAX ("459+ Real Estate Projects Delivered") */}
+        {/* ACT 4: ORTHOGONAL VERTICAL SPATIAL RISE ("459+ Real Estate Projects") */}
         {/* ===================================================================== */}
         <div className="act4-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-          <div className="max-w-4xl flex flex-col items-center justify-center gap-6">
-            {/* Pure Clean Golden Counter */}
+          <div className="max-w-4xl flex flex-col items-center justify-center gap-5">
+            {/* Minimalist Champagne Eyebrow Badge */}
+            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/15 text-gray-300 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase backdrop-blur-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+              100% On-Schedule Execution
+            </div>
+
+            {/* Crisp Monumental Counter without Gaudy Glow */}
             <div className="flex flex-col items-center justify-center">
-              <span className="text-[clamp(5rem,14vw,11rem)] font-black text-[#F5B800] leading-none tracking-[-0.04em] glow-gold-cinematic drop-shadow-[0_10px_60px_rgba(245,184,0,0.4)]">
+              <span className="act4-metric-val text-[clamp(5rem,14vw,11rem)] font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-[#F5B800] to-[#D97706] leading-none tracking-[-0.04em] drop-shadow-[0_10px_40px_rgba(0,0,0,0.9)]">
                 459+
               </span>
-              <h3 className="text-[clamp(1.8rem,4vw,3.6rem)] font-black text-white tracking-tight leading-tight mt-3">
-                Real Estate Projects Delivered on Schedule
+              <h3 className="act4-headline text-[clamp(1.8rem,3.8vw,3.4rem)] font-black text-white tracking-tight leading-tight mt-3">
+                Real Estate Projects Delivered On Schedule
               </h3>
             </div>
 
@@ -314,11 +389,11 @@ export const CinematicHero: React.FC = () => {
               Zero Delays. Zero Junk Enquiries. <span className="text-white font-bold">100% Mandate Velocity.</span>
             </p>
 
-            {/* Minimal High-End CTA */}
+            {/* High-End Clean Gold CTA Button */}
             <div className="pt-3 pointer-events-auto">
               <a
                 href="#book-strategy-session"
-                className="inline-flex items-center gap-3 bg-[#F5B800] hover:bg-[#E5AB00] text-gray-950 font-black text-sm sm:text-base px-8 py-4 rounded-2xl transition-all shadow-[0_0_35px_rgba(245,184,0,0.4)] active:scale-95"
+                className="inline-flex items-center gap-3 bg-[#F5B800] hover:bg-[#E5AB00] text-gray-950 font-black text-sm sm:text-base px-8 py-4 rounded-2xl transition-all shadow-[0_0_30px_rgba(245,184,0,0.35)] active:scale-95"
               >
                 <span>Book Your Project Sell-Out Strategy Session</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
