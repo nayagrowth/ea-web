@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Act1ArtboardPoster } from './acts/Act1ArtboardPoster';
+import { Act1ArchitecturalColumns } from './acts/Act1ArchitecturalColumns';
+import { Act1PosterHook } from './acts/Act1PosterHook';
 import { Act2SellOut } from './acts/Act2SellOut';
 import { Act3Timeline } from './acts/Act3Timeline';
 import { Act4TriPanel } from './acts/Act4TriPanel';
@@ -9,7 +11,13 @@ import { Act5Credibility } from './acts/Act5Credibility';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const CinematicHero: React.FC = () => {
+export type Act1Variant = 'columns' | 'artboard' | 'poster';
+
+interface CinematicHeroProps {
+  act1Variant?: Act1Variant;
+}
+
+export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'columns' }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -17,20 +25,37 @@ export const CinematicHero: React.FC = () => {
   useEffect(() => {
     if (!containerRef.current || !stageRef.current) return;
 
+    // Refresh scroll triggers when variant changes
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+
     const ctx = gsap.context(() => {
-      // 1. Initial State Setup
+      // 1. Initial State Setup for All Variants
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
+      
+      // Artboard Poster classes
       gsap.set('.act1-most-word', { yPercent: 0, opacity: 1 });
       gsap.set('.act1-top-rule', { scaleX: 1, transformOrigin: 'left center' });
       gsap.set('.act1-agencies-slab', { scaleX: 1, transformOrigin: 'left center' });
       gsap.set('.act1-agencies-word', { scaleX: 1, opacity: 1, transformOrigin: 'left center' });
-      gsap.set('.act1-run-word', { scaleY: 1, transformOrigin: 'bottom center' });
+      gsap.set('.act1-run-word', { scaleY: 1, opacity: 1, transformOrigin: 'bottom center' });
       gsap.set('.act1-your-word', { opacity: 1, y: 0 });
       gsap.set('.act1-your-rule-top', { scaleX: 1 });
       gsap.set('.act1-your-rule-bottom', { scaleX: 1 });
       gsap.set('.act1-ads-slab', { scaleX: 1, transformOrigin: 'right center' });
-      gsap.set('.act1-ads-word', { yPercent: 0, scaleX: 1, transformOrigin: 'left bottom' });
+      gsap.set('.act1-ads-word', { yPercent: 0, scaleX: 1, opacity: 1, transformOrigin: 'left bottom' });
 
+      // Architectural Columns classes
+      gsap.set('.act1-col-1', { yPercent: 0, opacity: 1 });
+      gsap.set('.act1-col-2', { yPercent: 0, opacity: 1 });
+      gsap.set('.act1-col-3', { yPercent: 0, opacity: 1 });
+      gsap.set('.act1-col-4', { yPercent: 0, opacity: 1 });
+      gsap.set('.act1-col2-axis', { scaleY: 1, transformOrigin: 'top center' });
+      gsap.set('.act1-gold-eclipse', { scale: 1, opacity: 1 });
+
+      // Poster Frame classes
+      gsap.set('.act1-poster-card', { scale: 1, opacity: 1 });
+
+      // Acts 2 - 5 Initial States
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
       gsap.set('.act3-stage', { autoAlpha: 0 });
       gsap.set('.act3-line-1', { xPercent: -100, opacity: 0 });
@@ -43,7 +68,7 @@ export const CinematicHero: React.FC = () => {
       gsap.set('.act5-stage', { autoAlpha: 0, yPercent: 40, scale: 0.96 });
       gsap.set('.bg-real-estate-tower', { opacity: 0.45 });
 
-      // 2. Mathematically Budgeted Master Scrubbed Timeline (900% scrub distance, 0.8s responsive scrub)
+      // 2. Master Scrubbed Timeline (900% scrub distance, 0.8s responsive scrub)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
@@ -57,67 +82,111 @@ export const CinematicHero: React.FC = () => {
       });
 
       // =====================================================================
-      // ACT 1 (0% to 20%): 1920x1080 POSTER FRAME ARCHITECTURAL OUTRO
+      // ACT 1 OUTRO (0% to 20% Scroll)
       // =====================================================================
-      tl.to('.act1-most-word', {
-        yPercent: -120,
-        duration: 1.0,
-        ease: 'power2.in',
-      })
-        .to('.act1-top-rule', {
-          scaleX: 0,
-          duration: 0.9,
-          ease: 'power2.in',
-        }, '-=0.85')
-        .to('.act1-agencies-slab', {
-          scaleX: 0,
+      if (act1Variant === 'columns') {
+        tl.to('.act1-col-1', {
+          yPercent: 110,
           duration: 1.1,
           ease: 'power2.inOut',
-        }, '-=0.8')
-        .to('.act1-agencies-word', {
-          scaleX: 0.45,
+        })
+          .to('.act1-col-2', {
+            yPercent: -110,
+            duration: 1.1,
+            ease: 'power2.inOut',
+          }, '-=0.95')
+          .to('.act1-col-3', {
+            yPercent: 110,
+            duration: 1.1,
+            ease: 'power2.inOut',
+          }, '-=0.95')
+          .to('.act1-col-4', {
+            xPercent: 110,
+            duration: 1.1,
+            ease: 'power2.inOut',
+          }, '-=0.95')
+          .to('.act1-gold-eclipse', {
+            scale: 1.4,
+            opacity: 0,
+            duration: 0.9,
+            ease: 'power2.in',
+          }, '-=0.9')
+          .to('.act1-stage', {
+            autoAlpha: 0,
+            duration: 0.2,
+          }, '-=0.2');
+      } else if (act1Variant === 'artboard') {
+        tl.to('.act1-most-word', {
+          yPercent: -120,
+          duration: 1.0,
+          ease: 'power2.in',
+        })
+          .to('.act1-top-rule', {
+            scaleX: 0,
+            duration: 0.9,
+            ease: 'power2.in',
+          }, '-=0.85')
+          .to('.act1-agencies-slab', {
+            scaleX: 0,
+            duration: 1.1,
+            ease: 'power2.inOut',
+          }, '-=0.8')
+          .to('.act1-agencies-word', {
+            scaleX: 0.45,
+            opacity: 0,
+            duration: 1.0,
+            ease: 'power2.in',
+          }, '-=0.95')
+          .to('.act1-run-word', {
+            scaleY: 0.05,
+            duration: 1.0,
+            ease: 'power2.in',
+          }, '-=0.85')
+          .to('.act1-your-word', {
+            opacity: 0,
+            y: 20,
+            duration: 0.7,
+            ease: 'power2.in',
+          }, '-=0.8')
+          .to(['.act1-your-rule-top', '.act1-your-rule-bottom'], {
+            scaleX: 0,
+            duration: 0.7,
+            ease: 'power2.in',
+          }, '-=0.7')
+          .to('.act1-ads-slab', {
+            scaleX: 0,
+            duration: 1.0,
+            ease: 'power2.inOut',
+          }, '-=0.85')
+          .to('.act1-ads-word', {
+            yPercent: 100,
+            scaleX: 0.55,
+            duration: 1.0,
+            ease: 'power2.in',
+          }, '-=0.95')
+          .to('.act1-stage', {
+            autoAlpha: 0,
+            duration: 0.2,
+          }, '-=0.2');
+      } else {
+        tl.to('.act1-poster-card', {
+          scale: 0.85,
+          yPercent: -40,
           opacity: 0,
-          duration: 1.0,
-          ease: 'power2.in',
-        }, '-=0.95')
-        .to('.act1-run-word', {
-          scaleY: 0.05,
-          duration: 1.0,
-          ease: 'power2.in',
-        }, '-=0.85')
-        .to('.act1-your-word', {
-          opacity: 0,
-          y: 20,
-          duration: 0.7,
-          ease: 'power2.in',
-        }, '-=0.8')
-        .to(['.act1-your-rule-top', '.act1-your-rule-bottom'], {
-          scaleX: 0,
-          duration: 0.7,
-          ease: 'power2.in',
-        }, '-=0.7')
-        .to('.act1-ads-slab', {
-          scaleX: 0,
-          duration: 1.0,
+          duration: 1.1,
           ease: 'power2.inOut',
-        }, '-=0.85')
-        .to('.act1-ads-word', {
-          yPercent: 100,
-          scaleX: 0.55,
-          duration: 1.0,
-          ease: 'power2.in',
-        }, '-=0.95')
-        .to('.act1-stage', {
+        }).to('.act1-stage', {
           autoAlpha: 0,
           duration: 0.2,
-        }, '-=0.2')
+        }, '-=0.2');
+      }
 
-        // Tower background fades to pitch black
-        .to('.bg-real-estate-tower', {
-          opacity: 0,
-          duration: 1.0,
-          ease: 'power2.inOut',
-        }, '-=0.4')
+      // Tower background fades to pitch black
+      tl.to('.bg-real-estate-tower', {
+        opacity: 0,
+        duration: 1.0,
+        ease: 'power2.inOut',
+      }, '-=0.4')
 
         // =====================================================================
         // ACT 2 (20% to 40%): "We sell-out your real estate project"
@@ -260,7 +329,7 @@ export const CinematicHero: React.FC = () => {
           opacity: 1,
           duration: 1.1,
           ease: 'power3.out',
-        }, '-=0.85')
+          }, '-=0.85')
 
         // Panel 1 (Left) rises as text exits off the screen
         .to('.act4-panel-1', {
@@ -329,7 +398,7 @@ export const CinematicHero: React.FC = () => {
     }, containerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [act1Variant]);
 
   return (
     <div ref={containerRef} className="relative w-full bg-[#000000]">
@@ -359,9 +428,12 @@ export const CinematicHero: React.FC = () => {
         <div className="absolute inset-0 z-1 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.08)_0%,transparent_70%)]" />
 
         {/* ===================================================================== */}
-        {/* MODULAR 5-ACT ARCHITECTURE                                            */}
+        {/* MODULAR ACT 1 (Variant-Selectable) + ACTS 2-5                         */}
         {/* ===================================================================== */}
-        <Act1ArtboardPoster />
+        {act1Variant === 'columns' && <Act1ArchitecturalColumns />}
+        {act1Variant === 'artboard' && <Act1ArtboardPoster />}
+        {act1Variant === 'poster' && <Act1PosterHook />}
+
         <Act2SellOut />
         <Act3Timeline />
         <Act4TriPanel />
