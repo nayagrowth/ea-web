@@ -26,17 +26,17 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // 1. Set initial states cleanly (Frame 0 is 100% minimal)
-      gsap.set('.agency-car-stage', { autoAlpha: 0, scale: 0.9 });
-      gsap.set('.explosion-burst-stage', { autoAlpha: 0, scale: 0.2 });
-      gsap.set('.scene-solution-blueprint', { autoAlpha: 0, y: 50, scale: 0.96 });
+      // 1. Initial State Setup
+      gsap.set('.agency-car-stage', { autoAlpha: 0, scale: 0.95 });
+      gsap.set('.explosion-burst-stage', { autoAlpha: 0, scale: 0.1 });
+      gsap.set('.scene-solution-blueprint', { autoAlpha: 0, y: 60, scale: 0.95 });
 
-      // 2. Master Scroll Scrub Timeline (400% scroll distance)
+      // 2. Master Scroll Scrub Timeline
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=400%',
+          end: '+=450%',
           pin: stageRef.current,
           scrub: 1,
           anticipatePin: 1,
@@ -44,77 +44,82 @@ export const CinematicHero: React.FC = () => {
       });
 
       // -------------------------------------------------------------
-      // BEAT 1: "Most agencies run your ads." -> Morphs into Speed Stage
+      // BEAT 1: "Most agencies run your ads." -> Accelerating Supercar
       // -------------------------------------------------------------
       tl.to('.cine-hero-h1', {
-        scale: 0.95,
-        autoAlpha: 0.3,
-        y: -30,
+        scale: 0.92,
+        autoAlpha: 0.2,
+        y: -35,
         duration: 1,
         ease: 'power2.inOut',
       })
-        // Car and speed grid emerge from pitch black
+        // Car & Speed Track emerge
         .to('.agency-car-stage', {
           autoAlpha: 1,
           scale: 1,
-          duration: 1.2,
+          duration: 1,
           ease: 'power2.out',
         }, '-=0.5')
         // Car accelerates through the speed tunnel
         .to('.supercar-container', {
-          x: 280,
-          duration: 1.8,
+          x: 340,
+          duration: 2,
           ease: 'power2.in',
         })
         .to('.headlight-beam', {
-          opacity: 0.8,
-          scaleX: 1.3,
-          duration: 1.8,
+          opacity: 0.9,
+          scaleX: 1.4,
+          duration: 2,
         }, '<')
 
         // -------------------------------------------------------------
-        // BEAT 2: The High-Speed Explosion Detonation
+        // BEAT 2: The Detonation Shockwave Burst
         // -------------------------------------------------------------
         .to('.supercar-container', {
           autoAlpha: 0,
           scale: 1.2,
-          duration: 0.2,
+          duration: 0.15,
           ease: 'power4.out',
         })
         .to('.explosion-burst-stage', {
           autoAlpha: 1,
-          scale: 1.5,
+          scale: 1.6,
           duration: 0.6,
           ease: 'elastic.out(1.2, 0.4)',
         }, '-=0.1')
         .to('.explosion-shard', {
-          scale: 1.8,
+          scale: 2.2,
           opacity: 0,
           duration: 0.8,
           stagger: 0.01,
           ease: 'power3.out',
         }, '-=0.3')
+        .to('.shockwave-core, .shockwave-ring-1, .shockwave-ring-2', {
+          scale: 2.5,
+          opacity: 0,
+          duration: 0.8,
+        }, '<')
 
         // -------------------------------------------------------------
-        // BEAT 3: Transition to the Project Sell-Out Solution Stage
+        // BEAT 3: Complete Cleanup & Solution Blueprint Entrance
         // -------------------------------------------------------------
         .to('.scene-agency-master', {
           autoAlpha: 0,
-          duration: 0.8,
+          duration: 0.6,
           ease: 'power2.inOut',
         })
         .to('.scene-solution-blueprint', {
           autoAlpha: 1,
           y: 0,
           scale: 1,
-          duration: 1.5,
+          duration: 1.6,
           ease: 'power3.out',
-        }, '-=0.4')
+        })
         .fromTo(
           '.cine-chip',
           { autoAlpha: 0, y: 15, scale: 0.85 },
           { autoAlpha: 1, y: 0, scale: 1, stagger: 0.08, duration: 0.8, ease: 'back.out(1.5)' },
-          '-=0.6'
+          '-=0.8'
         );
     }, containerRef);
 
@@ -133,10 +138,10 @@ export const CinematicHero: React.FC = () => {
           <img
             src="/cinematic_luxury_tower.jpg"
             alt="Luxury Architecture"
-            className="w-full h-full object-cover opacity-35 filter brightness-85 contrast-110 scale-105"
+            className="w-full h-full object-cover opacity-40 filter brightness-90 contrast-110 scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0B0F17]/80 via-[#0B0F17]/50 to-[#0B0F17]/95" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.1)_0%,transparent_70%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.12)_0%,transparent_70%)]" />
         </div>
 
         {/* ========================================================================= */}
@@ -149,18 +154,18 @@ export const CinematicHero: React.FC = () => {
           </h1>
 
           {/* Dynamic Supercar & Speed Shaders Canvas */}
-          <div className="agency-car-stage relative w-full max-w-4xl h-[240px] mt-4 flex items-center justify-center">
+          <div className="agency-car-stage relative w-full max-w-4xl h-[260px] mt-4 flex items-center justify-center">
             <svg viewBox="0 0 800 240" className="w-full h-full overflow-visible" fill="none">
               {/* Perspective Road Speed Grid */}
               <SpeedGrid />
 
               {/* Accelerating Supercar Unit */}
-              <g className="supercar-container" transform="translate(100, 110)">
+              <g className="supercar-container" transform="translate(60, 100)">
                 <AgencyCar />
               </g>
 
-              {/* Explosion Shockwave & Kinetic Shards at Crash Coordinate (x=500, y=140) */}
-              <g className="explosion-burst-stage" transform="translate(500, 140)">
+              {/* Explosion Shockwave & Kinetic Shards at Impact Point */}
+              <g className="explosion-burst-stage" transform="translate(540, 130)">
                 <ExplosionParticles />
               </g>
             </svg>
