@@ -1,9 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SpeedGrid } from './agency-act/SpeedGrid';
-import { AgencyCar } from './agency-act/AgencyCar';
-import { ExplosionParticles } from './agency-act/ExplosionParticles';
 import { HeroDiagram } from '../homepage/HeroDiagram';
 import { StatsBar } from '../homepage/StatsBar';
 import {
@@ -26,95 +23,94 @@ export const CinematicHero: React.FC = () => {
     if (!containerRef.current || !stageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // 1. Initial State Setup
-      gsap.set('.agency-car-stage', { autoAlpha: 0, scale: 0.95 });
-      gsap.set('.explosion-burst-stage', { autoAlpha: 0, scale: 0.1 });
-      gsap.set('.scene-solution-blueprint', { autoAlpha: 0, y: 60, scale: 0.95 });
+      // Set initial states
+      gsap.set('.cine-hook-scene', { autoAlpha: 1 });
+      gsap.set('.cine-reveal-scene', { autoAlpha: 0 });
+      gsap.set('.cine-blueprint-scene', { autoAlpha: 0, y: 60, scale: 0.96 });
 
-      // 2. Master Scroll Scrub Timeline
+      // Master 400% Scroll Scrub Timeline
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=450%',
+          end: '+=400%',
           pin: stageRef.current,
-          scrub: 1,
+          scrub: 1.1,
           anticipatePin: 1,
         },
       });
 
       // -------------------------------------------------------------
-      // BEAT 1: "Most agencies run your ads." -> Accelerating Supercar
+      // ACT 1: "Most agencies run your ads." -> Kinetic Mask Exit
       // -------------------------------------------------------------
-      tl.to('.cine-hero-h1', {
-        scale: 0.92,
-        autoAlpha: 0.2,
-        y: -35,
+      tl.to('.hook-line-1', {
+        y: -60,
+        opacity: 0,
+        rotateX: 25,
         duration: 1,
-        ease: 'power2.inOut',
+        ease: 'power3.in',
       })
-        // Car & Speed Track emerge
-        .to('.agency-car-stage', {
-          autoAlpha: 1,
-          scale: 1,
+        .to('.hook-line-2', {
+          y: -60,
+          opacity: 0,
+          rotateX: 25,
           duration: 1,
-          ease: 'power2.out',
-        }, '-=0.5')
-        // Car accelerates through the speed tunnel
-        .to('.supercar-container', {
-          x: 340,
-          duration: 2,
-          ease: 'power2.in',
-        })
-        .to('.headlight-beam', {
-          opacity: 0.9,
-          scaleX: 1.4,
-          duration: 2,
-        }, '<')
+          ease: 'power3.in',
+        }, '-=0.85')
+        .to('.cine-hook-scene', {
+          autoAlpha: 0,
+          duration: 0.3,
+        }, '-=0.2')
 
         // -------------------------------------------------------------
-        // BEAT 2: The Detonation Shockwave Burst
+        // ACT 2: "We SELL-OUT your real estate project..." Kinetic Mask Entrance
         // -------------------------------------------------------------
-        .to('.supercar-container', {
-          autoAlpha: 0,
-          scale: 1.2,
-          duration: 0.15,
-          ease: 'power4.out',
-        })
-        .to('.explosion-burst-stage', {
+        .to('.cine-reveal-scene', {
           autoAlpha: 1,
-          scale: 1.6,
-          duration: 0.6,
-          ease: 'elastic.out(1.2, 0.4)',
-        }, '-=0.1')
-        .to('.explosion-shard', {
-          scale: 2.2,
-          opacity: 0,
-          duration: 0.8,
-          stagger: 0.01,
-          ease: 'power3.out',
-        }, '-=0.3')
-        .to('.shockwave-core, .shockwave-ring-1, .shockwave-ring-2', {
-          scale: 2.5,
-          opacity: 0,
-          duration: 0.8,
-        }, '<')
+          duration: 0.2,
+        })
+        .fromTo(
+          '.reveal-line-1',
+          { y: 80, opacity: 0, clipPath: 'inset(100% 0 0 0)', rotateX: -30 },
+          { y: 0, opacity: 1, clipPath: 'inset(0% 0 0 0)', rotateX: 0, duration: 1.2, ease: 'power3.out' },
+          '-=0.1'
+        )
+        .fromTo(
+          '.reveal-line-2',
+          { y: 80, opacity: 0, clipPath: 'inset(100% 0 0 0)', rotateX: -30 },
+          { y: 0, opacity: 1, clipPath: 'inset(0% 0 0 0)', rotateX: 0, duration: 1.2, ease: 'power3.out' },
+          '-=0.9'
+        )
+        .fromTo(
+          '.reveal-line-3',
+          { y: 80, opacity: 0, clipPath: 'inset(100% 0 0 0)', rotateX: -30 },
+          { y: 0, opacity: 1, clipPath: 'inset(0% 0 0 0)', rotateX: 0, duration: 1.2, ease: 'power3.out' },
+          '-=0.9'
+        )
+        .fromTo(
+          '.reveal-line-4',
+          { y: 80, opacity: 0, clipPath: 'inset(100% 0 0 0)', rotateX: -30 },
+          { y: 0, opacity: 1, clipPath: 'inset(0% 0 0 0)', rotateX: 0, duration: 1.2, ease: 'power3.out' },
+          '-=0.9'
+        )
 
         // -------------------------------------------------------------
-        // BEAT 3: Complete Cleanup & Solution Blueprint Entrance
+        // ACT 3: Transition & Docking into the 4-Phase System Blueprint
         // -------------------------------------------------------------
-        .to('.scene-agency-master', {
+        .to('.cine-reveal-scene', {
           autoAlpha: 0,
-          duration: 0.6,
+          scale: 0.94,
+          y: -40,
+          duration: 1,
           ease: 'power2.inOut',
         })
-        .to('.scene-solution-blueprint', {
+        .to('.cine-blueprint-scene', {
           autoAlpha: 1,
           y: 0,
           scale: 1,
-          duration: 1.6,
+          duration: 1.5,
           ease: 'power3.out',
-        })
+        }, '-=0.5')
         .fromTo(
           '.cine-chip',
           { autoAlpha: 0, y: 15, scale: 0.85 },
@@ -133,7 +129,7 @@ export const CinematicHero: React.FC = () => {
         ref={stageRef}
         className="relative w-full h-screen min-h-[660px] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-20 py-4 overflow-hidden bg-[#0B0F17]"
       >
-        {/* Luxury Architectural Backdrop */}
+        {/* Luxury Architectural Backdrop with Vignette */}
         <div className="absolute inset-0 z-0">
           <img
             src="/cinematic_luxury_tower.jpg"
@@ -144,36 +140,34 @@ export const CinematicHero: React.FC = () => {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,184,0,0.12)_0%,transparent_70%)]" />
         </div>
 
+        {/* Ambient Grid Overlay */}
+        <div
+          className="absolute inset-0 z-1 pointer-events-none opacity-20"
+          style={{
+            backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px)`,
+            backgroundSize: '32px 32px',
+          }}
+        />
+
         {/* ========================================================================= */}
-        {/* ACT 1: FRAME 0 - PURE MINIMAL HOOK + MORPHING CAR & EXPLOSION             */}
+        {/* ACT 1: FRAME 0 - INITIAL HOOK ("Most agencies run your ads.")             */}
         {/* ========================================================================= */}
-        <div className="scene-agency-master absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-          {/* Main Huge Pristine Headline */}
-          <h1 className="cine-hero-h1 text-[clamp(2.8rem,7vw,6.5rem)] font-black text-white tracking-tight leading-[1.05] max-w-5xl drop-shadow-[0_4px_35px_rgba(0,0,0,0.9)]">
-            Most agencies <span className="text-gray-400">run your ads.</span>
-          </h1>
-
-          {/* Dynamic Supercar & Speed Shaders Canvas */}
-          <div className="agency-car-stage relative w-full max-w-4xl h-[260px] mt-4 flex items-center justify-center">
-            <svg viewBox="0 0 800 240" className="w-full h-full overflow-visible" fill="none">
-              {/* Perspective Road Speed Grid */}
-              <SpeedGrid />
-
-              {/* Accelerating Supercar Unit */}
-              <g className="supercar-container" transform="translate(60, 100)">
-                <AgencyCar />
-              </g>
-
-              {/* Explosion Shockwave & Kinetic Shards at Impact Point */}
-              <g className="explosion-burst-stage" transform="translate(540, 130)">
-                <ExplosionParticles />
-              </g>
-            </svg>
+        <div className="cine-hook-scene absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+          <div className="flex flex-col items-center justify-center gap-1 max-w-5xl">
+            <div className="overflow-hidden">
+              <span className="hook-line-1 block text-[clamp(3.2rem,7.5vw,6.8rem)] font-black text-white tracking-tight leading-[1.04] drop-shadow-[0_4px_35px_rgba(0,0,0,0.9)]">
+                Most agencies
+              </span>
+            </div>
+            <div className="overflow-hidden">
+              <span className="hook-line-2 block text-[clamp(3.2rem,7.5vw,6.8rem)] font-black text-gray-400 tracking-tight leading-[1.04] drop-shadow-[0_4px_35px_rgba(0,0,0,0.9)]">
+                run your ads.
+              </span>
+            </div>
           </div>
 
-          {/* Minimal Scroll Cue */}
-          <div className="mt-8 flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-gray-400">
-            <span>Scroll to continue</span>
+          <div className="mt-10 flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-gray-400">
+            <span>Scroll to reveal the sell-out model</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5B800" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce">
               <line x1="12" y1="5" x2="12" y2="19" /><polyline points="19 12 12 19 5 12" />
             </svg>
@@ -181,9 +175,37 @@ export const CinematicHero: React.FC = () => {
         </div>
 
         {/* ========================================================================= */}
-        {/* ACT 2: THE 4-PHASE SYSTEM ENGINE & MASTER DOCKED BLUEPRINT                */}
+        {/* ACT 2: SCENE TRANSFORMATION ("We sell-out your real estate project...")   */}
         {/* ========================================================================= */}
-        <div className="scene-solution-blueprint relative z-10 w-full grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] xl:grid-cols-[1.02fr_1.18fr] gap-6 lg:gap-10 xl:gap-14 items-center my-auto pt-2 bg-white rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl border border-gray-100">
+        <div className="cine-reveal-scene absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+          <div className="flex flex-col items-center justify-center gap-1 max-w-6xl">
+            <div className="overflow-hidden">
+              <span className="reveal-line-1 block text-[clamp(2.4rem,5.5vw,5rem)] font-black text-white tracking-tight leading-[1.08] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+                Most agencies run your ads.
+              </span>
+            </div>
+            <div className="overflow-hidden">
+              <span className="reveal-line-2 block text-[clamp(2.4rem,5.5vw,5rem)] font-black text-white tracking-tight leading-[1.08] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+                We <span className="text-[#F5B800] glow-gold-cinematic">sell-out</span>
+              </span>
+            </div>
+            <div className="overflow-hidden">
+              <span className="reveal-line-3 block text-[clamp(2.4rem,5.5vw,5rem)] font-black text-white tracking-tight leading-[1.08] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+                your real estate project
+              </span>
+            </div>
+            <div className="overflow-hidden">
+              <span className="reveal-line-4 block text-[clamp(2.4rem,5.5vw,5rem)] font-black text-gray-300 tracking-tight leading-[1.08] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+                within your planned timeline.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* ACT 3: FULL BLUEPRINT STAGE (4-Phase System Engine + Docked Metrics)      */}
+        {/* ========================================================================= */}
+        <div className="cine-blueprint-scene relative z-10 w-full grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] xl:grid-cols-[1.02fr_1.18fr] gap-6 lg:gap-10 xl:gap-14 items-center my-auto pt-2 bg-white rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl border border-gray-100 text-gray-900">
           {/* Left Column: Solution Narrative */}
           <div className="flex flex-col justify-between py-0 max-w-[620px]">
             <div className="flex flex-col gap-3.5">
