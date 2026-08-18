@@ -6,7 +6,7 @@ export const Act1ArchitecturalColumns: React.FC = () => {
       {/* ===================================================================== */}
       {/* COLUMN 1: "Most" (Gallery Porcelain Ground + Pure Didone Serif)       */}
       {/* ===================================================================== */}
-      <div className="act1-col-1 relative h-full bg-[#F4F4F3] flex items-center justify-center border-r border-black/10 overflow-hidden">
+      <div className="act1-col-1 relative h-full bg-[#F5F5F4] flex items-center justify-center border-r border-black/10 overflow-hidden">
         <h1 className="act1-most-word font-serif text-[clamp(4.8rem,9vw,10.5rem)] font-normal text-[#080808] tracking-[-0.04em] leading-none select-none">
           Most
         </h1>
@@ -27,81 +27,100 @@ export const Act1ArchitecturalColumns: React.FC = () => {
       {/* COLUMN 3: Split Stack (3D Perspective Runway "run" + Textured "your.") */}
       {/* ===================================================================== */}
       <div className="act1-col-3 relative h-full flex flex-col border-r border-white/10 overflow-hidden">
-        {/* Top 54%: "run" with Pure Procedural 3D Architectural Beveled Perspective Floor */}
-        <div className="act1-run-panel relative h-[54%] bg-[#F2EFEB] flex flex-col items-center justify-between pt-[10vh] overflow-hidden border-b border-black/15">
-          <h2 className="act1-run-word relative z-10 font-sans text-[clamp(4rem,7.5vw,7.8rem)] font-black text-[#0A0A0A] tracking-[-0.05em] leading-none">
+        {/* Top 54%: "run" with Realistic Architectural 3D Ground Perspective Runway */}
+        <div className="act1-run-panel relative h-[54%] bg-[#F3F0EC] flex flex-col items-center justify-between pt-[8vh] overflow-hidden border-b border-black/15">
+          {/* Extended Bold Modern Sans "run" */}
+          <h2 className="act1-run-word relative z-10 font-sans text-[clamp(4.2rem,8vw,8.4rem)] font-black text-[#0A0A0A] tracking-[-0.05em] leading-none scale-y-95">
             run
           </h2>
 
-          {/* 100% Pure Mathematical 3D Beveled Perspective Floor Beams */}
-          <div className="relative w-full h-[60%] mt-auto">
+          {/* Mathematical 3D Floor Perspective Runway Floor */}
+          <div className="relative w-full h-[66%] mt-auto overflow-hidden">
             <svg
               className="w-full h-full block"
-              viewBox="0 0 400 260"
+              viewBox="0 0 400 300"
               preserveAspectRatio="none"
             >
               <defs>
-                <linearGradient id="code-plank-surface" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#F5F3EF" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="#D5D0C6" stopOpacity="1" />
+                {/* Longitudinal Beam Shading */}
+                <linearGradient id="beam-fade" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#EDEAE4" stopOpacity="0" />
+                  <stop offset="25%" stopColor="#E2DDD4" stopOpacity="0.4" />
+                  <stop offset="100%" stopColor="#CCC6BB" stopOpacity="1" />
                 </linearGradient>
 
-                <linearGradient id="code-rib-highlight" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#D8D4CA" />
+                <linearGradient id="ridge-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+                  <stop offset="30%" stopColor="#FFFFFF" stopOpacity="0.7" />
+                  <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
                 </linearGradient>
 
-                <linearGradient id="code-rib-shadow" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#7E7A72" />
-                  <stop offset="100%" stopColor="#ABA59A" />
+                <linearGradient id="ridge-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#9E9A92" stopOpacity="0" />
+                  <stop offset="30%" stopColor="#9E9A92" stopOpacity="0.5" />
+                  <stop offset="100%" stopColor="#7A756C" stopOpacity="0.9" />
                 </linearGradient>
               </defs>
 
-              <g className="opacity-95">
-                {/* Beam 1 */}
-                <polygon points="198,8 202,8 -25,260 -10,260" fill="url(#code-plank-surface)" />
-                <line x1="198" y1="8" x2="-25" y2="260" stroke="url(#code-rib-highlight)" strokeWidth="2" />
-                <line x1="202" y1="8" x2="-10" y2="260" stroke="url(#code-rib-shadow)" strokeWidth="2.5" />
+              {/* Distant Atmospheric Horizon Fade */}
+              <rect x="0" y="0" width="400" height="300" fill="url(#beam-fade)" opacity="0.3" />
 
-                {/* Beam 2 */}
-                <polygon points="199,8 201,8 30,260 45,260" fill="url(#code-plank-surface)" />
-                <line x1="199" y1="8" x2="30" y2="260" stroke="url(#code-rib-highlight)" strokeWidth="2" />
-                <line x1="201" y1="8" x2="45" y2="260" stroke="url(#code-rib-shadow)" strokeWidth="2.5" />
+              {/* 3D Longitudinal Runway Tracks (Vanishing Point at x: 200, y: 15) */}
+              <g>
+                {/* Track -5 */}
+                <polygon points="199,15 201,15 -60,300 -40,300" fill="url(#beam-fade)" />
+                <line x1="199" y1="15" x2="-60" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.8" />
+                <line x1="201" y1="15" x2="-40" y2="300" stroke="url(#ridge-shadow)" strokeWidth="2.2" />
 
-                {/* Beam 3 */}
-                <polygon points="199.5,8 200.5,8 85,260 100,260" fill="url(#code-plank-surface)" />
-                <line x1="199.5" y1="8" x2="85" y2="260" stroke="url(#code-rib-highlight)" strokeWidth="2" />
-                <line x1="200.5" y1="8" x2="100" y2="260" stroke="url(#code-rib-shadow)" strokeWidth="2.5" />
+                {/* Track -4 */}
+                <polygon points="199.2,15 200.8,15 0,300 20,300" fill="url(#beam-fade)" />
+                <line x1="199.2" y1="15" x2="0" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.8" />
+                <line x1="200.8" y1="15" x2="20" y2="300" stroke="url(#ridge-shadow)" strokeWidth="2.2" />
 
-                {/* Beam 4 */}
-                <polygon points="200,8 200.5,8 140,260 155,260" fill="url(#code-plank-surface)" />
-                <line x1="200" y1="8" x2="140" y2="260" stroke="url(#code-rib-highlight)" strokeWidth="2" />
-                <line x1="200.5" y1="8" x2="155" y2="260" stroke="url(#code-rib-shadow)" strokeWidth="2" />
+                {/* Track -3 */}
+                <polygon points="199.4,15 200.6,15 60,300 78,300" fill="url(#beam-fade)" />
+                <line x1="199.4" y1="15" x2="60" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.6" />
+                <line x1="200.6" y1="15" x2="78" y2="300" stroke="url(#ridge-shadow)" strokeWidth="2.0" />
 
-                {/* Center Meridian Beam 5 */}
-                <polygon points="200,8 200.5,8 195,260 205,260" fill="url(#code-plank-surface)" />
-                <line x1="200" y1="8" x2="195" y2="260" stroke="url(#code-rib-highlight)" strokeWidth="2" />
-                <line x1="200.5" y1="8" x2="205" y2="260" stroke="url(#code-rib-shadow)" strokeWidth="2" />
+                {/* Track -2 */}
+                <polygon points="199.6,15 200.4,15 115,300 130,300" fill="url(#beam-fade)" />
+                <line x1="199.6" y1="15" x2="115" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.5" />
+                <line x1="200.4" y1="15" x2="130" y2="300" stroke="url(#ridge-shadow)" strokeWidth="1.8" />
 
-                {/* Beam 6 */}
-                <polygon points="200,8 200.5,8 245,260 260,260" fill="url(#code-plank-surface)" />
-                <line x1="200" y1="8" x2="245" y2="260" stroke="url(#code-rib-highlight)" strokeWidth="2" />
-                <line x1="200.5" y1="8" x2="260" y2="260" stroke="url(#code-rib-shadow)" strokeWidth="2" />
+                {/* Track -1 */}
+                <polygon points="199.8,15 200.2,15 165,300 178,300" fill="url(#beam-fade)" />
+                <line x1="199.8" y1="15" x2="165" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.4" />
+                <line x1="200.2" y1="15" x2="178" y2="300" stroke="url(#ridge-shadow)" strokeWidth="1.6" />
 
-                {/* Beam 7 */}
-                <polygon points="200,8 201,8 300,260 315,260" fill="url(#code-plank-surface)" />
-                <line x1="200" y1="8" x2="300" y2="260" stroke="url(#code-rib-highlight)" strokeWidth="2" />
-                <line x1="201" y1="8" x2="315" y2="260" stroke="url(#code-rib-shadow)" strokeWidth="2.5" />
+                {/* Center Track 0 */}
+                <polygon points="199.9,15 200.1,15 194,300 206,300" fill="url(#beam-fade)" />
+                <line x1="199.9" y1="15" x2="194" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.4" />
+                <line x1="200.1" y1="15" x2="206" y2="300" stroke="url(#ridge-shadow)" strokeWidth="1.6" />
 
-                {/* Beam 8 */}
-                <polygon points="200,8 202,8 355,260 370,260" fill="url(#code-plank-surface)" />
-                <line x1="200" y1="8" x2="355" y2="260" stroke="url(#code-rib-highlight)" strokeWidth="2" />
-                <line x1="202" y1="8" x2="370" y2="260" stroke="url(#code-rib-shadow)" strokeWidth="2.5" />
+                {/* Track +1 */}
+                <polygon points="199.8,15 200.2,15 222,300 235,300" fill="url(#beam-fade)" />
+                <line x1="199.8" y1="15" x2="222" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.4" />
+                <line x1="200.2" y1="15" x2="235" y2="300" stroke="url(#ridge-shadow)" strokeWidth="1.6" />
 
-                {/* Beam 9 */}
-                <polygon points="200,8 202,8 410,260 425,260" fill="url(#code-plank-surface)" />
-                <line x1="200" y1="8" x2="410" y2="260" stroke="url(#code-rib-highlight)" strokeWidth="2" />
-                <line x1="202" y1="8" x2="425" y2="260" stroke="url(#code-rib-shadow)" strokeWidth="2.5" />
+                {/* Track +2 */}
+                <polygon points="199.6,15 200.4,15 270,300 285,300" fill="url(#beam-fade)" />
+                <line x1="199.6" y1="15" x2="270" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.5" />
+                <line x1="200.4" y1="15" x2="285" y2="300" stroke="url(#ridge-shadow)" strokeWidth="1.8" />
+
+                {/* Track +3 */}
+                <polygon points="199.4,15 200.6,15 322,300 340,300" fill="url(#beam-fade)" />
+                <line x1="199.4" y1="15" x2="322" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.6" />
+                <line x1="200.6" y1="15" x2="340" y2="300" stroke="url(#ridge-shadow)" strokeWidth="2.0" />
+
+                {/* Track +4 */}
+                <polygon points="199.2,15 200.8,15 380,300 400,300" fill="url(#beam-fade)" />
+                <line x1="199.2" y1="15" x2="380" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.8" />
+                <line x1="200.8" y1="15" x2="400" y2="300" stroke="url(#ridge-shadow)" strokeWidth="2.2" />
+
+                {/* Track +5 */}
+                <polygon points="199,15 201,15 440,300 460,300" fill="url(#beam-fade)" />
+                <line x1="199" y1="15" x2="440" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.8" />
+                <line x1="201" y1="15" x2="460" y2="300" stroke="url(#ridge-shadow)" strokeWidth="2.2" />
               </g>
             </svg>
           </div>
@@ -131,26 +150,18 @@ export const Act1ArchitecturalColumns: React.FC = () => {
       </div>
 
       {/* ===================================================================== */}
-      {/* COLUMN 4: "ads." (100% Pure Code Solar Eclipse & Physical Refraction)  */}
+      {/* COLUMN 4: "ads." (Solar Eclipse Refraction with Physical Backlight)   */}
       {/* ===================================================================== */}
       <div className="act1-col-4 relative h-full bg-[#08080A] flex items-center justify-center overflow-hidden">
-        {/* Layer 1: Ambient Rayleigh Atmospheric Scattering (Warm Golden Corona Glow) */}
+        {/* Layer 1: Occluded Sun Radiant Backlight Behind the Rim */}
         <div
-          className="absolute -right-[12vw] w-[38vw] h-[95vh] rounded-full pointer-events-none blur-3xl opacity-90"
+          className="absolute -right-[12vw] w-[42vw] h-[95vh] rounded-full pointer-events-none blur-3xl opacity-95"
           style={{
-            background: 'radial-gradient(ellipse at 80% 50%, rgba(245, 184, 0, 0.48) 0%, rgba(212, 175, 55, 0.22) 40%, rgba(138, 98, 20, 0.08) 65%, transparent 80%)',
+            background: 'radial-gradient(ellipse at 75% 50%, rgba(255, 220, 120, 0.7) 0%, rgba(245, 184, 0, 0.45) 30%, rgba(180, 120, 20, 0.2) 55%, transparent 75%)',
           }}
         />
 
-        {/* Layer 2: Secondary Golden Rim Diffuse Bloom */}
-        <div
-          className="absolute -right-[6vw] w-[30vw] h-[85vh] rounded-full pointer-events-none blur-2xl opacity-80"
-          style={{
-            background: 'radial-gradient(ellipse at 85% 50%, rgba(255, 235, 160, 0.6) 0%, rgba(230, 170, 30, 0.3) 35%, transparent 70%)',
-          }}
-        />
-
-        {/* Layer 3: The Solar Corona Eclipse Physics (Pure Mathematical SVG) */}
+        {/* Layer 2: Real Atmospheric Corona Dispersion SVG */}
         <svg
           className="act1-gold-eclipse absolute inset-0 w-full h-full pointer-events-none"
           viewBox="0 0 300 600"
@@ -158,59 +169,65 @@ export const Act1ArchitecturalColumns: React.FC = () => {
         >
           <defs>
             {/* Incandescent Core Rim Gradient */}
-            <linearGradient id="code-eclipse-rim" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#FFF2B2" />
-              <stop offset="20%" stopColor="#F9E28A" />
+            <linearGradient id="true-eclipse-rim" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FFF7D6" />
+              <stop offset="25%" stopColor="#F9E28A" />
               <stop offset="50%" stopColor="#D4AF37" />
               <stop offset="80%" stopColor="#E5B242" />
               <stop offset="100%" stopColor="#A6761A" />
             </linearGradient>
 
-            {/* Gaussian Corona Dispersion Filter */}
-            <filter id="code-corona-bloom" x="-40%" y="-40%" width="180%" height="180%">
-              <feGaussianBlur stdDeviation="16" result="outerBlur" />
-              <feGaussianBlur stdDeviation="5" result="innerBlur" />
+            {/* Gaussian Corona Filter */}
+            <filter id="true-corona-glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="22" result="ambientGlow" />
+              <feGaussianBlur stdDeviation="7" result="innerCorona" />
               <feMerge>
-                <feMergeNode in="outerBlur" />
-                <feMergeNode in="innerBlur" />
+                <feMergeNode in="ambientGlow" />
+                <feMergeNode in="innerCorona" />
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
           </defs>
 
-          {/* Atmospheric Corona Radiance Arc */}
+          {/* Broad Radiant Corona Arc */}
           <path
-            d="M 235,-20 Q 295,300 235,620"
+            d="M 100,-20 A 340,340 0 0,1 100,620"
             fill="none"
             stroke="#F5B800"
-            strokeWidth="24"
+            strokeWidth="32"
             opacity="0.35"
-            filter="url(#code-corona-bloom)"
+            filter="url(#true-corona-glow)"
           />
 
-          {/* Mid Corona Warm Gold Arc */}
+          {/* Intense Golden Corona Flame */}
           <path
-            d="M 235,-20 Q 295,300 235,620"
+            d="M 100,-20 A 340,340 0 0,1 100,620"
             fill="none"
             stroke="#D4AF37"
-            strokeWidth="10"
-            opacity="0.75"
-            filter="url(#code-corona-bloom)"
+            strokeWidth="14"
+            opacity="0.85"
+            filter="url(#true-corona-glow)"
           />
 
-          {/* Razor-Sharp Incandescent Solar Rim (Pure Light Refraction Core) */}
+          {/* Razor-Sharp Incandescent Solar Rim Core */}
           <path
-            d="M 235,-20 Q 295,300 235,620"
+            d="M 100,-20 A 340,340 0 0,1 100,620"
             fill="none"
-            stroke="url(#code-eclipse-rim)"
+            stroke="url(#true-eclipse-rim)"
             strokeWidth="4.5"
             strokeLinecap="round"
           />
+
+          {/* Occluding Dark Celestial Body (The Moon) */}
+          <path
+            d="M 0,-20 L 100,-20 A 340,340 0 0,1 100,620 L 0,620 Z"
+            fill="#08080A"
+          />
         </svg>
 
-        {/* Layer 4: "ads." in 100% Pure Code Brushed Liquid Gold Gradient */}
+        {/* Layer 3: "ads." Typography in Antique Brushed Gold */}
         <h2
-          className="act1-ads-word relative z-10 font-sans text-[clamp(4.5rem,8.6vw,9.5rem)] font-black tracking-[-0.04em] leading-none drop-shadow-[0_12px_40px_rgba(0,0,0,0.95)]"
+          className="act1-ads-word relative z-10 font-sans text-[clamp(4.5rem,8.6vw,9.5rem)] font-black tracking-[-0.04em] leading-none drop-shadow-[0_14px_45px_rgba(0,0,0,0.98)]"
           style={{
             background: 'linear-gradient(135deg, #F9E7A2 0%, #D4AF37 38%, #AA7E24 75%, #F0CE6E 100%)',
             WebkitBackgroundClip: 'text',
