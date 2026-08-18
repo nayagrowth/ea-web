@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { REFERENCE_GEOMETRY } from '../constants/referenceGeometry';
 import { projectWorldLineToScreen, intersectLines } from '../camera/projection';
 import type { SlatMetricData } from '../geometry/Act2Geometry';
+import type { FloorCurveValidationData } from '../geometry/FloorSweepRibbon';
 
 export interface SilhouetteError {
   name: string;
@@ -19,6 +20,14 @@ export interface SlatThicknessValidation {
   status: 'PASS' | 'FAIL';
 }
 
+export interface FloorCurveError {
+  name: string;
+  avgErrorPx: number;
+  maxErrorPx: number;
+  sampleCount: number;
+  status: 'PASS' | 'FAIL';
+}
+
 export interface CalibrationReport {
   targetVP: { x: number; y: number };
   projectedVP: { x: number; y: number };
@@ -31,6 +40,8 @@ export interface CalibrationReport {
   rightRibAvgErrorPx: number;
   rightRibStatus: 'PASS' | 'FAIL';
   slatOccupancyStatus: 'PASS' | 'FAIL';
+  floorCurveStatus: 'PASS' | 'FAIL';
+  floorCurves: FloorCurveError[];
   slatThicknesses: SlatThicknessValidation[];
   status: 'PASS' | 'FAIL';
   lineCount: number;
@@ -55,10 +66,6 @@ function viewportPointToReference(
   );
 }
 
-/**
- * Calculates average perpendicular distance from the target endpoints to a
- * projected line, all expressed in the canonical 1672 × 941 coordinate space.
- */
 function evaluateReferenceLineError(
   projectedP0: THREE.Vector2,
   projectedP1: THREE.Vector2,
@@ -89,17 +96,18 @@ function evaluateReferenceLineError(
 /**
  * Validates:
  * 1) One-point convergence to canonical VP (1433.21, 586.43),
- * 2) Primary structural silhouettes and true viewport-entry accuracy,
+ * 2) Primary structural silhouettes and true top-boundary entry (Top Blade entry < 3 px),
  * 3) Right-wall ray-family spacing,
  * 4) Real camera-projected slat thickness occupancy (|T_render - T_target| < 3.0 px),
- * 5) Top Silver Blade screen top-boundary entry (x at y=0).
+ * 5) Runtime floor-curve reprojection accuracy (E_curve < 1.0 px).
  */
 export function validateVanishingPoint(
   keyLines: Array<{ p0: THREE.Vector3; p1: THREE.Vector3; name: string }>,
   camera: THREE.Camera,
   viewportWidth: number,
   viewportHeight: number,
-  slatMetrics: SlatMetricData[] = []
+  slatMetrics: SlatMetricData[] = [],
+  curveData: FloorCurveValidationData[] = []
 ): CalibrationReport {
   const projected = keyLines.map((line) => ({
     name: line.name,
@@ -168,13 +176,11 @@ export function validateVanishingPoint(
       target.p1
     );
 
-    // Precise Top Blade Entry Validation at Screen Top Boundary Y = 0
     if (target.keyLineName === 'TopSilverBlade') {
       const refP0 = viewportPointToReference(projectedLine.p0Px, viewportWidth, viewportHeight);
       const refP1 = viewportPointToReference(projectedLine.p1Px, viewportWidth, viewportHeight);
       const lineEq = lineFromPoints(refP0, refP1);
 
-      // Solve X when Y = 0: a*X + b*(0) + c = 0 => X = -c / a
       if (Math.abs(lineEq.x) > 1e-7) {
         const xAtTop = -lineEq.z / lineEq.x;
         topBladeEntryErrorPx = Math.abs(xAtTop - target.p0.x);
@@ -224,9 +230,8 @@ export function validateVanishingPoint(
       ? 'PASS'
       : 'FAIL';
 
-  // Real Slat Thickness Projection Validation at X = 1672
+  // Real Slat Thickness Projection Validation
   const slatThicknesses: SlatThicknessValidation[] = slatMetrics.map((m) => {
-    // Project top and bottom lines to find Y at X = 1672
     const topProj = projectWorldLineToScreen(m.topEdgeWorld, new THREE.Vector3(m.topEdgeWorld.x, m.topEdgeWorld.y, -95.0), camera, viewportWidth, viewportHeight);
     const botProj = projectWorldLineToScreen(m.bottomEdgeWorld, new THREE.Vector3(m.bottomEdgeWorld.x, m.bottomEdgeWorld.y, -95.0), camera, viewportWidth, viewportHeight);
 
@@ -263,6 +268,41 @@ export function validateVanishingPoint(
       ? 'PASS'
       : 'FAIL';
 
+  // Runtime Floor Curve Reprojection Validation
+  const floorCurves: FloorCurveError[] = curveData.map((curve) => {
+    const pointErrors: number[] = [];
+    const v = new THREE.Vector3();
+
+    for (let i = 0; i < curve.worldPoints.length; i++) {
+      v.copy(curve.worldPoints[i]).project(camera);
+      const projX = ((v.x + 1) * 0.5) * viewportWidth;
+      const projY = ((1 - v.y) * 0.5) * viewportHeight;
+
+      const refX = (projX / viewportWidth) * REFERENCE_GEOMETRY.width;
+      const refY = (projY / viewportHeight) * REFERENCE_GEOMETRY.height;
+
+      const target = curve.screenTargetPoints[i];
+      const err = Math.hypot(refX - target.x, refY - target.y);
+      pointErrors.push(err);
+    }
+
+    const avgErrorPx = pointErrors.reduce((sum, e) => sum + e, 0) / pointErrors.length;
+    const maxErrorPx = Math.max(...pointErrors);
+
+    return {
+      name: curve.name,
+      avgErrorPx,
+      maxErrorPx,
+      sampleCount: curve.worldPoints.length,
+      status: avgErrorPx < 1.0 && maxErrorPx < 2.0 ? 'PASS' : 'FAIL',
+    };
+  });
+
+  const floorCurveStatus: 'PASS' | 'FAIL' =
+    floorCurves.length === 0 || floorCurves.every((c) => c.status === 'PASS')
+      ? 'PASS'
+      : 'FAIL';
+
   const maxSilhouetteErrorPx =
     silhouettes.length > 0
       ? Math.max(...silhouettes.map((s) => s.errorPx))
@@ -278,7 +318,8 @@ export function validateVanishingPoint(
     maxRayErrorPx < 3.0 &&
     primarySilhouettesPass &&
     rightRibStatus === 'PASS' &&
-    slatOccupancyStatus === 'PASS'
+    slatOccupancyStatus === 'PASS' &&
+    floorCurveStatus === 'PASS'
       ? 'PASS'
       : 'FAIL';
 
@@ -297,6 +338,8 @@ export function validateVanishingPoint(
     rightRibAvgErrorPx,
     rightRibStatus,
     slatOccupancyStatus,
+    floorCurveStatus,
+    floorCurves,
     slatThicknesses,
     status,
     lineCount: keyLines.length,

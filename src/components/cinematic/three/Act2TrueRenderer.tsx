@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import { configureOffAxisCamera } from './act2/camera/projection';
-import { createAct2Geometry } from './act2/geometry/Act2Geometry';
+import { createAct2Geometry, type Act2GeometryRig } from './act2/geometry/Act2Geometry';
 import { validateVanishingPoint, type CalibrationReport } from './act2/debug/VanishingPointValidator';
 import { GeometryCalibrationOverlay } from './act2/debug/GeometryCalibrationOverlay';
 import { REFERENCE_GEOMETRY } from './act2/constants/referenceGeometry';
@@ -12,21 +12,26 @@ interface Act2TrueRendererProps {
 }
 
 /**
- * Geometry-first Act 2 renderer (Sweep V6.1 Final Geometry-Lock).
+ * Geometry-first Act 2 renderer (Sweep V6.2 Final Geometry Lock).
  *
  * Invariants:
- * - Canonical VP (1433.21, 586.43) is strictly preserved.
- * - Slat bodies are real architectural slabs with gap-derived occupancy verified via camera projection.
- * - Real 3D Floor Sweep Ribbon unprojected without arbitrary clamping.
- * - World-transformed `aDepth` vertex attributes on all planes and objects.
+ * - Canonical VP (1433.21, 586.43) strictly locked.
+ * - ResizeObserver on mountRef for instant synchronized camera/renderer resizing.
+ * - Explicit contained 1672:941 review frame (s = min(1, Wp/1672, Hp/941)).
+ * - Screen-interpolated floor sweep ribbon with runtime curve reprojection validation.
  * - Real Clay Mode via scene.overrideMaterial.
+ * - Both local & global depth attributes (aDepthLocal, aDepthGlobal, aWorldZ).
  */
 export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
   className = '',
   showCalibrationOverlay = true,
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
+  const parentContainerRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
+  const geometryRigRef = useRef<Act2GeometryRig | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+
   const [calibrationReport, setCalibrationReport] = useState<CalibrationReport | null>(null);
   const [viewportDims, setViewportDims] = useState<{ width: number; height: number }>({
     width: REFERENCE_GEOMETRY.width,
@@ -37,8 +42,35 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
   const [isClayMode, setIsClayMode] = useState(false);
   const [isCanonicalLetterbox, setIsCanonicalLetterbox] = useState(false);
 
+  // Exact Contained Sizing for 1672:941 Review Frame
+  const [letterboxDims, setLetterboxDims] = useState<{ width: number; height: number }>({
+    width: REFERENCE_GEOMETRY.width,
+    height: REFERENCE_GEOMETRY.height,
+  });
+
   const materialsRef = useRef<THREE.Material[]>([]);
   const clayMaterialRef = useRef<THREE.MeshStandardMaterial | null>(null);
+
+  // Update letterbox dimensions when parent container dimensions change
+  const updateLetterboxDims = useCallback(() => {
+    const parent = parentContainerRef.current;
+    if (!parent) return;
+
+    const wp = parent.clientWidth || window.innerWidth;
+    const hp = parent.clientHeight || window.innerHeight;
+
+    const s = Math.min(1.0, wp / REFERENCE_GEOMETRY.width, hp / REFERENCE_GEOMETRY.height);
+    setLetterboxDims({
+      width: Math.round(REFERENCE_GEOMETRY.width * s),
+      height: Math.round(REFERENCE_GEOMETRY.height * s),
+    });
+  }, []);
+
+  useEffect(() => {
+    updateLetterboxDims();
+    window.addEventListener('resize', updateLetterboxDims);
+    return () => window.removeEventListener('resize', updateLetterboxDims);
+  }, [updateLetterboxDims]);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -58,7 +90,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     scene.fog = new THREE.FogExp2('#030405', 0.0055);
     sceneRef.current = scene;
 
-    // Calibrated Clay Material for Dev Mode
+    // Calibrated Clay Material
     const clayMat = new THREE.MeshStandardMaterial({
       color: '#848890',
       roughness: 0.88,
@@ -81,6 +113,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     );
     camera.rotation.set(0, 0, 0);
     configureOffAxisCamera(camera, width, height);
+    cameraRef.current = camera;
 
     // 3. WEBGL RENDERER
     const renderer = new THREE.WebGLRenderer({
@@ -89,7 +122,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
       alpha: false,
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(width, height);
+    renderer.setSize(width, height, false);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.10;
@@ -121,6 +154,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
 
     // 5. GEOMETRY RIG
     const geometryRig = createAct2Geometry();
+    geometryRigRef.current = geometryRig;
     scene.add(geometryRig.group);
     disposables.push(...geometryRig.disposables);
 
@@ -141,7 +175,8 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         camera,
         w,
         h,
-        geometryRig.slatMetrics
+        geometryRig.slatMetrics,
+        geometryRig.floorSweepRig.keyReferenceCurves
       );
       setCalibrationReport(report);
     };
@@ -155,24 +190,25 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     };
     animate();
 
-    const handleResize = () => {
-      if (!container || isDisposed) return;
+    // 6. RESIZE OBSERVER ON MOUNT CONTAINER (Instant sync without dimensional transition delay)
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (isDisposed || entries.length === 0) return;
+      const entry = entries[0];
+      const w = Math.round(entry.contentRect.width) || container.clientWidth || window.innerWidth;
+      const h = Math.round(entry.contentRect.height) || container.clientHeight || window.innerHeight;
 
-      const w = container.clientWidth || window.innerWidth;
-      const h = container.clientHeight || window.innerHeight;
       setViewportDims({ width: w, height: h });
-
       configureOffAxisCamera(camera, w, h);
-      renderer.setSize(w, h);
+      renderer.setSize(w, h, false);
       runCalibration(w, h);
-    };
+    });
 
-    window.addEventListener('resize', handleResize);
+    resizeObserver.observe(container);
 
     return () => {
       isDisposed = true;
       cancelAnimationFrame(frameId);
-      window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
 
       disposables.forEach((item) => {
         try {
@@ -208,13 +244,19 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
   }, [isWireframe, isClayMode]);
 
   return (
-    <div className={`relative w-full h-full flex items-center justify-center bg-[#030405] overflow-hidden ${className}`}>
+    <div
+      ref={parentContainerRef}
+      className={`relative w-full h-full flex items-center justify-center bg-[#030405] overflow-hidden ${className}`}
+    >
       <div
         ref={mountRef}
-        className={`act2-true-renderer relative pointer-events-none select-none overflow-hidden transition-all duration-300 ${
+        style={
           isCanonicalLetterbox
-            ? 'w-[1672px] h-[941px] max-w-full max-h-full aspect-[1672/941] shadow-[0_0_80px_rgba(0,0,0,0.95)] border border-white/10'
-            : 'w-full h-full'
+            ? { width: `${letterboxDims.width}px`, height: `${letterboxDims.height}px` }
+            : { width: '100%', height: '100%' }
+        }
+        className={`act2-true-renderer relative pointer-events-none select-none overflow-hidden ${
+          isCanonicalLetterbox ? 'shadow-[0_0_80px_rgba(0,0,0,0.95)] border border-white/10' : ''
         }`}
       >
         {showCalibrationOverlay && (
@@ -228,6 +270,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
             onToggleClayMode={() => setIsClayMode((prev) => !prev)}
             isCanonicalLetterbox={isCanonicalLetterbox}
             onToggleCanonicalLetterbox={() => setIsCanonicalLetterbox((prev) => !prev)}
+            onForceCanonical={() => setIsCanonicalLetterbox(true)}
           />
         )}
       </div>

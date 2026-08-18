@@ -12,6 +12,7 @@ interface GeometryCalibrationOverlayProps {
   onToggleClayMode?: () => void;
   isCanonicalLetterbox?: boolean;
   onToggleCanonicalLetterbox?: () => void;
+  onForceCanonical?: () => void;
 }
 
 function readableName(name: string): string {
@@ -37,6 +38,7 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
   onToggleClayMode,
   isCanonicalLetterbox = false,
   onToggleCanonicalLetterbox,
+  onForceCanonical,
 }) => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [showReferenceOverlay, setShowReferenceOverlay] = useState(false);
@@ -47,6 +49,21 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
 
   const vpScreenX = REFERENCE_GEOMETRY.vpUv.u * viewportWidth;
   const vpScreenY = REFERENCE_GEOMETRY.vpUv.v * viewportHeight;
+
+  const handleToggleReference = () => {
+    const nextState = !showReferenceOverlay;
+    setShowReferenceOverlay(nextState);
+    if (nextState && onForceCanonical) {
+      onForceCanonical();
+    }
+  };
+
+  const handleToggleDifferenceMode = () => {
+    setIsDifferenceMode((prev) => !prev);
+    if (onForceCanonical) {
+      onForceCanonical();
+    }
+  };
 
   return (
     <div className="absolute inset-0 pointer-events-none select-none z-50 overflow-hidden font-mono text-xs">
@@ -60,7 +77,7 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
         <div className="w-2.5 h-2.5 rounded-full border border-[#F5C200]/90 shadow-[0_0_8px_#F5C200]" />
       </div>
 
-      {/* Optional Reference Comparison Overlay (Difference / Screen Mode) */}
+      {/* Reference Comparison Overlay (Screen-Contained 1:1 Pixel Match) */}
       {showReferenceOverlay && (
         <div
           className={`absolute inset-0 pointer-events-none ${
@@ -71,7 +88,7 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
           <img
             src="/reference_act2.png"
             alt="Reference Act 2 Alignment"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-fill"
           />
         </div>
       )}
@@ -186,6 +203,24 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
                 </div>
               </div>
 
+              {/* Floor Sweep Curve Reprojection */}
+              <div className="pt-1.5 mt-1.5 border-t border-white/10 space-y-1">
+                <div className="flex justify-between">
+                  <span className="text-neutral-500">FLOOR SWEEP CURVES</span>
+                  <span className={report.floorCurveStatus === 'PASS' ? 'text-emerald-400 font-semibold' : 'text-amber-400'}>
+                    {report.floorCurveStatus}
+                  </span>
+                </div>
+                {report.floorCurves.map((c) => (
+                  <div key={c.name} className="flex justify-between text-[10px]">
+                    <span className="text-neutral-600">{c.name.replace('FloorSweep_', '')}</span>
+                    <span className="text-emerald-400">
+                      avg {c.avgErrorPx.toFixed(3)} px / max {c.maxErrorPx.toFixed(3)} px
+                    </span>
+                  </div>
+                ))}
+              </div>
+
               {/* Dev Inspection Tools */}
               <div className="pt-2 mt-2 border-t border-white/10 space-y-2">
                 <span className="text-[10px] text-neutral-400 uppercase font-semibold">
@@ -230,7 +265,7 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
                     </button>
                   )}
                   <button
-                    onClick={() => setShowReferenceOverlay((prev) => !prev)}
+                    onClick={handleToggleReference}
                     className={`px-2 py-1 rounded text-[10.5px] font-semibold transition-all cursor-pointer ${
                       showReferenceOverlay
                         ? 'bg-[#F5C200] text-[#001A24]'
@@ -244,7 +279,7 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
                 {showReferenceOverlay && (
                   <div className="flex items-center justify-between gap-2 pt-1">
                     <button
-                      onClick={() => setIsDifferenceMode((prev) => !prev)}
+                      onClick={handleToggleDifferenceMode}
                       className="text-[10px] text-neutral-400 hover:text-white underline cursor-pointer"
                     >
                       Mode: {isDifferenceMode ? 'Difference' : 'Screen'}
