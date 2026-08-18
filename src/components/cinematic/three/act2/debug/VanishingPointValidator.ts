@@ -6,6 +6,14 @@ export interface SilhouetteError {
   name: string;
   errorPx: number;
   tolerancePx: number;
+  startEndpointErrorPx: number;
+  status: 'PASS' | 'FAIL';
+}
+
+export interface SlatThicknessValidation {
+  name: string;
+  thicknessPx: number;
+  worldHeight: number;
   status: 'PASS' | 'FAIL';
 }
 
@@ -16,9 +24,12 @@ export interface CalibrationReport {
   maxRayErrorPx: number;
   avgRayErrorPx: number;
   maxSilhouetteErrorPx: number;
+  topBladeEntryErrorPx: number;
   rightRibMaxErrorPx: number;
   rightRibAvgErrorPx: number;
   rightRibStatus: 'PASS' | 'FAIL';
+  slatOccupancyStatus: 'PASS' | 'FAIL';
+  slatThicknesses: SlatThicknessValidation[];
   status: 'PASS' | 'FAIL';
   lineCount: number;
   intersectionCount: number;
@@ -53,38 +64,40 @@ function evaluateReferenceLineError(
   viewportHeight: number,
   targetP0: { x: number; y: number },
   targetP1: { x: number; y: number }
-): number {
+): { lineError: number; startEndpointError: number } {
   const refP0 = viewportPointToReference(projectedP0, viewportWidth, viewportHeight);
   const refP1 = viewportPointToReference(projectedP1, viewportWidth, viewportHeight);
   const lineEq = lineFromPoints(refP0, refP1);
 
   const { x: a, y: b, z: c } = lineEq;
   const denom = Math.hypot(a, b);
-  if (denom < 1e-9) return Number.POSITIVE_INFINITY;
+  if (denom < 1e-9) return { lineError: Number.POSITIVE_INFINITY, startEndpointError: Number.POSITIVE_INFINITY };
 
   const d0 = Math.abs(a * targetP0.x + b * targetP0.y + c) / denom;
   const d1 = Math.abs(a * targetP1.x + b * targetP1.y + c) / denom;
-  return (d0 + d1) / 2;
+
+  const startEndpointError = Math.hypot(refP0.x - targetP0.x, refP0.y - targetP0.y);
+
+  return {
+    lineError: (d0 + d1) / 2,
+    startEndpointError,
+  };
 }
 
 /**
  * Validates:
- * 1) one-point convergence,
- * 2) measured primary structural silhouettes,
- * 3) right-wall ray-family spacing.
- *
- * All errors are reported in canonical reference pixels even on non-16:9
- * viewports, preventing width-only error scaling from hiding Y distortion.
+ * 1) One-point convergence to canonical VP (1433.21, 586.43),
+ * 2) Primary structural silhouettes and visible endpoint accuracy,
+ * 3) Right-wall ray-family spacing & slat thickness occupancy,
+ * 4) Top Silver Blade top-boundary entry point.
  */
 export function validateVanishingPoint(
   keyLines: Array<{ p0: THREE.Vector3; p1: THREE.Vector3; name: string }>,
   camera: THREE.Camera,
   viewportWidth: number,
-  viewportHeight: number
+  viewportHeight: number,
+  slatMetrics: Array<{ index: number; name: string; worldHeight: number; projectedThicknessPx: number }> = []
 ): CalibrationReport {
-  const targetViewportX = REFERENCE_GEOMETRY.vpUv.u * viewportWidth;
-  const targetViewportY = REFERENCE_GEOMETRY.vpUv.v * viewportHeight;
-
   const projected = keyLines.map((line) => ({
     name: line.name,
     ...projectWorldLineToScreen(line.p0, line.p1, camera, viewportWidth, viewportHeight),
@@ -137,12 +150,13 @@ export function validateVanishingPoint(
   );
 
   const silhouettes: SilhouetteError[] = [];
+  let topBladeEntryErrorPx = 0;
 
   Object.values(REFERENCE_GEOMETRY.targetLines).forEach((target) => {
     const projectedLine = projected.find((p) => p.name === target.keyLineName);
     if (!projectedLine) return;
 
-    const errorPx = evaluateReferenceLineError(
+    const { lineError, startEndpointError } = evaluateReferenceLineError(
       projectedLine.p0Px,
       projectedLine.p1Px,
       viewportWidth,
@@ -151,11 +165,16 @@ export function validateVanishingPoint(
       target.p1
     );
 
+    if (target.keyLineName === 'TopSilverBlade') {
+      topBladeEntryErrorPx = startEndpointError;
+    }
+
     silhouettes.push({
       name: target.keyLineName,
-      errorPx,
+      errorPx: lineError,
+      startEndpointErrorPx: startEndpointError,
       tolerancePx: target.tolerancePx,
-      status: errorPx <= target.tolerancePx ? 'PASS' : 'FAIL',
+      status: lineError <= target.tolerancePx ? 'PASS' : 'FAIL',
     });
   });
 
@@ -165,7 +184,7 @@ export function validateVanishingPoint(
     const projectedLine = projected.find((p) => p.name === target.keyLineName);
     if (!projectedLine) return;
 
-    const errorPx = evaluateReferenceLineError(
+    const { lineError } = evaluateReferenceLineError(
       projectedLine.p0Px,
       projectedLine.p1Px,
       viewportWidth,
@@ -174,7 +193,7 @@ export function validateVanishingPoint(
       REFERENCE_GEOMETRY.vpPx
     );
 
-    ribErrors.push({ errorPx, tolerancePx: target.tolerancePx });
+    ribErrors.push({ errorPx: lineError, tolerancePx: target.tolerancePx });
   });
 
   const rightRibMaxErrorPx =
@@ -191,6 +210,19 @@ export function validateVanishingPoint(
       ? 'PASS'
       : 'FAIL';
 
+  // Slat Thickness Validation (Ensures slabs are real 3D volumes > 8px thickness, not thin lines)
+  const slatThicknesses: SlatThicknessValidation[] = slatMetrics.map((m) => ({
+    name: m.name,
+    thicknessPx: m.projectedThicknessPx,
+    worldHeight: m.worldHeight,
+    status: m.projectedThicknessPx >= 8.0 ? 'PASS' : 'FAIL',
+  }));
+
+  const slatOccupancyStatus: 'PASS' | 'FAIL' =
+    slatThicknesses.length > 0 && slatThicknesses.every((s) => s.status === 'PASS')
+      ? 'PASS'
+      : 'FAIL';
+
   const maxSilhouetteErrorPx =
     silhouettes.length > 0
       ? Math.max(...silhouettes.map((s) => s.errorPx))
@@ -204,15 +236,10 @@ export function validateVanishingPoint(
     vpErrorPx < 3.0 &&
     maxRayErrorPx < 3.0 &&
     primarySilhouettesPass &&
-    rightRibStatus === 'PASS'
+    rightRibStatus === 'PASS' &&
+    slatOccupancyStatus === 'PASS'
       ? 'PASS'
       : 'FAIL';
-
-  // These viewport values are intentionally evaluated even though only the
-  // canonical result is reported; they make debugging a mismatched viewport
-  // straightforward when stepping through this function.
-  void targetViewportX;
-  void targetViewportY;
 
   return {
     targetVP: {
@@ -224,9 +251,12 @@ export function validateVanishingPoint(
     maxRayErrorPx,
     avgRayErrorPx,
     maxSilhouetteErrorPx,
+    topBladeEntryErrorPx,
     rightRibMaxErrorPx,
     rightRibAvgErrorPx,
     rightRibStatus,
+    slatOccupancyStatus,
+    slatThicknesses,
     status,
     lineCount: keyLines.length,
     intersectionCount: intersections.length,

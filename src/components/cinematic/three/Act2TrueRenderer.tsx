@@ -12,10 +12,13 @@ interface Act2TrueRendererProps {
 }
 
 /**
- * Geometry-first Act 2 renderer.
+ * Geometry-first Act 2 renderer (Sweep V6).
  *
- * Typography and pointer parallax stay intentionally absent until the measured
- * environment passes VP + silhouette calibration.
+ * Invariants:
+ * - Measured canonical VP (1433.21, 586.43) is strictly preserved.
+ * - Slat bodies are genuine architectural slabs derived from ray interval occupancy.
+ * - Real 3D Floor Sweep Ribbon unprojected from screen space.
+ * - Normalized `aDepth` baked into all geometries for animation readiness.
  */
 export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
   className = '',
@@ -27,6 +30,11 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     width: REFERENCE_GEOMETRY.width,
     height: REFERENCE_GEOMETRY.height,
   });
+
+  const [isWireframe, setIsWireframe] = useState(false);
+  const [isClayMode, setIsClayMode] = useState(false);
+
+  const materialsRef = useRef<THREE.Material[]>([]);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -60,7 +68,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     camera.rotation.set(0, 0, 0);
     configureOffAxisCamera(camera, width, height);
 
-    // 3. WEBGL
+    // 3. WEBGL RENDERER
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       powerPreference: 'high-performance',
@@ -70,56 +78,65 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     renderer.setSize(width, height);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.12;
+    renderer.toneMappingExposure = 1.10;
     container.appendChild(renderer.domElement);
 
-    // 4. LIGHTING — reveal surfaces without turning them into visible boxes.
-    const ambientLight = new THREE.AmbientLight('#080a0e', 0.28);
+    // 4. LIGHTING RIG (Restrained Specular Modeling)
+    const ambientLight = new THREE.AmbientLight('#080a0e', 0.30);
     scene.add(ambientLight);
 
-    const rightWallKey = new THREE.DirectionalLight('#eef1f5', 3.8);
+    const rightWallKey = new THREE.DirectionalLight('#eef1f5', 4.2);
     rightWallKey.position.set(11, 17, 3);
     scene.add(rightWallKey);
 
-    const leftHeroFill = new THREE.DirectionalLight('#b6bac2', 0.72);
+    const leftHeroFill = new THREE.DirectionalLight('#b6bac2', 0.85);
     leftHeroFill.position.set(-1, 9, 5);
     scene.add(leftHeroFill);
 
-    // Broad, soft wall modelling light. It creates the charcoal gradient visible
-    // in the reference instead of a flat black rectangle.
-    const wallModelLight = new THREE.PointLight('#aeb2ba', 2.0, 58, 2);
+    // Broad soft wall wash
+    const wallModelLight = new THREE.PointLight('#aeb2ba', 2.2, 58, 2);
     wallModelLight.position.set(-2.5, 7.2, -17);
     scene.add(wallModelLight);
 
-    // Warm energy spill close to the champagne horizon, intentionally restrained.
+    // Warm energy spill along horizon
     const warmRailLight = new THREE.PointLight('#c39443', 1.4, 42, 2);
     warmRailLight.position.set(-5.5, 2.2, -14);
     scene.add(warmRailLight);
 
-    // Deep convergence cue; no visible portal disk or ring tunnel.
-    const vpLight = new THREE.PointLight('#c7a052', 1.15, 48, 2);
+    // Deep convergence accent
+    const vpLight = new THREE.PointLight('#c7a052', 1.2, 48, 2);
     vpLight.position.set(2.8, 1.8, -78);
     scene.add(vpLight);
 
-    // 5. GEOMETRY
+    // 5. GEOMETRY RIG
     const geometryRig = createAct2Geometry();
     scene.add(geometryRig.group);
     disposables.push(...geometryRig.disposables);
+
+    // Collect materials for wireframe/clay toggles
+    const mats: THREE.Material[] = [];
+    geometryRig.group.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh && (child as THREE.Mesh).material) {
+        const m = (child as THREE.Mesh).material;
+        if (Array.isArray(m)) mats.push(...m);
+        else mats.push(m);
+      }
+    });
+    materialsRef.current = mats;
 
     const runCalibration = (w: number, h: number) => {
       const report = validateVanishingPoint(
         geometryRig.keyLongitudinalLines,
         camera,
         w,
-        h
+        h,
+        geometryRig.slatMetrics
       );
       setCalibrationReport(report);
     };
 
     runCalibration(width, height);
 
-    // Static today, animation-ready tomorrow. Keep a renderer loop so GSAP/Three
-    // transforms can be introduced later without changing renderer architecture.
     const animate = () => {
       if (isDisposed) return;
       renderer.render(scene, camera);
@@ -150,7 +167,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         try {
           item.dispose();
         } catch {
-          // Best-effort teardown.
+          // ignore
         }
       });
 
@@ -162,6 +179,15 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     };
   }, []);
 
+  // Update wireframe / clay mode dynamically on materials
+  useEffect(() => {
+    materialsRef.current.forEach((m) => {
+      if (m instanceof THREE.MeshStandardMaterial || m instanceof THREE.MeshBasicMaterial) {
+        m.wireframe = isWireframe;
+      }
+    });
+  }, [isWireframe]);
+
   return (
     <div
       ref={mountRef}
@@ -172,6 +198,10 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
           report={calibrationReport}
           viewportWidth={viewportDims.width}
           viewportHeight={viewportDims.height}
+          isWireframe={isWireframe}
+          onToggleWireframe={() => setIsWireframe((prev) => !prev)}
+          isClayMode={isClayMode}
+          onToggleClayMode={() => setIsClayMode((prev) => !prev)}
         />
       )}
     </div>
