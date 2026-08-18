@@ -16,26 +16,26 @@ export const EaLogo: React.FC<{ size?: number; className?: string }> = ({ size =
     xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
-    <rect width="48" height="48" rx="8" fill="#F5B800" />
+    <rect width="48" height="48" rx="10" fill="#F5C200" />
     <text
-      x="9"
+      x="8"
       y="34"
-      fontFamily="system-ui, -apple-system, sans-serif"
+      fontFamily="'Qurova', -apple-system, sans-serif"
       fontSize="26"
       fontWeight="900"
-      fill="#111827"
-      letterSpacing="-1.5"
+      fill="#001A24"
+      letterSpacing="-1"
     >
       E
     </text>
     <text
-      x="25"
+      x="24"
       y="34"
-      fontFamily="system-ui, -apple-system, sans-serif"
+      fontFamily="'Qurova', -apple-system, sans-serif"
       fontSize="23"
       fontWeight="700"
-      fill="#111827"
-      letterSpacing="-1"
+      fill="#001A24"
+      letterSpacing="-0.5"
     >
       â
     </text>
@@ -119,7 +119,7 @@ export const PlayIcon: React.FC<IconProps> = ({ className, size = 16, color = 'c
   </svg>
 );
 
-export const CheckIcon: React.FC<IconProps> = ({ className, size = 13, color = '#F5B800', style }) => (
+export const CheckIcon: React.FC<IconProps> = ({ className, size = 13, color = '#F5C200', style }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>
     <polyline points="20 6 9 17 4 12" />
   </svg>
@@ -154,7 +154,6 @@ export const GlobeIcon: React.FC<IconProps> = ({ className, size = 19, color = '
   </svg>
 );
 
-/* True 3D Rotating Globe Component */
 export const Globe3DIcon: React.FC<{ size?: number; className?: string }> = ({ size = 20, className }) => (
   <div
     className={`perspective-globe flex items-center justify-center ${className || ''}`}
@@ -172,7 +171,7 @@ export const Globe3DIcon: React.FC<{ size?: number; className?: string }> = ({ s
       className="animate-3d-globe"
     >
       <circle cx="12" cy="12" r="10" stroke="#D97706" strokeWidth="1.8" />
-      <ellipse cx="12" cy="12" rx="10" ry="3.5" stroke="#F5B800" strokeWidth="1.5" />
+      <ellipse cx="12" cy="12" rx="10" ry="3.5" stroke="#F5C200" strokeWidth="1.5" />
       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="#D97706" strokeWidth="1.8" />
     </svg>
   </div>

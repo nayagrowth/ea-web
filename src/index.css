@@ -1,5 +1,76 @@
 @import "tailwindcss";
 
+/* -------------------------------------------------------------------------- */
+/* ESTATE AUTOPILOTS OFFICIAL BRAND FONTS                                      */
+/* -------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: 'Qurova';
+  src: url('/fonts/qurova/Qurova-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Qurova';
+  src: url('/fonts/qurova/Qurova-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Qurova';
+  src: url('/fonts/qurova/Qurova-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Qurova';
+  src: url('/fonts/qurova/Qurova-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Qurova';
+  src: url('/fonts/qurova/Qurova-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Agency';
+  src: url('/fonts/agency/Agency.otf') format('opentype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-qurova: 'Qurova', -apple-system, sans-serif;
+  --font-agency: 'Agency', -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  --color-brand-yellow: #F5C200;
+  --color-brand-gold: #F5C200;
+  --color-brand-dark: #001A24;
+  --color-brand-charcoal: #051319;
+  --color-brand-obsidian: #050608;
+}
+
+.font-qurova {
+  font-family: 'Qurova', -apple-system, sans-serif;
+}
+
+.font-agency {
+  font-family: 'Agency', -apple-system, sans-serif;
+}
+
 @layer base {
   html {
     width: 100%;
@@ -11,7 +82,7 @@
   body {
     width: 100%;
     min-height: 100%;
-    background-color: #080909;
+    background-color: #050608;
     color: #111827;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -32,15 +103,15 @@
 @keyframes beacon-pulse {
   0% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(245, 184, 0, 0.7);
+    box-shadow: 0 0 0 0 rgba(245, 194, 0, 0.7);
   }
   70% {
     transform: scale(1.15);
-    box-shadow: 0 0 0 5px rgba(245, 184, 0, 0);
+    box-shadow: 0 0 0 5px rgba(245, 194, 0, 0);
   }
   100% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(245, 184, 0, 0);
+    box-shadow: 0 0 0 0 rgba(245, 194, 0, 0);
   }
 }
 
@@ -61,9 +132,9 @@
 .shimmer-badge {
   background: linear-gradient(
     90deg,
-    rgba(245, 184, 0, 0.12) 0%,
-    rgba(245, 184, 0, 0.35) 50%,
-    rgba(245, 184, 0, 0.12) 100%
+    rgba(245, 194, 0, 0.12) 0%,
+    rgba(245, 194, 0, 0.35) 50%,
+    rgba(245, 194, 0, 0.12) 100%
   );
   background-size: 200% 100%;
   animation: gold-shimmer 3.5s infinite linear;
@@ -90,9 +161,9 @@
   transform-origin: center center;
 }
 
-/* Cinematic Gold Glow utility (Static, GSAP-driven for performance) */
+/* Cinematic Gold Glow utility */
 .glow-gold-cinematic {
-  text-shadow: 0 0 20px rgba(245, 184, 0, 0.45), 0 0 40px rgba(245, 184, 0, 0.2);
+  text-shadow: 0 0 20px rgba(245, 194, 0, 0.45), 0 0 40px rgba(245, 194, 0, 0.2);
 }
 
 /* Text Masking Utilities */

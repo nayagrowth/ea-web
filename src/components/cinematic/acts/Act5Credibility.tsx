@@ -6,7 +6,7 @@ export const Act5Credibility: React.FC = () => {
       {/* Radial Warm Ivory/White Light Bloom (Smooth Handoff to Problem Section) */}
       <div className="act5-white-bloom absolute inset-0 bg-[#FFFFFF] opacity-0 pointer-events-none z-30" />
 
-      <div className="relative max-w-5xl flex flex-col items-center justify-center gap-6 z-10">
+      <div className="relative max-w-5xl flex flex-col items-center justify-center gap-6 z-10 font-qurova">
         {/* Minimalist Champagne Eyebrow Badge */}
         <div className="inline-flex items-center gap-2 bg-white/5 border border-white/15 text-gray-300 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase backdrop-blur-md">
           <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
@@ -15,10 +15,10 @@ export const Act5Credibility: React.FC = () => {
 
         {/* Crisp Monumental Counter without Gaudy Glow */}
         <div className="flex flex-col items-center justify-center">
-          <span className="act5-metric-val text-[clamp(5.5rem,15vw,11.5rem)] font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-[#F5B800] to-[#D97706] leading-none tracking-[-0.04em] drop-shadow-[0_10px_40px_rgba(0,0,0,0.9)]">
+          <span className="act5-metric-val font-agency font-bold text-[clamp(6.5rem,18vw,13.5rem)] text-transparent bg-clip-text bg-gradient-to-b from-white via-[#F5C200] to-[#E5B200] leading-none tracking-tight drop-shadow-[0_10px_40px_rgba(0,0,0,0.9)]">
             459+
           </span>
-          <h3 className="act5-headline text-[clamp(1.8rem,3.8vw,3.4rem)] font-black text-white tracking-tight leading-tight mt-3">
+          <h3 className="act5-headline font-qurova font-bold text-[clamp(1.8rem,3.8vw,3.4rem)] text-white tracking-tight leading-tight mt-3">
             Real Estate Projects Delivered On Schedule
           </h3>
         </div>
@@ -26,16 +26,16 @@ export const Act5Credibility: React.FC = () => {
         {/* 3 High-End Proof Metrics */}
         <div className="act5-proof-metrics grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-10 pt-2 border-t border-white/10 w-full max-w-3xl">
           <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl font-black text-white">4 Years</span>
-            <span className="text-xs font-mono text-gray-400 uppercase tracking-widest mt-1">Market Dominance</span>
+            <span className="font-agency font-bold text-3xl sm:text-4xl text-white">4 Years</span>
+            <span className="text-xs font-qurova text-gray-400 uppercase tracking-widest mt-1">Market Dominance</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl font-black text-[#F5B800]">25+</span>
-            <span className="text-xs font-mono text-gray-400 uppercase tracking-widest mt-1">In-House Experts</span>
+            <span className="font-agency font-bold text-3xl sm:text-4xl text-[#F5C200]">25+</span>
+            <span className="text-xs font-qurova text-gray-400 uppercase tracking-widest mt-1">In-House Experts</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl font-black text-white">Mumbai &amp; Pune</span>
-            <span className="text-xs font-mono text-gray-400 uppercase tracking-widest mt-1">On-Ground Presence</span>
+            <span className="font-agency font-bold text-3xl sm:text-4xl text-white">Mumbai &amp; Pune</span>
+            <span className="text-xs font-qurova text-gray-400 uppercase tracking-widest mt-1">On-Ground Presence</span>
           </div>
         </div>
 
@@ -43,7 +43,7 @@ export const Act5Credibility: React.FC = () => {
         <div className="act5-cta pt-4 pointer-events-auto">
           <a
             href="#book-strategy-session"
-            className="inline-flex items-center gap-3 bg-[#F5B800] hover:bg-[#E5AB00] text-gray-950 font-black text-sm sm:text-base px-8 py-4 rounded-2xl transition-all shadow-[0_0_30px_rgba(245,184,0,0.35)] active:scale-95"
+            className="inline-flex items-center gap-3 bg-[#F5C200] hover:bg-[#E5B200] text-[#001A24] font-qurova font-bold text-sm sm:text-base px-8 py-4 rounded-2xl transition-all shadow-[0_0_30px_rgba(245,194,0,0.35)] active:scale-95"
           >
             <span>Book Your Project Sell-Out Strategy Session</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
