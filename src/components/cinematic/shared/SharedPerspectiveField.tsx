@@ -1,6 +1,7 @@
 import React from 'react';
 
-export const ACT2_VP = { x: 1459, y: 585 } as const; // (87.3%, 62.2% of 1672x941)
+export const ACT2_VP_WALL = { x: 1427, y: 588 } as const; // (85.3%, 62.5% of 1672x941)
+export const ACT2_VP_FLOOR = { x: 1516, y: 623 } as const; // (90.7%, 66.2% of 1672x941)
 
 export const SharedPerspectiveField: React.FC = () => {
   return (
@@ -12,125 +13,194 @@ export const SharedPerspectiveField: React.FC = () => {
           preserveAspectRatio="none"
         >
           <defs>
-            {/* Gold Horizon Core Gradient */}
-            <linearGradient id="gold-laser-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            {/* Gold Laser Horizon Gradient */}
+            <linearGradient id="gold-horizon-core" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#c79846" stopOpacity="0" />
-              <stop offset="12%" stopColor="#ecd08e" stopOpacity="0.9" />
-              <stop offset="65%" stopColor="#ecd08e" stopOpacity="1" />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
+              <stop offset="25%" stopColor="#c79846" stopOpacity="0.4" />
+              <stop offset="60%" stopColor="#ecd08e" stopOpacity="0.95" />
+              <stop offset="90%" stopColor="#ffffff" stopOpacity="1" />
+              <stop offset="100%" stopColor="#ecd08e" stopOpacity="0.8" />
             </linearGradient>
 
-            {/* Gold Glow Filter */}
-            <filter id="gold-laser-glow" x="-20%" y="-30%" width="140%" height="160%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
+            {/* Gold Laser Glow Filter */}
+            <filter id="gold-laser-bloom" x="-20%" y="-40%" width="140%" height="180%">
+              <feGaussianBlur stdDeviation="7" result="blur1" />
+              <feGaussianBlur stdDeviation="2" result="blur2" />
               <feMerge>
-                <feMergeNode in="blur" />
+                <feMergeNode in="blur1" />
+                <feMergeNode in="blur2" />
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
 
-            {/* Floor Track Shading Gradient */}
-            <linearGradient id="floor-fade-grad" x1="0%" y1="100%" x2="0%" y2="0%">
-              <stop offset="0%" stopColor="#08090a" stopOpacity="0.95" />
-              <stop offset="45%" stopColor="#111317" stopOpacity="0.75" />
-              <stop offset="100%" stopColor="#08090a" stopOpacity="0.1" />
+            {/* Glossy Dark Floor Gradient */}
+            <linearGradient id="glossy-floor-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#08090a" stopOpacity="0.3" />
+              <stop offset="20%" stopColor="#0e0f13" stopOpacity="0.8" />
+              <stop offset="60%" stopColor="#14161b" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#08090a" stopOpacity="0.98" />
             </linearGradient>
 
-            {/* White Speed Line Gradient */}
-            <linearGradient id="white-speed-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.05" />
-              <stop offset="40%" stopColor="#ffffff" stopOpacity="0.75" />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity="0.95" />
+            {/* Wall Slat Gradient */}
+            <linearGradient id="wall-slat-fill" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#121316" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#08090a" stopOpacity="1" />
             </linearGradient>
 
-            {/* Champagne Rail Gradient */}
-            <linearGradient id="champagne-speed-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#c79846" stopOpacity="0.1" />
-              <stop offset="50%" stopColor="#ecd08e" stopOpacity="0.85" />
+            {/* Champagne Floor Rail Gradient */}
+            <linearGradient id="champagne-floor-rail" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#c79846" stopOpacity="0" />
+              <stop offset="40%" stopColor="#dfbd78" stopOpacity="0.8" />
               <stop offset="100%" stopColor="#ecd08e" stopOpacity="1" />
+            </linearGradient>
+
+            {/* Silver Specular Wall Edge Gradient */}
+            <linearGradient id="silver-wall-edge" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+              <stop offset="50%" stopColor="#8a909d" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#30333c" stopOpacity="0.3" />
             </linearGradient>
           </defs>
 
           {/* ================================================================= */}
-          {/* LAYER 1: RIGHT ARCHITECTURAL WALL RIBS (Nested Rig Separation)     */}
+          {/* LAYER 1: GLOSSY REFLECTIVE FLOOR TARMAC                           */}
+          {/* ================================================================= */}
+          <g className="act2-floor-rails">
+            {/* Dark Glossy Asphalt/Tarmac Floor Polygon */}
+            <polygon
+              points="0,588 1427,588 1672,623 1672,941 0,941"
+              fill="url(#glossy-floor-grad)"
+            />
+
+            {/* Subtle Horizontal Floor Sheen Reflections */}
+            <polygon points="0,670 1427,588 1520,640 0,730" fill="#181a20" opacity="0.4" />
+            <polygon points="0,780 1427,588 1580,720 0,860" fill="#131418" opacity="0.3" />
+
+            {/* Floor Perspective Speed Rails (Sparse, High-Speed Precision) */}
+            <line x1="0" y1="710" x2="1516" y2="623" stroke="#ffffff" strokeWidth="1.6" opacity="0.55" />
+            <line x1="0" y1="755" x2="1516" y2="623" stroke="#484c56" strokeWidth="1.0" opacity="0.4" />
+            <line x1="0" y1="810" x2="1516" y2="623" stroke="#ffffff" strokeWidth="2.0" opacity="0.65" />
+            <line x1="280" y1="941" x2="1516" y2="623" stroke="#363942" strokeWidth="1.2" opacity="0.45" />
+            <line x1="580" y1="941" x2="1516" y2="623" stroke="#ffffff" strokeWidth="2.2" opacity="0.7" />
+            <line x1="920" y1="941" x2="1516" y2="623" stroke="#505562" strokeWidth="1.4" opacity="0.5" />
+            <line x1="1240" y1="941" x2="1516" y2="623" stroke="#ffffff" strokeWidth="2.8" opacity="0.8" />
+
+            {/* Champagne Gold Floor Velocity Tracks (Scarce Luxury Light) */}
+            <line
+              x1="0"
+              y1="642"
+              x2="1516"
+              y2="623"
+              stroke="url(#champagne-floor-rail)"
+              strokeWidth="2.0"
+              opacity="0.8"
+            />
+            <line
+              x1="740"
+              y1="941"
+              x2="1516"
+              y2="623"
+              stroke="url(#champagne-floor-rail)"
+              strokeWidth="2.8"
+              opacity="0.9"
+              filter="url(#gold-laser-bloom)"
+            />
+            <line
+              x1="1080"
+              y1="941"
+              x2="1516"
+              y2="623"
+              stroke="url(#champagne-floor-rail)"
+              strokeWidth="3.2"
+              opacity="0.95"
+              filter="url(#gold-laser-bloom)"
+            />
+          </g>
+
+          {/* ================================================================= */}
+          {/* LAYER 2: RIGHT ARCHITECTURAL WALL RIBS & METALLIC SLATS           */}
           {/* ================================================================= */}
           <g className="act2-rib-story-rig">
-            <g className="act2-rib-pointer-rig act2-rib-plane" opacity="0.95">
-              {/* Wall Background Facet */}
-              <polygon points="1672,0 1672,941 1459,585" fill="#121316" opacity="0.8" />
-              <polygon points="1672,180 1672,780 1459,585" fill="#181a20" opacity="0.65" />
+            <g className="act2-rib-pointer-rig act2-rib-plane">
+              {/* Solid Architectural Wall Polygon */}
+              <polygon
+                points="1672,0 1672,941 1427,588"
+                fill="url(#wall-slat-fill)"
+              />
 
-              {/* Wall Rib Lines */}
-              <line x1="1672" y1="40" x2="1459" y2="585" stroke="#ffffff" strokeWidth="2.5" opacity="0.85" />
-              <line x1="1672" y1="90" x2="1459" y2="585" stroke="#5a5e68" strokeWidth="1.2" opacity="0.6" />
-              <line x1="1672" y1="140" x2="1459" y2="585" stroke="#3a3d45" strokeWidth="1.0" opacity="0.5" />
-              <line x1="1672" y1="190" x2="1459" y2="585" stroke="#7e8492" strokeWidth="1.5" opacity="0.7" />
-              <line x1="1672" y1="250" x2="1459" y2="585" stroke="#ffffff" strokeWidth="2.0" opacity="0.8" />
-              <line x1="1672" y1="320" x2="1459" y2="585" stroke="#4a4e58" strokeWidth="1.2" opacity="0.55" />
-              <line x1="1672" y1="400" x2="1459" y2="585" stroke="#ffffff" strokeWidth="2.8" opacity="0.9" />
-              <line x1="1672" y1="490" x2="1459" y2="585" stroke="#606674" strokeWidth="1.4" opacity="0.65" />
-              <line x1="1672" y1="585" x2="1459" y2="585" stroke="#ffffff" strokeWidth="3.2" opacity="0.95" />
-              <line x1="1672" y1="670" x2="1459" y2="585" stroke="#4a4e58" strokeWidth="1.2" opacity="0.6" />
-              <line x1="1672" y1="760" x2="1459" y2="585" stroke="#ffffff" strokeWidth="2.2" opacity="0.85" />
-              <line x1="1672" y1="860" x2="1459" y2="585" stroke="#7e8492" strokeWidth="1.6" opacity="0.7" />
+              {/* Dominant Clean White Architectural Wall Edge */}
+              <line
+                x1="1672"
+                y1="35"
+                x2="1427"
+                y2="588"
+                stroke="url(#silver-wall-edge)"
+                strokeWidth="3.5"
+                opacity="0.95"
+              />
+
+              {/* Horizontal Louver Ribs with Specular Highlight Edges */}
+              <polygon points="1672,90 1672,135 1427,588" fill="#181a20" opacity="0.8" />
+              <line x1="1672" y1="90" x2="1427" y2="588" stroke="#ffffff" strokeWidth="1.8" opacity="0.75" />
+
+              <polygon points="1672,175 1672,225 1427,588" fill="#1e2027" opacity="0.85" />
+              <line x1="1672" y1="175" x2="1427" y2="588" stroke="#ffffff" strokeWidth="2.2" opacity="0.85" />
+
+              <polygon points="1672,265 1672,320 1427,588" fill="#1a1c22" opacity="0.8" />
+              <line x1="1672" y1="265" x2="1427" y2="588" stroke="#a0a5b2" strokeWidth="1.5" opacity="0.65" />
+
+              <polygon points="1672,360 1672,420 1427,588" fill="#22252e" opacity="0.9" />
+              <line x1="1672" y1="360" x2="1427" y2="588" stroke="#ffffff" strokeWidth="2.6" opacity="0.9" />
+
+              <polygon points="1672,465 1672,530 1427,588" fill="#1a1c22" opacity="0.85" />
+              <line x1="1672" y1="465" x2="1427" y2="588" stroke="#808694" strokeWidth="1.6" opacity="0.7" />
+
+              <polygon points="1672,575 1672,645 1427,588" fill="#252832" opacity="0.95" />
+              <line x1="1672" y1="575" x2="1427" y2="588" stroke="#ffffff" strokeWidth="3.2" opacity="0.95" />
+
+              <polygon points="1672,690 1672,765 1427,588" fill="#1c1e25" opacity="0.85" />
+              <line x1="1672" y1="690" x2="1427" y2="588" stroke="#8c92a0" strokeWidth="1.8" opacity="0.75" />
+
+              <polygon points="1672,810 1672,890 1427,588" fill="#20222a" opacity="0.8" />
+              <line x1="1672" y1="810" x2="1427" y2="588" stroke="#ffffff" strokeWidth="2.2" opacity="0.85" />
             </g>
           </g>
 
           {/* ================================================================= */}
-          {/* LAYER 2: FLOOR PERSPECTIVE SPEED RAILS                            */}
-          {/* ================================================================= */}
-          <g className="act2-floor-rails">
-            {/* Reflective Dark Floor Track */}
-            <polygon points="0,585 1459,585 1672,941 0,941" fill="url(#floor-fade-grad)" opacity="0.85" />
-
-            {/* Base White & Silver Velocity Rails */}
-            <line x1="0" y1="710" x2="1459" y2="585" stroke="url(#white-speed-grad)" strokeWidth="3.5" opacity="0.75" />
-            <line x1="0" y1="745" x2="1459" y2="585" stroke="#9095a0" strokeWidth="1.8" opacity="0.6" />
-            <line x1="0" y1="785" x2="1459" y2="585" stroke="#ffffff" strokeWidth="2.5" opacity="0.8" />
-            <line x1="0" y1="845" x2="1459" y2="585" stroke="#505560" strokeWidth="1.4" opacity="0.5" />
-            <line x1="180" y1="941" x2="1459" y2="585" stroke="#ffffff" strokeWidth="3.0" opacity="0.75" />
-            <line x1="420" y1="941" x2="1459" y2="585" stroke="#9095a0" strokeWidth="1.6" opacity="0.55" />
-            <line x1="680" y1="941" x2="1459" y2="585" stroke="#ffffff" strokeWidth="2.8" opacity="0.8" />
-            <line x1="920" y1="941" x2="1459" y2="585" stroke="#6a707c" strokeWidth="1.4" opacity="0.6" />
-            <line x1="1150" y1="941" x2="1459" y2="585" stroke="#ffffff" strokeWidth="3.2" opacity="0.85" />
-            <line x1="1340" y1="941" x2="1459" y2="585" stroke="#ffffff" strokeWidth="4.0" opacity="0.9" />
-
-            {/* Dynamic Champagne Gold Velocity Rails */}
-            <line x1="0" y1="630" x2="1459" y2="585" stroke="#c79846" strokeWidth="2.0" opacity="0.7" />
-            <line x1="300" y1="941" x2="1459" y2="585" stroke="url(#champagne-speed-grad)" strokeWidth="2.6" opacity="0.85" filter="url(#gold-laser-glow)" />
-            <line x1="780" y1="941" x2="1459" y2="585" stroke="url(#champagne-speed-grad)" strokeWidth="3.2" opacity="0.9" filter="url(#gold-laser-glow)" />
-            <line x1="1020" y1="941" x2="1459" y2="585" stroke="#dfbd78" strokeWidth="2.2" opacity="0.8" />
-            <line x1="1260" y1="941" x2="1459" y2="585" stroke="url(#champagne-speed-grad)" strokeWidth="3.8" opacity="0.95" filter="url(#gold-laser-glow)" />
-          </g>
-
-          {/* ================================================================= */}
-          {/* LAYER 3: UPPER GOLDEN TRAJECTORY & CENTRAL LASER HORIZON          */}
+          {/* LAYER 3: DOMINANT GOLDEN LASER HORIZON & UPPER DIAGONAL ACCENT     */}
           {/* ================================================================= */}
           <g className="act2-horizon-laser">
-            {/* Upper Diagonal Champagne Slash */}
-            <line x1="0" y1="265" x2="1459" y2="585" stroke="#ecd08e" strokeWidth="2.2" opacity="0.75" />
-            <line x1="0" y1="305" x2="1459" y2="585" stroke="#c79846" strokeWidth="1.2" opacity="0.5" />
-
-            {/* Primary Golden Speed Horizon (Dominant Central Beam) */}
+            {/* Upper Diagonal Champagne Streak (Behind "We") */}
             <line
               x1="0"
-              y1="576"
-              x2="1459"
-              y2="585"
-              stroke="url(#gold-laser-grad)"
-              strokeWidth="4.0"
-              opacity="0.95"
-              filter="url(#gold-laser-glow)"
+              y1="285"
+              x2="1427"
+              y2="588"
+              stroke="#ecd08e"
+              strokeWidth="1.6"
+              opacity="0.65"
             />
-            {/* Fine Sub-horizon Accent Line */}
+
+            {/* Core Golden Horizon Laser Beam (Mid-Section Velocity Corridor) */}
             <line
               x1="0"
               y1="588"
-              x2="1459"
-              y2="585"
+              x2="1427"
+              y2="588"
+              stroke="url(#gold-horizon-core)"
+              strokeWidth="3.8"
+              opacity="0.95"
+              filter="url(#gold-laser-bloom)"
+            />
+            {/* Fine Sub-horizon White Core */}
+            <line
+              x1="0"
+              y1="590"
+              x2="1427"
+              y2="588"
               stroke="#ffffff"
-              strokeWidth="1.4"
-              opacity="0.7"
+              strokeWidth="1.2"
+              opacity="0.8"
             />
           </g>
         </svg>

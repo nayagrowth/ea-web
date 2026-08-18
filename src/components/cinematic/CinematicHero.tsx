@@ -31,13 +31,18 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       // =====================================================================
       // Act 1 Initial State
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
-      gsap.set('.act1-col-bg', { xPercent: 0, yPercent: 0, opacity: 1 });
+      gsap.set('.act1-col-bg-1', { xPercent: 0, opacity: 1 });
+      gsap.set('.act1-col-bg-2', { opacity: 1 });
+      gsap.set('.act1-col-bg-3-top', { yPercent: 0, rotateX: 0, opacity: 1 });
+      gsap.set('.act1-col-bg-3-bottom', { yPercent: 0, opacity: 1 });
+      gsap.set('.act1-col-bg-4', { opacity: 1 });
       gsap.set('.act1-scroll-cue', { opacity: 1, y: 0 });
       gsap.set('.act1-most-word', { xPercent: 0, yPercent: 0, scale: 1, opacity: 1 });
       gsap.set('.act1-agencies-word', { xPercent: 0, yPercent: 0, opacity: 1 });
       gsap.set('.act1-col2-axis', { scaleY: 1, transformOrigin: 'top center', opacity: 1 });
       gsap.set('.act1-axis-pulse', { opacity: 0, y: 0 });
       gsap.set('.act1-run-word', { yPercent: 0, scale: 1, opacity: 1 });
+      gsap.set('.act1-runway-wrap', { rotateX: 0, scaleX: 1, yPercent: 0, opacity: 1 });
       gsap.set('.act1-run-track', { opacity: 1 });
       gsap.set('.act1-run-line', { opacity: 1 });
       gsap.set('.act1-energy-rail', { opacity: 0, strokeDasharray: '60 300', strokeDashoffset: 300 });
@@ -61,13 +66,13 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act2-rib-story-rig', { opacity: 0, x: 40 });
       gsap.set('.act2-floor-rails', { opacity: 0, scaleY: 0.8 });
       gsap.set('.act2-horizon-laser', { opacity: 0, scaleX: 0.2, transformOrigin: 'right center' });
-      gsap.set('.act2-word-we', { x: '-7vw', scale: 1.08, autoAlpha: 0 });
-      gsap.set('.act2-word-sellout', { x: '6vw', y: '-1.5vh', autoAlpha: 0 });
+      gsap.set('.act2-word-we', { x: '-6vw', translateZ: -250, autoAlpha: 0 });
+      gsap.set('.act2-word-sellout', { x: '5vw', y: '-1.5vh', translateZ: -200, autoAlpha: 0 });
       gsap.set('.act2-morph-hyphen', { scaleX: 0, transformOrigin: 'left center' });
-      gsap.set('.act2-word-your', { autoAlpha: 0, scale: 1.15 });
-      gsap.set('.act2-word-realestate', { x: '10vw', skewX: -3, scale: 1.02, autoAlpha: 0 });
-      gsap.set('.act2-word-project', { y: '6vh', autoAlpha: 0 });
-      gsap.set('.act2-word-project-reflect', { y: '6vh', autoAlpha: 0 });
+      gsap.set('.act2-word-your', { translateZ: -180, autoAlpha: 0 });
+      gsap.set('.act2-word-realestate', { x: '8vw', translateZ: -220, autoAlpha: 0 });
+      gsap.set('.act2-word-project', { y: '5vh', translateZ: -200, autoAlpha: 0 });
+      gsap.set('.act2-word-project-reflect', { y: '5vh', translateZ: -200, autoAlpha: 0 });
 
       // Acts 3 - 5 Initial States
       gsap.set('.act3-stage', { autoAlpha: 0 });
@@ -194,7 +199,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           }, 'IGNITION+=0.1');
 
         // -------------------------------------------------------------------
-        // BEAT 2: SOLID MATERIAL DECONSTRUCTION (Time 0.8 - 2.0): Zero Gray Mush
+        // BEAT 2: SOLID MATERIAL DECONSTRUCTION & RUN PLANE 3D ROTATION
         // -------------------------------------------------------------------
         tl.addLabel('DECONSTRUCT', 0.8);
 
@@ -225,12 +230,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power2.in',
           }, 'DECONSTRUCT')
 
-          // Column 3 Top (run): Solid #f2efea plane collapses upward
-          .to('.act1-col-bg-3-top', {
-            yPercent: -100,
-            duration: 0.9,
-            ease: 'power3.inOut',
-          }, 'DECONSTRUCT')
+          // Column 3 Top (run): The run plane physically rotates into depth as the floor!
           .to('.act1-run-word', {
             yPercent: -40,
             opacity: 0,
@@ -238,16 +238,19 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             duration: 0.8,
             ease: 'power2.in',
           }, 'DECONSTRUCT')
-          .to('.act1-run-track', {
-            opacity: 0,
-            duration: 0.6,
-            ease: 'power2.in',
+          .to('.act1-runway-wrap', {
+            rotateX: 68,
+            scaleX: 3.6,
+            yPercent: 45,
+            transformOrigin: 'center bottom',
+            duration: 1.1,
+            ease: 'power3.inOut',
           }, 'DECONSTRUCT')
-          .to('.act1-energy-rail', {
+          .to('.act1-col-bg-3-top', {
             opacity: 0,
-            duration: 0.5,
-            ease: 'power2.in',
-          }, 'DECONSTRUCT')
+            duration: 0.9,
+            ease: 'power2.inOut',
+          }, 'DECONSTRUCT+=0.2')
 
           // Column 3 Bottom (your): Solid #e8e3d9 plane collapses downward
           .to('.act1-col-bg-3-bottom', {
@@ -357,16 +360,16 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       }
 
       // ---------------------------------------------------------------------
-      // BEAT 4: ACT 2 TYPOGRAPHY ENTRANCE (Time 2.4 - 3.8): Architectural Lock
+      // BEAT 4: ACT 2 TYPOGRAPHY ENTRANCE (Emerging from 3D Depth)
       // ---------------------------------------------------------------------
       tl.addLabel('ACT2_VELOCITY_ENTER', 2.4);
 
-      // "We" arrives with heavy inertia from upper-left
+      // "We" arrives with heavy 3D grotesk inertia from upper-left depth
       tl.to('.act2-word-we', {
         x: 0,
-        scale: 1,
+        translateZ: 30,
         autoAlpha: 1,
-        duration: 0.75,
+        duration: 0.8,
         ease: 'power3.out',
       }, 'ACT2_VELOCITY_ENTER')
 
@@ -374,8 +377,9 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         .to('.act2-word-sellout', {
           x: 0,
           y: 0,
+          translateZ: 10,
           autoAlpha: 1,
-          duration: 0.8,
+          duration: 0.85,
           ease: 'power3.out',
         }, 'ACT2_VELOCITY_ENTER+=0.08')
         .to('.act2-morph-hyphen', {
@@ -384,35 +388,36 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           ease: 'power3.out',
         }, 'ACT2_VELOCITY_ENTER+=0.12')
 
-        // "your" locks into position from bridge
+        // "your" locks into position from bridge in 3D perspective
         .to('.act2-word-your', {
+          translateZ: 20,
           autoAlpha: 1,
-          scale: 1,
-          duration: 0.75,
+          duration: 0.8,
           ease: 'power3.out',
         }, 'ACT2_VELOCITY_ENTER+=0.14')
 
         // "real estate" slams into the lower-middle with heavy grotesk power
         .to('.act2-word-realestate', {
           x: 0,
-          skewX: 0,
-          scale: 1,
+          translateZ: 0,
           autoAlpha: 1,
-          duration: 0.8,
+          duration: 0.85,
           ease: 'power3.out',
         }, 'ACT2_VELOCITY_ENTER+=0.16')
 
         // "project" rises cleanly with its floor reflection
         .to('.act2-word-project', {
           y: 0,
+          translateZ: -15,
           autoAlpha: 0.95,
-          duration: 0.8,
+          duration: 0.85,
           ease: 'power3.out',
         }, 'ACT2_VELOCITY_ENTER+=0.22')
         .to('.act2-word-project-reflect', {
           y: 0,
+          translateZ: -20,
           autoAlpha: 0.08,
-          duration: 0.8,
+          duration: 0.85,
           ease: 'power3.out',
         }, 'ACT2_VELOCITY_ENTER+=0.22');
 
@@ -614,7 +619,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         {act1Variant === 'artboard' && <Act1ArtboardPoster />}
         {act1Variant === 'poster' && <Act1PosterHook />}
 
-        {/* Layer z-20: Act 2 Canonical 1672x941 Velocity Poster */}
+        {/* Layer z-20: Act 2 Canonical 1672x941 3D Velocity Poster */}
         <Act2VelocityPoster />
 
         {/* Layers z-25+: Acts 3-5 */}
