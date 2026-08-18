@@ -8,11 +8,11 @@ import type { Act1Variant } from './components/cinematic/CinematicHero';
 
 /**
  * TOGGLE MODE & ACT 1 HERO VARIATION:
+ * 'act2-still' -> Direct Frozen Static 3D Act 2 True Renderer (Default for 1:1 Design Review)
  * 'cinematic' -> Advanced GSAP ScrollTrigger kinetic storytelling experience
- * 'act2-still' -> Direct Frozen Static 3D Act 2 True Renderer
  * 'classic'   -> Pristine original responsive 2-section layout with standard Navbar
  */
-const DEFAULT_MODE: 'cinematic' | 'act2-still' | 'classic' = 'cinematic';
+const DEFAULT_MODE: 'cinematic' | 'act2-still' | 'classic' = 'act2-still';
 const DEFAULT_HERO_VARIANT: Act1Variant = 'columns';
 
 export const App: React.FC = () => {
@@ -30,8 +30,8 @@ export const App: React.FC = () => {
       {mode === 'classic' && <Navbar />}
 
       <main className="w-full flex flex-col">
-        {mode === 'cinematic' && <CinematicExperience act1Variant={heroVariant} />}
         {mode === 'act2-still' && <Act2StaticStill />}
+        {mode === 'cinematic' && <CinematicExperience act1Variant={heroVariant} />}
         {mode === 'classic' && (
           <>
             <Hero />
@@ -55,16 +55,6 @@ export const App: React.FC = () => {
             {/* Main Experience Mode Toggle */}
             <div className="flex items-center bg-white/10 rounded-xl p-0.5">
               <button
-                onClick={() => setMode('cinematic')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
-                  mode === 'cinematic'
-                    ? 'bg-[#F5B800] text-gray-950 shadow-md'
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                Cinematic
-              </button>
-              <button
                 onClick={() => setMode('act2-still')}
                 className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
                   mode === 'act2-still'
@@ -74,6 +64,16 @@ export const App: React.FC = () => {
                 title="Direct Frozen Static Act 2 3D Frame"
               >
                 Act 2 (3D Still)
+              </button>
+              <button
+                onClick={() => setMode('cinematic')}
+                className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+                  mode === 'cinematic'
+                    ? 'bg-[#F5B800] text-gray-950 shadow-md'
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                Cinematic
               </button>
               <button
                 onClick={() => setMode('classic')}
