@@ -2,44 +2,40 @@ import React from 'react';
 
 export const Act1ArchitecturalColumns: React.FC = () => {
   return (
-    <section className="act1-stage act1-columns-variant absolute inset-0 z-20 w-screen h-screen overflow-hidden pointer-events-none select-none">
+    <section className="act1-stage act1-columns-variant absolute inset-0 z-10 w-screen h-screen overflow-hidden pointer-events-none select-none">
       {/* ===================================================================== */}
       {/* MASTER 100VW / 100VH FULL-BLEED GRID (Zero Side Pillars / Full Viewport)*/}
       {/* ===================================================================== */}
       <div className="act1-artboard relative h-full w-full w-screen h-screen grid grid-cols-[24.5%_24.5%_24.5%_26.5%] overflow-hidden">
         {/* =================================================================== */}
-        {/* PANEL 1: "Most" (Cool Gallery Porcelain + Quiet High-Contrast Serif) */}
+        {/* PANEL 1: "Most" (Solid Gallery Porcelain Plane)                     */}
         {/* =================================================================== */}
-        <div className="act1-col-1 relative h-full flex flex-col items-center justify-start pt-[50vh] border-r border-black/[0.08] overflow-hidden">
-          {/* Fading Background Plane (Dissolves into permanent #080909) */}
+        <div className="act1-col-1 act1-panel-wrap relative h-full flex flex-col items-center justify-start pt-[50vh] border-r border-black/[0.08] overflow-hidden">
+          {/* Solid Material Background Plane (Clips/slides out cleanly without muddy gray alpha) */}
           <div className="act1-col-bg act1-col-bg-1 absolute inset-0 bg-[#ecebe8]">
             <div className="absolute inset-0 bg-gradient-to-b from-[#f2f1ee] via-[#ecebe8] to-[#e6e5e0] opacity-60 pointer-events-none" />
           </div>
 
-          <div className="most-pointer-rig">
-            <h1 className="act1-most-word relative z-10 font-serif text-[clamp(4.6rem,8.6vw,9.8rem)] font-normal text-[#0c0c0d] tracking-[-0.04em] leading-none select-none">
+          <div className="most-pointer-rig relative z-10">
+            <h1 className="act1-most-word font-serif text-[clamp(4.6rem,8.6vw,9.8rem)] font-normal text-[#0c0c0d] tracking-[-0.04em] leading-none select-none">
               Most
             </h1>
           </div>
         </div>
 
         {/* =================================================================== */}
-        {/* PANEL 2: "agencies" (Matte Charcoal + Ultra-Light Sans + Axis)      */}
+        {/* PANEL 2: "agencies" (Matte Charcoal + Ultra-Light Whole Sans + Axis)*/}
         {/* =================================================================== */}
-        <div className="act1-col-2 relative h-full flex flex-col items-center justify-start pt-[21vh] border-r border-white/[0.06] overflow-hidden">
-          {/* Fading Background Plane */}
+        <div className="act1-col-2 act1-panel-wrap relative h-full flex flex-col items-center justify-start pt-[21vh] border-r border-white/[0.06] overflow-hidden">
+          {/* Solid Charcoal Background Plane */}
           <div className="act1-col-bg act1-col-bg-2 absolute inset-0 bg-[#0b0c0d]">
             <div className="absolute inset-0 bg-gradient-to-b from-[#111214] via-[#0b0c0d] to-[#080809] opacity-80 pointer-events-none" />
           </div>
 
-          <div className="agencies-pointer-rig flex flex-col items-center">
-            {/* "agencies" with individual character spans for flow field deconstruction */}
-            <h2 className="act1-agencies-word relative z-10 font-sans text-[clamp(2.6rem,4.6vw,5.2rem)] font-extralight text-[#FFFFFF] tracking-[-0.03em] leading-none">
-              {'agencies'.split('').map((char, i) => (
-                <span key={i} className="act1-agencies-char inline-block">
-                  {char}
-                </span>
-              ))}
+          <div className="agencies-pointer-rig relative z-10 flex flex-col items-center">
+            {/* Intact Whole Word: Zero character explosion/fragmentation */}
+            <h2 className="act1-agencies-word font-sans text-[clamp(2.6rem,4.6vw,5.2rem)] font-extralight text-[#FFFFFF] tracking-[-0.03em] leading-none">
+              agencies
             </h2>
 
             {/* Compositional Axis / Plumb-Line Gesture with Travelling Highlight */}
@@ -52,10 +48,10 @@ export const Act1ArchitecturalColumns: React.FC = () => {
         {/* =================================================================== */}
         {/* PANEL 3: "run / your" (Sculpted Center Stack)                       */}
         {/* =================================================================== */}
-        <div className="act1-col-3 relative h-full flex flex-col border-r border-white/[0.06] overflow-hidden">
-          {/* Top 54%: "run" with Soft Whispering Perspective Runway */}
+        <div className="act1-col-3 act1-panel-wrap relative h-full flex flex-col border-r border-white/[0.06] overflow-hidden">
+          {/* Top 54%: "run" with Perspective Runway Geometry */}
           <div className="act1-run-panel relative h-[54%] flex flex-col items-center justify-between pt-[6.5vh] overflow-hidden border-b border-black/[0.12]">
-            {/* Top Column Background */}
+            {/* Top Column Background: Solid #f2efea material plane */}
             <div className="act1-col-bg act1-col-bg-3-top absolute inset-0 bg-[#f2efea]" />
 
             {/* Bold Assertive Modern Grotesk Sans */}
@@ -63,7 +59,7 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               run
             </h2>
 
-            {/* Embossed Perspective Floor: Nested Rigs (Story Rig vs Pointer Rig) */}
+            {/* Runway Area in Act 1: Runway grooves with soft highlight lines and energy rails */}
             <div className="act1-runway-wrap runway-story-rig relative w-full h-[65%] mt-auto overflow-hidden">
               <div className="runway-pointer-rig w-full h-full">
                 <svg
@@ -72,91 +68,89 @@ export const Act1ArchitecturalColumns: React.FC = () => {
                   preserveAspectRatio="none"
                 >
                   <defs>
-                    {/* Atmospheric Dissolve Mask */}
-                    <mask id="soft-runway-mask">
-                      <linearGradient id="soft-fog-grad" x1="0" y1="0" x2="0" y2="1">
+                    <mask id="act1-soft-runway-mask">
+                      <linearGradient id="act1-soft-fog-grad" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor="#000000" stopOpacity="0" />
                         <stop offset="30%" stopColor="#FFFFFF" stopOpacity="0.2" />
                         <stop offset="70%" stopColor="#FFFFFF" stopOpacity="0.75" />
                         <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
                       </linearGradient>
-                      <rect x="0" y="0" width="400" height="280" fill="url(#soft-fog-grad)" />
+                      <rect x="0" y="0" width="400" height="280" fill="url(#act1-soft-fog-grad)" />
                     </mask>
 
-                    {/* Soft Track Shading */}
-                    <linearGradient id="soft-track-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <linearGradient id="act1-track-fill" x1="0%" y1="0%" x2="0%" y2="100%">
                       <stop offset="0%" stopColor="#ede9e2" stopOpacity="0.1" />
                       <stop offset="60%" stopColor="#ded9cf" stopOpacity="0.5" />
                       <stop offset="100%" stopColor="#cec8bd" stopOpacity="0.85" />
                     </linearGradient>
 
-                    <linearGradient id="soft-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <linearGradient id="act1-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
                       <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
                       <stop offset="40%" stopColor="#ffffff" stopOpacity="0.5" />
                       <stop offset="100%" stopColor="#ffffff" stopOpacity="0.9" />
                     </linearGradient>
 
-                    <linearGradient id="soft-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <linearGradient id="act1-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
                       <stop offset="0%" stopColor="#b5afa5" stopOpacity="0" />
                       <stop offset="40%" stopColor="#9e978c" stopOpacity="0.4" />
                       <stop offset="100%" stopColor="#80796e" stopOpacity="0.7" />
                     </linearGradient>
                   </defs>
 
-                  {/* Perspective Beams */}
-                  <g mask="url(#soft-runway-mask)" opacity="0.9">
+                  {/* Perspective Tracks */}
+                  <g mask="url(#act1-soft-runway-mask)" opacity="0.9">
                     {/* Track -4 */}
-                    <polygon className="act1-run-track" points="166,35 171,35 10,280 26,280" fill="url(#soft-track-fill)" />
-                    <line className="act1-run-line" x1="166" y1="35" x2="10" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
-                    <line className="act1-run-line" x1="171" y1="35" x2="26" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.6" />
+                    <polygon className="act1-run-track" points="166,35 171,35 10,280 26,280" fill="url(#act1-track-fill)" />
+                    <line className="act1-run-line" x1="166" y1="35" x2="10" y2="280" stroke="url(#act1-highlight)" strokeWidth="1.2" />
+                    <line className="act1-run-line" x1="171" y1="35" x2="26" y2="280" stroke="url(#act1-shadow)" strokeWidth="1.6" />
                     <line className="act1-energy-rail act1-energy-rail-m4" x1="168" y1="35" x2="18" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
 
                     {/* Track -3 */}
-                    <polygon className="act1-run-track" points="175,35 179,35 62,280 77,280" fill="url(#soft-track-fill)" />
-                    <line className="act1-run-line" x1="175" y1="35" x2="62" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
-                    <line className="act1-run-line" x1="179" y1="35" x2="77" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.5" />
+                    <polygon className="act1-run-track" points="175,35 179,35 62,280 77,280" fill="url(#act1-track-fill)" />
+                    <line className="act1-run-line" x1="175" y1="35" x2="62" y2="280" stroke="url(#act1-highlight)" strokeWidth="1.2" />
+                    <line className="act1-run-line" x1="179" y1="35" x2="77" y2="280" stroke="url(#act1-shadow)" strokeWidth="1.5" />
                     <line className="act1-energy-rail act1-energy-rail-m3" x1="177" y1="35" x2="69" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
 
                     {/* Track -2 */}
-                    <polygon className="act1-run-track" points="183,35 186,35 116,280 129,280" fill="url(#soft-track-fill)" />
-                    <line className="act1-run-line" x1="183" y1="35" x2="116" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.1" />
-                    <line className="act1-run-line" x1="186" y1="35" x2="129" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.4" />
+                    <polygon className="act1-run-track" points="183,35 186,35 116,280 129,280" fill="url(#act1-track-fill)" />
+                    <line className="act1-run-line" x1="183" y1="35" x2="116" y2="280" stroke="url(#act1-highlight)" strokeWidth="1.1" />
+                    <line className="act1-run-line" x1="186" y1="35" x2="129" y2="280" stroke="url(#act1-shadow)" strokeWidth="1.4" />
                     <line className="act1-energy-rail act1-energy-rail-m2" x1="184.5" y1="35" x2="122.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
                     {/* Track -1 */}
-                    <polygon className="act1-run-track" points="191,35 194,35 168,280 179,280" fill="url(#soft-track-fill)" />
-                    <line className="act1-run-line" x1="191" y1="35" x2="168" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
-                    <line className="act1-run-line" x1="194" y1="35" x2="179" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+                    <polygon className="act1-run-track" points="191,35 194,35 168,280 179,280" fill="url(#act1-track-fill)" />
+                    <line className="act1-run-line" x1="191" y1="35" x2="168" y2="280" stroke="url(#act1-highlight)" strokeWidth="1.0" />
+                    <line className="act1-run-line" x1="194" y1="35" x2="179" y2="280" stroke="url(#act1-shadow)" strokeWidth="1.3" />
                     <line className="act1-energy-rail act1-energy-rail-m1" x1="192.5" y1="35" x2="173.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
                     {/* Center Track 0 (First to ignite on scroll) */}
-                    <polygon className="act1-run-track" points="198.5,35 201.5,35 195,280 205,280" fill="url(#soft-track-fill)" />
-                    <line className="act1-run-line" x1="198.5" y1="35" x2="195" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
-                    <line className="act1-run-line" x1="201.5" y1="25" x2="205" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+                    <polygon className="act1-run-track" points="198.5,35 201.5,35 195,280 205,280" fill="url(#act1-track-fill)" />
+                    <line className="act1-run-line" x1="198.5" y1="35" x2="195" y2="280" stroke="url(#act1-highlight)" strokeWidth="1.0" />
+                    <line className="act1-run-line" x1="201.5" y1="25" x2="205" y2="280" stroke="url(#act1-shadow)" strokeWidth="1.3" />
                     <line className="act1-energy-rail act1-energy-rail-0" x1="200" y1="35" x2="200" y2="280" stroke="#ecd08e" strokeWidth="2.4" strokeLinecap="round" opacity="0" />
 
                     {/* Track +1 */}
-                    <polygon className="act1-run-track" points="206,35 209,35 221,280 232,280" fill="url(#soft-track-fill)" />
-                    <line className="act1-run-line" x1="206" y1="35" x2="221" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
-                    <line className="act1-run-line" x1="209" y1="35" x2="232" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+                    <polygon className="act1-run-track" points="206,35 209,35 221,280 232,280" fill="url(#act1-track-fill)" />
+                    <line className="act1-run-line" x1="206" y1="35" x2="221" y2="280" stroke="url(#act1-highlight)" strokeWidth="1.0" />
+                    <line className="act1-run-line" x1="209" y1="35" x2="232" y2="280" stroke="url(#act1-shadow)" strokeWidth="1.3" />
                     <line className="act1-energy-rail act1-energy-rail-p1" x1="207.5" y1="35" x2="226.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
                     {/* Track +2 */}
-                    <polygon className="act1-run-track" points="214,35 217,35 271,280 284,280" fill="url(#soft-track-fill)" />
-                    <line className="act1-run-line" x1="214" y1="35" x2="271" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.1" />
-                    <line className="act1-run-line" x1="217" y1="35" x2="284" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.4" />
+                    <polygon className="act1-run-track" points="214,35 217,35 271,280 284,280" fill="url(#act1-track-fill)" />
+                    <line className="act1-run-line" x1="214" y1="35" x2="271" y2="280" stroke="url(#act1-highlight)" strokeWidth="1.1" />
+                    <line className="act1-run-line" x1="217" y1="35" x2="284" y2="280" stroke="url(#act1-shadow)" strokeWidth="1.4" />
                     <line className="act1-energy-rail act1-energy-rail-p2" x1="215.5" y1="35" x2="277.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
                     {/* Track +3 */}
-                    <polygon className="act1-run-track" points="221,35 225,35 323,280 338,280" fill="url(#soft-track-fill)" />
-                    <line className="act1-run-line" x1="221" y1="35" x2="323" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
-                    <line className="act1-run-line" x1="225" y1="35" x2="338" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.5" />
+                    <polygon className="act1-run-track" points="221,35 225,35 323,280 338,280" fill="url(#act1-track-fill)" />
+                    <line className="act1-run-line" x1="221" y1="35" x2="323" y2="280" stroke="url(#act1-highlight)" strokeWidth="1.2" />
+                    <line className="act1-run-line" x1="225" y1="35" x2="338" y2="280" stroke="url(#act1-shadow)" strokeWidth="1.5" />
                     <line className="act1-energy-rail act1-energy-rail-p3" x1="223" y1="35" x2="330.5" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
 
                     {/* Track +4 */}
-                    <polygon className="act1-run-track" points="229,35 234,35 374,280 390,280" fill="url(#soft-track-fill)" />
-                    <line className="act1-run-line" x1="229" y1="35" x2="374" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
-                    <line className="act1-run-line" x1="234" y1="35" x2="390" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.6" />
+                    <polygon className="act1-run-track" points="229,35 234,35 374,280 390,280" fill="url(#act1-track-fill)" />
+                    <line className="act1-run-line" x1="229" y1="35" x2="374" y2="280" stroke="url(#act1-highlight)" strokeWidth="1.2" />
+                    <line className="act1-run-line" x1="234" y1="35" x2="390" y2="280" stroke="url(#act1-shadow)" strokeWidth="1.6" />
                     <line className="act1-energy-rail act1-energy-rail-p4" x1="231.5" y1="35" x2="382" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
                   </g>
                 </svg>
@@ -166,7 +160,7 @@ export const Act1ArchitecturalColumns: React.FC = () => {
 
           {/* Bottom 46%: "your." (Warm Editorial Paper Tone + Italic Serif + Dot) */}
           <div className="act1-your-panel relative h-[46%] flex flex-col items-center justify-center px-7 overflow-hidden">
-            {/* Bottom Column Background */}
+            {/* Bottom Column Background: Solid #e8e3d9 plane */}
             <div className="act1-col-bg act1-col-bg-3-bottom absolute inset-0 bg-[#e8e3d9]">
               <div className="absolute inset-0 bg-gradient-to-b from-[#eae5db] to-[#e4ded3] opacity-50 pointer-events-none" />
             </div>
@@ -195,8 +189,8 @@ export const Act1ArchitecturalColumns: React.FC = () => {
         {/* =================================================================== */}
         {/* PANEL 4: "ads." (4-Layer Optical Eclipse + Champagne Bronze Shading)*/}
         {/* =================================================================== */}
-        <div className="act1-col-4 relative h-full w-full flex items-center justify-center overflow-hidden">
-          {/* Background Plane */}
+        <div className="act1-col-4 act1-panel-wrap relative h-full w-full flex items-center justify-center overflow-hidden">
+          {/* Solid Dark Background Plane (Seamless with stage) */}
           <div
             className="act1-col-bg act1-col-bg-4 absolute inset-0"
             style={{

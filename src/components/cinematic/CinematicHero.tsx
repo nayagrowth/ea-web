@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Act1ArtboardPoster } from './acts/Act1ArtboardPoster';
 import { Act1ArchitecturalColumns } from './acts/Act1ArchitecturalColumns';
 import { Act1PosterHook } from './acts/Act1PosterHook';
+import { SharedPerspectiveField } from './shared/SharedPerspectiveField';
 import { Act2VelocityPoster } from './acts/Act2VelocityPoster';
 import { Act3Timeline } from './acts/Act3Timeline';
 import { Act4TriPanel } from './acts/Act4TriPanel';
@@ -30,11 +31,10 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       // =====================================================================
       // Act 1 Initial State
       gsap.set('.act1-stage', { autoAlpha: 1, x: 0, y: 0 });
-      gsap.set('.act1-col-bg', { opacity: 1 });
+      gsap.set('.act1-col-bg', { xPercent: 0, yPercent: 0, opacity: 1 });
       gsap.set('.act1-scroll-cue', { opacity: 1, y: 0 });
       gsap.set('.act1-most-word', { xPercent: 0, yPercent: 0, scale: 1, opacity: 1 });
-      gsap.set('.act1-agencies-word', { opacity: 1 });
-      gsap.set('.act1-agencies-char', { x: 0, y: 0, opacity: 1 });
+      gsap.set('.act1-agencies-word', { xPercent: 0, yPercent: 0, opacity: 1 });
       gsap.set('.act1-col2-axis', { scaleY: 1, transformOrigin: 'top center', opacity: 1 });
       gsap.set('.act1-axis-pulse', { opacity: 0, y: 0 });
       gsap.set('.act1-run-word', { yPercent: 0, scale: 1, opacity: 1 });
@@ -55,9 +55,10 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act1-ads-slab', { scaleX: 1, transformOrigin: 'right center' });
       gsap.set('.act1-poster-card', { scale: 1, opacity: 1 });
 
-      // Act 2 Velocity Poster & Shared Rail Field Initial State
+      // Shared Perspective Rail Field & Act 2 Velocity Poster Initial State
+      gsap.set('.shared-rail-story-rig', { autoAlpha: 0 });
       gsap.set('.act2-velocity-stage', { autoAlpha: 0, x: 0, y: 0 });
-      gsap.set('.act2-rib-plane', { opacity: 0, x: 40 });
+      gsap.set('.act2-rib-story-rig', { opacity: 0, x: 40 });
       gsap.set('.act2-floor-rails', { opacity: 0, scaleY: 0.8 });
       gsap.set('.act2-horizon-laser', { opacity: 0, scaleX: 0.2, transformOrigin: 'right center' });
       gsap.set('.act2-word-we', { x: '-7vw', scale: 1.08, autoAlpha: 0 });
@@ -90,7 +91,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           start: 'top top',
           end: '+=850%',
           pin: stageRef.current,
-          scrub: 0.38, // Crisp, instant tactile response
+          scrub: 0.38, // Crisp, responsive tactile response
           anticipatePin: 1,
         },
       });
@@ -193,21 +194,66 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           }, 'IGNITION+=0.1');
 
         // -------------------------------------------------------------------
-        // BEAT 2: ACT 1 DECONSTRUCTION (Time 0.8 - 2.0): Controlled Breakdown
+        // BEAT 2: SOLID MATERIAL DECONSTRUCTION (Time 0.8 - 2.0): Zero Gray Mush
         // -------------------------------------------------------------------
         tl.addLabel('DECONSTRUCT', 0.8);
 
-        // Column backgrounds dissolve into #08090a
-        tl.to('.act1-col-bg', {
-          opacity: 0,
-          duration: 1.1,
-          ease: 'power2.inOut',
+        // Column 1 (Most): Solid porcelain plane slides leftward
+        tl.to('.act1-col-bg-1', {
+          xPercent: -100,
+          duration: 1.0,
+          ease: 'power3.inOut',
         }, 'DECONSTRUCT')
+          .to('.act1-most-word', {
+            xPercent: -80,
+            opacity: 0,
+            duration: 0.85,
+            ease: 'power2.in',
+          }, 'DECONSTRUCT')
+
+          // Column 2 (agencies): Whole intact word slides upward; plumb line retracts
           .to('.act1-col2-axis', {
             scaleY: 0,
             transformOrigin: 'top center',
             duration: 0.7,
             ease: 'power3.in',
+          }, 'DECONSTRUCT')
+          .to('.act1-agencies-word', {
+            yPercent: -45,
+            opacity: 0,
+            duration: 0.85,
+            ease: 'power2.in',
+          }, 'DECONSTRUCT')
+
+          // Column 3 Top (run): Solid #f2efea plane collapses upward
+          .to('.act1-col-bg-3-top', {
+            yPercent: -100,
+            duration: 0.9,
+            ease: 'power3.inOut',
+          }, 'DECONSTRUCT')
+          .to('.act1-run-word', {
+            yPercent: -40,
+            opacity: 0,
+            scale: 0.94,
+            duration: 0.8,
+            ease: 'power2.in',
+          }, 'DECONSTRUCT')
+          .to('.act1-run-track', {
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power2.in',
+          }, 'DECONSTRUCT')
+          .to('.act1-energy-rail', {
+            opacity: 0,
+            duration: 0.5,
+            ease: 'power2.in',
+          }, 'DECONSTRUCT')
+
+          // Column 3 Bottom (your): Solid #e8e3d9 plane collapses downward
+          .to('.act1-col-bg-3-bottom', {
+            yPercent: 100,
+            duration: 0.9,
+            ease: 'power3.inOut',
           }, 'DECONSTRUCT')
           .to('.act1-your-rule', {
             scaleX: 0,
@@ -215,39 +261,10 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             duration: 0.6,
             ease: 'power3.in',
           }, 'DECONSTRUCT')
-          .to('.act1-most-word', {
-            opacity: 0,
-            xPercent: -15,
-            duration: 0.9,
-            ease: 'power2.in',
-          }, 'DECONSTRUCT')
-          .to('.act1-agencies-char', {
-            y: (i: number) => (i % 2 === 0 ? -35 : 35),
-            x: (i: number) => (i - 3.5) * 18,
-            opacity: 0,
-            stagger: 0.02,
-            duration: 0.9,
-            ease: 'power2.in',
-          }, 'DECONSTRUCT')
-          .to('.act1-run-word', {
-            yPercent: -35,
-            opacity: 0,
-            scale: 0.92,
-            duration: 0.8,
-            ease: 'power2.in',
-          }, 'DECONSTRUCT')
-          .to('.act1-run-track', {
-            opacity: 0,
-            duration: 0.7,
-            ease: 'power2.in',
-          }, 'DECONSTRUCT')
-          .to('.act1-energy-rail', {
-            opacity: 0,
-            duration: 0.6,
-            ease: 'power2.in',
-          }, 'DECONSTRUCT')
+
+          // Column 4 (ads.): Eclipse rig glides toward right vanishing point
           .to('.act1-ads-text', {
-            scale: 0.88,
+            scale: 0.9,
             opacity: 0,
             duration: 0.8,
             ease: 'power2.in',
@@ -259,16 +276,16 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power2.in',
           }, 'DECONSTRUCT')
           .to('.act1-eclipse-rig', {
-            scale: 0.35,
+            scale: 0.5,
             opacity: 0,
-            xPercent: -25,
-            yPercent: 15,
+            xPercent: 20,
+            yPercent: 10,
             duration: 1.0,
             ease: 'power2.in',
           }, 'DECONSTRUCT');
 
         // -------------------------------------------------------------------
-        // BEAT 3: SHARED PERSPECTIVE EXPANSION (Time 1.6 - 2.8): Rail Field
+        // BEAT 3: SHARED PERSPECTIVE EXPANSION (Time 1.6 - 2.8): Single Rails
         // -------------------------------------------------------------------
         tl.addLabel('PERSPECTIVE_EXPAND', 1.6);
 
@@ -303,7 +320,12 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             duration: 0.2,
           }, 'PERSPECTIVE_EXPAND+=0.6')
 
-          // Shared perspective velocity field powers on with high-speed architectural burst
+          // Shared Perspective Speed Rails power on across full artboard
+          .to('.shared-rail-story-rig', {
+            autoAlpha: 1,
+            duration: 0.5,
+            ease: 'power2.out',
+          }, 'PERSPECTIVE_EXPAND+=0.1')
           .to('.act2-velocity-stage', {
             autoAlpha: 1,
             duration: 0.5,
@@ -315,7 +337,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             duration: 0.8,
             ease: 'power2.out',
           }, 'PERSPECTIVE_EXPAND+=0.1')
-          .to('.act2-rib-plane', {
+          .to('.act2-rib-story-rig', {
             opacity: 0.95,
             x: 0,
             duration: 0.8,
@@ -330,6 +352,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       } else {
         // Fallback for artboard / poster variants
         tl.to('.act1-stage', { autoAlpha: 0, duration: 1.0, ease: 'power2.inOut' }, 'IGNITION+=0.4')
+          .to('.shared-rail-story-rig', { autoAlpha: 1, duration: 0.8, ease: 'power2.out' }, 'IGNITION+=0.6')
           .to('.act2-velocity-stage', { autoAlpha: 1, duration: 1.0, ease: 'power2.out' }, 'IGNITION+=0.6');
       }
 
@@ -347,7 +370,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         ease: 'power3.out',
       }, 'ACT2_VELOCITY_ENTER')
 
-        // "sell-out" slides in along the golden trajectory
+        // "sell-out" slides in along the golden trajectory with newly formed gold hyphen
         .to('.act2-word-sellout', {
           x: 0,
           y: 0,
@@ -361,7 +384,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           ease: 'power3.out',
         }, 'ACT2_VELOCITY_ENTER+=0.12')
 
-        // "your" locks into position
+        // "your" locks into position from bridge
         .to('.act2-word-your', {
           autoAlpha: 1,
           scale: 1,
@@ -379,7 +402,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           ease: 'power3.out',
         }, 'ACT2_VELOCITY_ENTER+=0.16')
 
-        // "project" rises from the floor velocity field with its floor reflection
+        // "project" rises cleanly with its floor reflection
         .to('.act2-word-project', {
           y: 0,
           autoAlpha: 0.95,
@@ -394,15 +417,16 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         }, 'ACT2_VELOCITY_ENTER+=0.22');
 
       // ---------------------------------------------------------------------
-      // BEAT 5: ACT 2 HOLD & SETTLE (Time 3.8 - 5.4): Frozen Static Poster
+      // BEAT 5: ACT 2 STATIC READABLE HOLD (Time 3.8 - 5.6): Zero Text Drift
       // ---------------------------------------------------------------------
       tl.addLabel('ACT2_HOLD', 3.8);
-      tl.to('.act2-velocity-stage', { scale: 1.006, duration: 1.6, ease: 'none' }, 'ACT2_HOLD');
+      // Typography stops completely for maximum readability; minimal atmospheric life on rails
+      tl.to('.act2-floor-rails', { opacity: 0.95, duration: 1.8, ease: 'none' }, 'ACT2_HOLD');
 
       // ---------------------------------------------------------------------
-      // ACT 2 ➔ ACT 3 MOTIF MORPH (Time 5.4 - 7.0): Horizon Laser Continuity
+      // ACT 2 ➔ ACT 3 MOTIF MORPH (Time 5.6 - 7.2): Horizon Laser Continuity
       // ---------------------------------------------------------------------
-      tl.addLabel('ACT2_TO_ACT3', 5.4);
+      tl.addLabel('ACT2_TO_ACT3', 5.6);
 
       // Act 2 typography departs gracefully
       tl.to('.act2-word-we', { y: -40, opacity: 0, duration: 0.8, ease: 'power2.in' }, 'ACT2_TO_ACT3')
@@ -411,7 +435,8 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         .to('.act2-word-realestate', { y: -30, opacity: 0, duration: 0.8, ease: 'power2.in' }, 'ACT2_TO_ACT3+=0.15')
         .to('.act2-word-project', { y: -20, opacity: 0, duration: 0.8, ease: 'power2.in' }, 'ACT2_TO_ACT3+=0.2')
         .to('.act2-word-project-reflect', { opacity: 0, duration: 0.5 }, 'ACT2_TO_ACT3')
-        .to('.act2-rib-plane', { opacity: 0, duration: 0.8 }, 'ACT2_TO_ACT3+=0.2')
+        .to('.act2-rib-story-rig', { opacity: 0, duration: 0.8 }, 'ACT2_TO_ACT3+=0.2')
+        .to('.shared-rail-story-rig', { autoAlpha: 0, duration: 0.4 }, 'ACT2_TO_ACT3+=0.6')
         .to('.act2-velocity-stage', { autoAlpha: 0, duration: 0.3 }, 'ACT2_TO_ACT3+=0.7')
 
         // =====================================================================
@@ -537,7 +562,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
     }, containerRef);
 
     // =======================================================================
-    // 3. FINE-POINTER SPATIAL PARALLAX (Nested Rig QuickTo Interaction)
+    // 3. FINE-POINTER SPATIAL PARALLAX (Nested Rig QuickTo Isolation)
     // =======================================================================
     const isFinePointer = window.matchMedia('(pointer: fine)').matches;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -547,7 +572,8 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       const runwayRotateY = gsap.quickTo('.runway-pointer-rig', 'rotateY', { duration: 0.4, ease: 'power3.out' });
       const eclipseX = gsap.quickTo('.eclipse-pointer-rig', 'x', { duration: 0.5, ease: 'power3.out' });
       const mostX = gsap.quickTo('.most-pointer-rig', 'x', { duration: 0.5, ease: 'power3.out' });
-      const act2RibX = gsap.quickTo('.act2-rib-plane', 'x', { duration: 0.4, ease: 'power3.out' });
+      const act2RibX = gsap.quickTo('.act2-rib-pointer-rig', 'x', { duration: 0.4, ease: 'power3.out' });
+      const sharedRailX = gsap.quickTo('.shared-rail-pointer-rig', 'x', { duration: 0.4, ease: 'power3.out' });
 
       const handleMouseMove = (e: MouseEvent) => {
         const mx = (e.clientX / window.innerWidth) * 2 - 1; // -1 to 1
@@ -556,6 +582,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         eclipseX(mx * 3);
         mostX(mx * -2);
         act2RibX(mx * 4);
+        sharedRailX(mx * 3);
       };
 
       window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -576,17 +603,21 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         className="cinematicStage relative w-full h-screen min-h-[660px] flex flex-col justify-center items-center p-0 m-0 overflow-hidden bg-[#08090a] select-none"
         style={{ perspective: '1600px' }}
       >
-        {/* Layer 0: Permanent Deep Matte Base */}
+        {/* Layer z-0: Permanent Deep Matte Base */}
         <div className="absolute inset-0 bg-[#08090a] pointer-events-none z-0" />
 
-        {/* ===================================================================== */}
-        {/* MODULAR ACT 1 (Variant-Selectable) + ACT 2 VELOCITY POSTER + ACTS 3-5 */}
-        {/* ===================================================================== */}
+        {/* Layer z-6: True Persistent Shared Rail Field */}
+        <SharedPerspectiveField />
+
+        {/* Layer z-10: Modular Act 1 (Solid Material Panels) */}
         {act1Variant === 'columns' && <Act1ArchitecturalColumns />}
         {act1Variant === 'artboard' && <Act1ArtboardPoster />}
         {act1Variant === 'poster' && <Act1PosterHook />}
 
+        {/* Layer z-20: Act 2 Canonical 1672x941 Velocity Poster */}
         <Act2VelocityPoster />
+
+        {/* Layers z-25+: Acts 3-5 */}
         <Act3Timeline />
         <Act4TriPanel />
         <Act5Credibility />
