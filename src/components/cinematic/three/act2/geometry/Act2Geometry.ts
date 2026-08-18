@@ -7,23 +7,37 @@ export interface Act2GeometryRig {
 }
 
 /**
- * Builds the mathematically pure 3D Euclidean corridor
- * All longitudinal rails, slats, and trims are EXACTLY parallel to D = (0, 0, -1)
+ * EXACT ARCHITECTURAL ROOM SHELL & CORRIDOR
+ * 
+ * Boundaries:
+ * - Floor Plane Π_F: Y = 0, X in [-8, 5], Z in [-5, -95]
+ * - Left Hero Wall Π_L: X = -8, Y in [0, 14.6], Z in [-5, -95]
+ * - Right Rib Wall Π_R: X = 5, Y in [0, 14.7], Z in [-5, -95], Top Blade Y = 14.55
+ * - Ceiling Π_C: Y = 14.6, X in [-8, 5], Z in [-5, -95]
+ * 
+ * Every longitudinal edge is parallel to depth direction D = (0, 0, -1)
  */
 export function createAct2Geometry(): Act2GeometryRig {
   const group = new THREE.Group();
   const disposables: Array<{ dispose: () => void }> = [];
   const keyLongitudinalLines: Array<{ p0: THREE.Vector3; p1: THREE.Vector3; name: string }> = [];
 
-  const corridorDepthStart = 8.0;
-  const corridorDepthEnd = -45.0;
-  const corridorLength = corridorDepthStart - corridorDepthEnd;
-  const midZ = (corridorDepthStart + corridorDepthEnd) / 2;
+  const zStart = -5.0;
+  const zEnd = -95.0;
+  const corridorLength = Math.abs(zEnd - zStart); // 90 units
+  const midZ = (zStart + zEnd) / 2; // -50.0
+
+  const wallLeftX = -8.0;
+  const wallRightX = 5.0;
+  const ceilingY = 14.6;
 
   // -------------------------------------------------------------------------
-  // 1. FLOOR PLANE (Π_F: Y = 0, Normal (0, 1, 0))
+  // 1. FLOOR PLANE (Π_F: Y = 0, X in [-8, 5])
   // -------------------------------------------------------------------------
-  const floorGeo = new THREE.PlaneGeometry(35, corridorLength);
+  const floorWidth = wallRightX - wallLeftX; // 13 units
+  const floorMidX = (wallLeftX + wallRightX) / 2; // -1.5
+
+  const floorGeo = new THREE.PlaneGeometry(floorWidth, corridorLength);
   const floorMat = new THREE.MeshStandardMaterial({
     color: '#08090b',
     roughness: 0.22,
@@ -31,15 +45,15 @@ export function createAct2Geometry(): Act2GeometryRig {
   });
   const floorMesh = new THREE.Mesh(floorGeo, floorMat);
   floorMesh.rotation.x = -Math.PI / 2;
-  floorMesh.position.set(-1.0, 0, midZ);
+  floorMesh.position.set(floorMidX, 0, midZ);
   group.add(floorMesh);
   disposables.push(floorGeo, floorMat);
 
-  // Broad subtle reflective panels with shallow elevation
+  // Subtle dark-silver floor panels with slight roughness variation
   const floorPanels = [
-    { x: -10, width: 6, roughness: 0.26, color: '#07080a' },
-    { x: -3, width: 7, roughness: 0.18, color: '#090b0f' },
-    { x: 3.5, width: 4.5, roughness: 0.22, color: '#0a0c12' },
+    { x: -6.0, width: 3.5, roughness: 0.28, color: '#07080a' },
+    { x: -2.0, width: 4.0, roughness: 0.18, color: '#090b0f' },
+    { x: 2.5, width: 4.5, roughness: 0.24, color: '#0a0c12' },
   ];
 
   floorPanels.forEach((p, idx) => {
@@ -56,14 +70,14 @@ export function createAct2Geometry(): Act2GeometryRig {
     disposables.push(pGeo, pMat);
   });
 
-  // Longitudinal Floor Speed Rails (All exactly parallel to D = (0, 0, -1))
+  // Longitudinal Floor Speed Rails (All parallel to D = (0, 0, -1))
   const railXPositions = [
-    { x: -11.5, width: 0.04, color: '#ffffff', emissive: 0.4, isGold: false },
-    { x: -6.5, width: 0.03, color: '#555b68', emissive: 0.2, isGold: false },
-    { x: -1.2, width: 0.05, color: '#ffffff', emissive: 0.7, isGold: false },
-    { x: 2.2, width: 0.08, color: '#ecd08e', emissive: 2.6, isGold: true },  // Champagne Gold
-    { x: 3.8, width: 0.10, color: '#dfbd78', emissive: 3.2, isGold: true },  // Champagne Gold
-    { x: 4.85, width: 0.06, color: '#ffffff', emissive: 1.2, isGold: false },
+    { x: -7.0, width: 0.04, color: '#ffffff', emissive: 0.4 },
+    { x: -4.5, width: 0.03, color: '#555b68', emissive: 0.2 },
+    { x: -1.0, width: 0.05, color: '#ffffff', emissive: 0.7 },
+    { x: 2.2, width: 0.08, color: '#ecd08e', emissive: 2.6 },  // Champagne Gold
+    { x: 3.8, width: 0.10, color: '#dfbd78', emissive: 3.2 },  // Champagne Gold
+    { x: 4.85, width: 0.06, color: '#ffffff', emissive: 1.2 },
   ];
 
   railXPositions.forEach((r, idx) => {
@@ -81,52 +95,58 @@ export function createAct2Geometry(): Act2GeometryRig {
     disposables.push(railGeo, railMat);
 
     keyLongitudinalLines.push({
-      p0: new THREE.Vector3(r.x, 0.006, corridorDepthStart),
-      p1: new THREE.Vector3(r.x, 0.006, corridorDepthEnd),
+      p0: new THREE.Vector3(r.x, 0.006, zStart),
+      p1: new THREE.Vector3(r.x, 0.006, zEnd),
       name: `FloorRail_${idx + 1}_x${r.x}`,
     });
   });
 
   // -------------------------------------------------------------------------
-  // 2. LEFT / BACK ARCHITECTURAL MASS (Π_L: Matte Dark Absorptive Plane)
+  // 2. LEFT HERO WALL (Π_L: X = -8, Receding longitudinally from z = -5 to -95)
   // -------------------------------------------------------------------------
-  const backShellGeo = new THREE.PlaneGeometry(30, 20);
-  const backShellMat = new THREE.MeshStandardMaterial({
-    color: '#050608',
-    roughness: 0.90,
-    metalness: 0.02,
+  const leftWallGeo = new THREE.PlaneGeometry(corridorLength, ceilingY);
+  const leftWallMat = new THREE.MeshStandardMaterial({
+    color: '#090a0d',
+    roughness: 0.76,
+    metalness: 0.08,
   });
-  const backShellMesh = new THREE.Mesh(backShellGeo, backShellMat);
-  backShellMesh.position.set(-8.0, 7.5, -28.0);
-  group.add(backShellMesh);
-  disposables.push(backShellGeo, backShellMat);
+  const leftWallMesh = new THREE.Mesh(leftWallGeo, leftWallMat);
+  leftWallMesh.rotation.y = Math.PI / 2; // Normal faces into corridor (+X)
+  leftWallMesh.position.set(wallLeftX, ceilingY / 2, midZ);
+  group.add(leftWallMesh);
+  disposables.push(leftWallGeo, leftWallMat);
+
+  // Left Wall/Floor Seam Trim Line (at X = -8, Y = 0.01)
+  keyLongitudinalLines.push({
+    p0: new THREE.Vector3(wallLeftX, 0.01, zStart),
+    p1: new THREE.Vector3(wallLeftX, 0.01, zEnd),
+    name: 'LeftWallFloorSeam',
+  });
 
   // -------------------------------------------------------------------------
-  // 3. RIGHT ARCHITECTURAL WALL (Π_R: X = 5.0, All Fins Parallel to D)
+  // 3. RIGHT STRUCTURAL WALL & 13 METALLIC LOUVER FINS (Π_R: X = 5.0)
   // -------------------------------------------------------------------------
-  const wallX = 5.0;
-
-  // Wall Backplane Mesh at X = 5.0
-  const wallBackGeo = new THREE.PlaneGeometry(corridorLength, 12);
-  const wallBackMat = new THREE.MeshStandardMaterial({
+  // Wall Backplane at X = 5.0
+  const rightWallGeo = new THREE.PlaneGeometry(corridorLength, ceilingY + 0.2);
+  const rightWallMat = new THREE.MeshStandardMaterial({
     color: '#060709',
-    roughness: 0.45,
-    metalness: 0.75,
+    roughness: 0.40,
+    metalness: 0.80,
   });
-  const wallBackMesh = new THREE.Mesh(wallBackGeo, wallBackMat);
-  wallBackMesh.rotation.y = -Math.PI / 2;
-  wallBackMesh.position.set(wallX + 0.02, 5.0, midZ);
-  group.add(wallBackMesh);
-  disposables.push(wallBackGeo, wallBackMat);
+  const rightWallMesh = new THREE.Mesh(rightWallGeo, rightWallMat);
+  rightWallMesh.rotation.y = -Math.PI / 2; // Normal faces into corridor (-X)
+  rightWallMesh.position.set(wallRightX + 0.02, ceilingY / 2, midZ);
+  group.add(rightWallMesh);
+  disposables.push(rightWallGeo, rightWallMat);
 
-  // 10 Geometrically Spaced 3D Louver Fins (All attached to Π_R at X = 5.0, extending along -Z)
-  const finYPositions = [0.25, 0.70, 1.20, 1.77, 2.41, 3.12, 3.90, 4.75, 5.67, 6.65];
+  // 13 Calibrated Fin Heights spanning Y in [1.5, 13.5]
+  const finYPositions = [1.5, 2.4, 2.9, 3.8, 4.6, 5.0, 6.0, 7.0, 8.0, 9.0, 10.3, 11.9, 13.5];
 
   finYPositions.forEach((yPos, idx) => {
-    const finHeight = 0.08 + idx * 0.025;
-    const finWidth = 0.18; // thickness projecting into corridor
+    const finHeight = 0.09 + (idx / finYPositions.length) * 0.08;
+    const finWidth = 0.22; // Thickness into corridor
 
-    // Fin Main Body (Dark Metallic)
+    // Fin Main Body (Dark Metallic Slab)
     const finGeo = new THREE.BoxGeometry(finWidth, finHeight, corridorLength);
     const finMat = new THREE.MeshStandardMaterial({
       color: '#0a0c10',
@@ -134,54 +154,70 @@ export function createAct2Geometry(): Act2GeometryRig {
       metalness: 0.92,
     });
     const finMesh = new THREE.Mesh(finGeo, finMat);
-    finMesh.position.set(wallX - finWidth / 2, yPos, midZ);
+    finMesh.position.set(wallRightX - finWidth / 2, yPos, midZ);
     group.add(finMesh);
     disposables.push(finGeo, finMat);
 
-    // Specular Top Edge Bevel (Catching grazing key light)
+    // Specular Top Edge Bevel (Catches grazing key light)
     const edgeGeo = new THREE.BoxGeometry(0.025, 0.02, corridorLength);
     const edgeMat = new THREE.MeshStandardMaterial({
       color: '#ffffff',
       roughness: 0.02,
       metalness: 0.99,
       emissive: '#ffffff',
-      emissiveIntensity: 0.7 + (idx / finYPositions.length) * 0.5,
+      emissiveIntensity: 0.7 + (idx / finYPositions.length) * 0.6,
     });
     const edgeMesh = new THREE.Mesh(edgeGeo, edgeMat);
-    edgeMesh.position.set(wallX - finWidth + 0.012, yPos + finHeight / 2, midZ);
+    edgeMesh.position.set(wallRightX - finWidth + 0.012, yPos + finHeight / 2, midZ);
     group.add(edgeMesh);
     disposables.push(edgeGeo, edgeMat);
 
     keyLongitudinalLines.push({
-      p0: new THREE.Vector3(wallX - finWidth, yPos + finHeight / 2, corridorDepthStart),
-      p1: new THREE.Vector3(wallX - finWidth, yPos + finHeight / 2, corridorDepthEnd),
+      p0: new THREE.Vector3(wallRightX - finWidth, yPos + finHeight / 2, zStart),
+      p1: new THREE.Vector3(wallRightX - finWidth, yPos + finHeight / 2, zEnd),
       name: `WallFin_${idx + 1}_y${yPos}`,
     });
   });
 
-  // Dominant Upper Right Silver Structural Blade (Top Boundary at Y = 7.45)
-  const bladeWidth = 0.22;
-  const bladeGeo = new THREE.BoxGeometry(bladeWidth, 0.22, corridorLength);
+  // Dominant Outer Silver Structural Blade (Top Boundary at Y = 14.55)
+  const bladeY = 14.55;
+  const bladeWidth = 0.26;
+  const bladeGeo = new THREE.BoxGeometry(bladeWidth, 0.26, corridorLength);
   const bladeMat = new THREE.MeshStandardMaterial({
     color: '#ffffff',
     emissive: '#ffffff',
-    emissiveIntensity: 1.8,
+    emissiveIntensity: 2.2,
     roughness: 0.02,
     metalness: 0.99,
   });
   const bladeMesh = new THREE.Mesh(bladeGeo, bladeMat);
-  bladeMesh.position.set(wallX - bladeWidth / 2, 7.45, midZ);
+  bladeMesh.position.set(wallRightX - bladeWidth / 2, bladeY, midZ);
   group.add(bladeMesh);
   disposables.push(bladeGeo, bladeMat);
 
   keyLongitudinalLines.push({
-    p0: new THREE.Vector3(wallX - bladeWidth, 7.45, corridorDepthStart),
-    p1: new THREE.Vector3(wallX - bladeWidth, 7.45, corridorDepthEnd),
+    p0: new THREE.Vector3(wallRightX - bladeWidth, bladeY, zStart),
+    p1: new THREE.Vector3(wallRightX - bladeWidth, bladeY, zEnd),
     name: 'TopSilverBlade',
   });
 
   // -------------------------------------------------------------------------
-  // 4. MAIN GOLDEN HORIZON EMITTER (Along Floor Seam Y = 0.01, Parallel to D)
+  // 4. CEILING PLANE (Π_C: Y = 14.6, Dark Matte Absorber)
+  // -------------------------------------------------------------------------
+  const ceilingGeo = new THREE.PlaneGeometry(floorWidth, corridorLength);
+  const ceilingMat = new THREE.MeshStandardMaterial({
+    color: '#040507',
+    roughness: 0.95,
+    metalness: 0.02,
+  });
+  const ceilingMesh = new THREE.Mesh(ceilingGeo, ceilingMat);
+  ceilingMesh.rotation.x = Math.PI / 2; // Normal faces down (-Y)
+  ceilingMesh.position.set(floorMidX, ceilingY, midZ);
+  group.add(ceilingMesh);
+  disposables.push(ceilingGeo, ceilingMat);
+
+  // -------------------------------------------------------------------------
+  // 5. MAIN GOLDEN HORIZON EMITTER (Along Floor Seam Y = 0.02, Parallel to D)
   // -------------------------------------------------------------------------
   const laserGeo = new THREE.BoxGeometry(0.04, 0.04, corridorLength);
   const laserMat = new THREE.MeshStandardMaterial({

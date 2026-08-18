@@ -14,8 +14,8 @@ interface Act2TrueRendererProps {
  * EXACT MATHEMATICAL ACT 2 ONE-POINT FORCED PERSPECTIVE CORRIDOR
  * 
  * Immutably calibrated to Target Vanishing Point: (1433.21, 586.43)
- * Camera: Off-axis asymmetric frustum with near = 0.1, far = 100.0, zero pointer parallax
- * Geometry: Single Euclidean coordinate system with all longitudinal lines parallel to D = (0, 0, -1)
+ * Full 4-Plane Room Shell (Floor, Left Hero Wall, Right Slat Wall, Ceiling)
+ * Zero front-facing end caps, continuous corridor depth [-5, -95]
  */
 export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
   className = '',
@@ -39,13 +39,13 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     const height = container.clientHeight || window.innerHeight;
     setViewportDims({ width, height });
 
-    // 1. SCENE SETUP (Deep Matte Obsidian Space)
+    // 1. SCENE SETUP (Subtle Deep Charcoal Void Atmosphere)
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#050608');
-    scene.fog = new THREE.FogExp2('#050608', 0.015);
+    scene.background = new THREE.Color('#030405');
+    scene.fog = new THREE.FogExp2('#030405', 0.008);
 
-    // 2. CAMERA SETUP (Pinhole at origin with exact off-axis frustum)
-    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
+    // 2. CAMERA SETUP (Pinhole at origin with exact off-axis frustum, far = 150)
+    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 150);
     camera.position.set(0, 1.65, 0);
     camera.rotation.set(0, 0, 0); // Pure forward orientation; projection matrix alone generates off-axis VP
     configureOffAxisCamera(camera, width, height);
@@ -63,25 +63,25 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     container.appendChild(renderer.domElement);
 
     // 4. PBR LIGHTING RIG
-    const ambientLight = new THREE.AmbientLight('#06080b', 0.35);
+    const ambientLight = new THREE.AmbientLight('#080a0e', 0.40);
     scene.add(ambientLight);
 
     // Sharp grazing key light along right wall fins
-    const keyLight = new THREE.DirectionalLight('#ffffff', 4.5);
-    keyLight.position.set(12, 14, 4);
+    const keyLight = new THREE.DirectionalLight('#ffffff', 4.8);
+    keyLight.position.set(10, 16, 2);
     scene.add(keyLight);
 
-    // Soft warm fill along the left floor/wall junction
-    const warmFill = new THREE.DirectionalLight('#ecd08e', 1.5);
-    warmFill.position.set(-6, 6, 2);
-    scene.add(warmFill);
+    // Soft warm fill along the left hero wall
+    const leftHeroFill = new THREE.DirectionalLight('#ecd08e', 1.8);
+    leftHeroFill.position.set(-12, 8, -10);
+    scene.add(leftHeroFill);
 
-    // Vanishing Point Accent Light
-    const vpLight = new THREE.PointLight('#ecd08e', 3.0, 35);
-    vpLight.position.set(5.0, 1.0, -35.0);
+    // Vanishing Point Depth Accent Light
+    const vpLight = new THREE.PointLight('#ecd08e', 3.0, 50);
+    vpLight.position.set(5.0, 1.0, -60.0);
     scene.add(vpLight);
 
-    // 5. MATHEMATICALLY PURE EUCLIDEAN CORRIDOR GEOMETRY
+    // 5. MATHEMATICALLY PURE EUCLIDEAN ROOM SHELL GEOMETRY
     const geometryRig = createAct2Geometry();
     scene.add(geometryRig.group);
     disposables.push(...geometryRig.disposables);

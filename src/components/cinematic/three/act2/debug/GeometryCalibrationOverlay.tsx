@@ -36,10 +36,12 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
           <span className="font-semibold text-white tracking-wide">ACT 2 CALIBRATION</span>
           <span
             className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-              report.status === 'PASS' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+              report.status === 'PASS'
+                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
             }`}
           >
-            {report.status} ({report.maxErrorPx.toFixed(2)} px)
+            {report.status} ({report.vpErrorPx.toFixed(2)} px)
           </span>
         </div>
 
@@ -57,16 +59,34 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-neutral-500">MAX RAY ERROR</span>
-            <span className={report.maxErrorPx < 3.0 ? 'text-emerald-400' : 'text-rose-400'}>
-              {report.maxErrorPx.toFixed(3)} px
+            <span className="text-neutral-500">VP ERROR</span>
+            <span className={report.vpErrorPx < 3.0 ? 'text-emerald-400 font-medium' : 'text-rose-400'}>
+              {report.vpErrorPx.toFixed(2)} px
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-neutral-500">AVG RAY ERROR</span>
-            <span className="text-neutral-200">{report.avgErrorPx.toFixed(3)} px</span>
+            <span className="text-neutral-500">MAX RAY ERROR</span>
+            <span className={report.maxRayErrorPx < 3.0 ? 'text-emerald-400' : 'text-rose-400'}>
+              {report.maxRayErrorPx.toFixed(3)} px
+            </span>
           </div>
-          <div className="flex justify-between pt-1 border-t border-neutral-800/60 text-[10px] text-neutral-500">
+
+          {/* Silhouette edge alignment status */}
+          {report.silhouettes.length > 0 && (
+            <div className="pt-1.5 mt-1.5 border-t border-neutral-800/80 space-y-1">
+              <span className="text-[10px] text-neutral-400 uppercase font-semibold">Silhouettes</span>
+              {report.silhouettes.map((s) => (
+                <div key={s.name} className="flex justify-between text-[10.5px]">
+                  <span className="text-neutral-500">{s.name}</span>
+                  <span className={s.errorPx < 3.0 ? 'text-emerald-400' : 'text-amber-400'}>
+                    {s.errorPx.toFixed(2)} px ({s.status})
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="flex justify-between pt-1.5 border-t border-neutral-800/60 text-[10px] text-neutral-500">
             <span>RAYS: {report.lineCount}</span>
             <span>INTERSECTIONS: {report.intersectionCount}</span>
           </div>

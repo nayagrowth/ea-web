@@ -23,6 +23,18 @@ export const REFERENCE_GEOMETRY = {
     top: 0.042917,
     bottom: -0.025949,
     near: 0.1,
-    far: 100.0,
+    far: 150.0,
+  },
+
+  // Target Structural Silhouette Lines for Calibration Validation
+  targetLines: {
+    topBlade: {
+      p0: { x: 1660.5, y: 0.0 },
+      p1: { x: 1433.21, y: 586.43 },
+    },
+    leftWallFloorSeam: {
+      p0: { x: 0.0, y: 548.0 },
+      p1: { x: 1433.21, y: 586.43 },
+    },
   },
 } as const;
