@@ -27,14 +27,14 @@ export const Act1ArchitecturalColumns: React.FC = () => {
       {/* COLUMN 3: Split Stack (3D Perspective Runway "run" + Textured "your.") */}
       {/* ===================================================================== */}
       <div className="act1-col-3 relative h-full flex flex-col border-r border-white/10 overflow-hidden">
-        {/* Top 54%: "run" with Non-Converging Atmospheric Horizon Runway */}
+        {/* Top 54%: "run" with 20% More Converging Runway & Atmospheric Blur */}
         <div className="act1-run-panel relative h-[54%] bg-[#F3F0EC] flex flex-col items-center justify-between pt-[7vh] overflow-hidden border-b border-black/15">
           {/* Extended Bold Modern Display Sans "run" */}
           <h2 className="act1-run-word relative z-10 font-sans text-[clamp(4.2rem,8vw,8.5rem)] font-black text-[#0A0A0A] tracking-[-0.04em] leading-none">
             run
           </h2>
 
-          {/* Architectural Ground Perspective Tracks with Open Horizon & Atmospheric Depth Blur */}
+          {/* Calibrated 3D Perspective Floor with Atmospheric Horizon Dissolve */}
           <div className="relative w-full h-[68%] mt-auto overflow-hidden">
             <svg
               className="w-full h-full block"
@@ -42,21 +42,16 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               preserveAspectRatio="none"
             >
               <defs>
-                {/* Atmospheric Fog Mask — Lines smoothly dissolve into blur before ever converging */}
+                {/* Atmospheric Fog Mask */}
                 <mask id="runway-fog-mask">
                   <linearGradient id="fog-grad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#000000" stopOpacity="0" />
-                    <stop offset="35%" stopColor="#FFFFFF" stopOpacity="0.25" />
-                    <stop offset="70%" stopColor="#FFFFFF" stopOpacity="0.85" />
+                    <stop offset="25%" stopColor="#FFFFFF" stopOpacity="0.3" />
+                    <stop offset="65%" stopColor="#FFFFFF" stopOpacity="0.85" />
                     <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
                   </linearGradient>
                   <rect x="0" y="0" width="400" height="280" fill="url(#fog-grad)" />
                 </mask>
-
-                {/* Soft Horizon Depth Blur Filter */}
-                <filter id="horizon-haze" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" />
-                </filter>
 
                 {/* Shading Gradients for Metallic Tracks */}
                 <linearGradient id="track-surface" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -81,62 +76,62 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               {/* Distant Atmospheric Horizon Floor Shading */}
               <rect x="0" y="0" width="400" height="280" fill="#F0EDE7" />
 
-              {/* Group of Non-Converging 3D Tracks masked with atmospheric depth dissolve */}
+              {/* Group of 20% More Converging 3D Tracks */}
               <g mask="url(#runway-fog-mask)">
                 {/* Track -5 */}
-                <polygon points="120,40 128,40 -65,280 -45,280" fill="url(#track-surface)" />
-                <line x1="120" y1="40" x2="-65" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
-                <line x1="128" y1="40" x2="-45" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
+                <polygon points="160,25 165,25 -55,280 -35,280" fill="url(#track-surface)" />
+                <line x1="160" y1="25" x2="-55" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
+                <line x1="165" y1="25" x2="-35" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
 
                 {/* Track -4 */}
-                <polygon points="138,40 145,40 -5,280 15,280" fill="url(#track-surface)" />
-                <line x1="138" y1="40" x2="-5" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
-                <line x1="145" y1="40" x2="15" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
+                <polygon points="168,25 173,25 0,280 18,280" fill="url(#track-surface)" />
+                <line x1="168" y1="25" x2="0" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
+                <line x1="173" y1="25" x2="18" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
 
                 {/* Track -3 */}
-                <polygon points="154,40 160,40 55,280 73,280" fill="url(#track-surface)" />
-                <line x1="154" y1="40" x2="55" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.6" />
-                <line x1="160" y1="40" x2="73" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.0" />
+                <polygon points="176,25 180,25 55,280 72,280" fill="url(#track-surface)" />
+                <line x1="176" y1="25" x2="55" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.6" />
+                <line x1="180" y1="25" x2="72" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.0" />
 
                 {/* Track -2 */}
-                <polygon points="170,40 175,40 115,280 130,280" fill="url(#track-surface)" />
-                <line x1="170" y1="40" x2="115" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.5" />
-                <line x1="175" y1="40" x2="130" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.8" />
+                <polygon points="184,25 188,25 110,280 125,280" fill="url(#track-surface)" />
+                <line x1="184" y1="25" x2="110" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.5" />
+                <line x1="188" y1="25" x2="125" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.8" />
 
                 {/* Track -1 */}
-                <polygon points="185,40 189,40 168,280 180,280" fill="url(#track-surface)" />
-                <line x1="185" y1="40" x2="168" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.4" />
-                <line x1="189" y1="40" x2="180" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.6" />
+                <polygon points="192,25 195,25 165,280 178,280" fill="url(#track-surface)" />
+                <line x1="192" y1="25" x2="165" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.4" />
+                <line x1="195" y1="25" x2="178" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.6" />
 
                 {/* Center Track 0 */}
-                <polygon points="198,40 202,40 194,280 206,280" fill="url(#track-surface)" />
-                <line x1="198" y1="40" x2="194" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.4" />
-                <line x1="202" y1="40" x2="206" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.6" />
+                <polygon points="198.5,25 201.5,25 194,280 206,280" fill="url(#track-surface)" />
+                <line x1="198.5" y1="25" x2="194" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.4" />
+                <line x1="201.5" y1="25" x2="206" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.6" />
 
                 {/* Track +1 */}
-                <polygon points="211,40 215,40 220,280 232,280" fill="url(#track-surface)" />
-                <line x1="211" y1="40" x2="220" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.4" />
-                <line x1="215" y1="40" x2="232" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.6" />
+                <polygon points="205,25 208,25 222,280 235,280" fill="url(#track-surface)" />
+                <line x1="205" y1="25" x2="222" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.4" />
+                <line x1="208" y1="25" x2="235" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.6" />
 
                 {/* Track +2 */}
-                <polygon points="225,40 230,40 270,280 285,280" fill="url(#track-surface)" />
-                <line x1="225" y1="40" x2="270" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.5" />
-                <line x1="230" y1="40" x2="285" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.8" />
+                <polygon points="212,25 216,25 275,280 290,280" fill="url(#track-surface)" />
+                <line x1="212" y1="25" x2="275" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.5" />
+                <line x1="216" y1="25" x2="290" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.8" />
 
                 {/* Track +3 */}
-                <polygon points="240,40 246,40 327,280 345,280" fill="url(#track-surface)" />
-                <line x1="240" y1="40" x2="327" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.6" />
-                <line x1="246" y1="40" x2="345" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.0" />
+                <polygon points="220,25 224,25 328,280 345,280" fill="url(#track-surface)" />
+                <line x1="220" y1="25" x2="328" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.6" />
+                <line x1="224" y1="25" x2="345" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.0" />
 
                 {/* Track +4 */}
-                <polygon points="255,40 262,40 385,280 405,280" fill="url(#track-surface)" />
-                <line x1="255" y1="40" x2="385" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
-                <line x1="262" y1="40" x2="405" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
+                <polygon points="227,25 232,25 382,280 400,280" fill="url(#track-surface)" />
+                <line x1="227" y1="25" x2="382" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
+                <line x1="232" y1="25" x2="400" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
 
                 {/* Track +5 */}
-                <polygon points="272,40 280,40 445,280 465,280" fill="url(#track-surface)" />
-                <line x1="272" y1="40" x2="445" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
-                <line x1="280" y1="40" x2="465" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
+                <polygon points="235,25 240,25 435,280 455,280" fill="url(#track-surface)" />
+                <line x1="235" y1="25" x2="435" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
+                <line x1="240" y1="25" x2="455" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
               </g>
             </svg>
           </div>
