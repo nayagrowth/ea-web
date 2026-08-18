@@ -10,11 +10,11 @@ export const Act1ArchitecturalColumns: React.FC = () => {
         {/* =================================================================== */}
         {/* PANEL 1: "Most" (Cool Gallery Porcelain + Quiet High-Contrast Serif) */}
         {/* =================================================================== */}
-        <div className="act1-col-1 relative h-full bg-[#ecebe8] flex flex-col items-center justify-start pt-[52vh] border-r border-black/[0.08] overflow-hidden">
+        <div className="act1-col-1 relative h-full bg-[#ecebe8] flex flex-col items-center justify-start pt-[50vh] border-r border-black/[0.08] overflow-hidden">
           {/* Subtle printed surface tone */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#f2f1ee] via-[#ecebe8] to-[#e6e5e0] opacity-60 pointer-events-none" />
 
-          <h1 className="act1-most-word relative z-10 font-serif text-[clamp(3.6rem,6.8vw,7.8rem)] font-normal text-[#0c0c0d] tracking-[-0.035em] leading-none select-none">
+          <h1 className="act1-most-word relative z-10 font-serif text-[clamp(4.6rem,8.6vw,9.8rem)] font-normal text-[#0c0c0d] tracking-[-0.04em] leading-none select-none">
             Most
           </h1>
         </div>
@@ -22,16 +22,16 @@ export const Act1ArchitecturalColumns: React.FC = () => {
         {/* =================================================================== */}
         {/* PANEL 2: "agencies" (Matte Charcoal + Ultra-Light Sans + Axis)      */}
         {/* =================================================================== */}
-        <div className="act1-col-2 relative h-full bg-[#0b0c0d] flex flex-col items-center justify-start pt-[23vh] border-r border-white/[0.06] overflow-hidden">
+        <div className="act1-col-2 relative h-full bg-[#0b0c0d] flex flex-col items-center justify-start pt-[21vh] border-r border-white/[0.06] overflow-hidden">
           {/* Subtle vertical atmospheric depth */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#111214] via-[#0b0c0d] to-[#080809] opacity-80 pointer-events-none" />
 
-          <h2 className="act1-agencies-word relative z-10 font-sans text-[clamp(2.1rem,3.8vw,4.2rem)] font-extralight text-[#FFFFFF] tracking-[-0.025em] leading-none">
+          <h2 className="act1-agencies-word relative z-10 font-sans text-[clamp(2.6rem,4.6vw,5.2rem)] font-extralight text-[#FFFFFF] tracking-[-0.03em] leading-none">
             agencies
           </h2>
 
           {/* Compositional Axis / Plumb-Line Gesture */}
-          <div className="act1-col2-axis relative w-[1px] bg-gradient-to-b from-white/40 via-white/18 to-transparent h-[50vh] mt-7 z-10" />
+          <div className="act1-col2-axis relative w-[1.5px] bg-gradient-to-b from-white/45 via-white/20 to-transparent h-[52vh] mt-7 z-10" />
         </div>
 
         {/* =================================================================== */}
@@ -39,21 +39,21 @@ export const Act1ArchitecturalColumns: React.FC = () => {
         {/* =================================================================== */}
         <div className="act1-col-3 relative h-full flex flex-col border-r border-white/[0.06] overflow-hidden bg-[#e8e3d9]">
           {/* Top 54%: "run" with Soft Whispering Perspective Runway */}
-          <div className="act1-run-panel relative h-[54%] bg-[#f2efea] flex flex-col items-center justify-between pt-[7.5vh] overflow-hidden border-b border-black/[0.12]">
+          <div className="act1-run-panel relative h-[54%] bg-[#f2efea] flex flex-col items-center justify-between pt-[6.5vh] overflow-hidden border-b border-black/[0.12]">
             {/* Bold Assertive Modern Grotesk Sans */}
-            <h2 className="act1-run-word relative z-10 font-sans text-[clamp(3.4rem,6.5vw,7.2rem)] font-black text-[#0c0c0d] tracking-[-0.045em] leading-none">
+            <h2 className="act1-run-word relative z-10 font-sans text-[clamp(4.2rem,8.2vw,9.0rem)] font-black text-[#0c0c0d] tracking-[-0.045em] leading-none">
               run
             </h2>
 
             {/* Subtle Embossed Perspective Floor (Atmospheric & Soft) */}
-            <div className="relative w-full h-[66%] mt-auto overflow-hidden">
+            <div className="relative w-full h-[65%] mt-auto overflow-hidden">
               <svg
                 className="w-full h-full block"
                 viewBox="0 0 400 280"
                 preserveAspectRatio="none"
               >
                 <defs>
-                  {/* Atmospheric Dissolve Mask — Lines melt into paper before meeting */}
+                  {/* Atmospheric Dissolve Mask */}
                   <mask id="soft-runway-mask">
                     <linearGradient id="soft-fog-grad" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="#000000" stopOpacity="0" />
@@ -112,7 +112,7 @@ export const Act1ArchitecturalColumns: React.FC = () => {
                   {/* Center Track 0 */}
                   <polygon points="198.5,35 201.5,35 195,280 205,280" fill="url(#soft-track-fill)" />
                   <line x1="198.5" y1="35" x2="195" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
-                  <line x1="201.5" y1="35" x2="205" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+                  <line x1="201.5" y1="25" x2="205" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
 
                   {/* Track +1 */}
                   <polygon points="206,35 209,35 221,280 232,280" fill="url(#soft-track-fill)" />
@@ -143,8 +143,8 @@ export const Act1ArchitecturalColumns: React.FC = () => {
             {/* Subtle natural paper gradient */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#eae5db] to-[#e4ded3] opacity-50 pointer-events-none" />
 
-            <div className="relative flex flex-col items-start w-full max-w-[240px]">
-              <h2 className="act1-your-word font-serif italic text-[clamp(3.6rem,6.8vw,7.4rem)] font-normal text-[#0c0c0d] tracking-[-0.035em] leading-[0.88] select-none">
+            <div className="relative flex flex-col items-start w-full max-w-[280px]">
+              <h2 className="act1-your-word font-serif italic text-[clamp(4.4rem,8.4vw,9.2rem)] font-normal text-[#0c0c0d] tracking-[-0.035em] leading-[0.88] select-none">
                 your
               </h2>
 
@@ -152,7 +152,7 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               <div className="act1-your-rule-wrap relative w-full flex items-center justify-end mt-1.5">
                 <div className="act1-your-rule w-full h-[1px] bg-[#0c0c0d]/25" />
                 <div
-                  className="act1-your-dot ml-2 w-3 h-3 rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.18)] shrink-0"
+                  className="act1-your-dot ml-2 w-3.5 h-3.5 rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.18)] shrink-0"
                   style={{
                     background: 'radial-gradient(circle at 35% 35%, #ecd08e 0%, #c79846 55%, #8b6228 100%)',
                   }}
@@ -171,7 +171,7 @@ export const Act1ArchitecturalColumns: React.FC = () => {
             background: 'radial-gradient(ellipse at 50% 42%, #141414 0%, #0b0c0d 55%, #080809 100%)',
           }}
         >
-          {/* Layer z1: Broad Warm Corona Haze (fades softly to black) */}
+          {/* Layer z1: Broad Warm Corona Haze */}
           <div
             className="act1-gold-eclipse absolute rounded-full pointer-events-none"
             style={{
@@ -218,10 +218,10 @@ export const Act1ArchitecturalColumns: React.FC = () => {
           <div
             className="act1-ads-word absolute z-10 flex items-baseline select-none"
             style={{
-              left: '14%',
-              top: '43.4%',
+              left: '12%',
+              top: '42.5%',
               fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              fontSize: 'min(20vw, 9.4vh)',
+              fontSize: 'min(25vw, 12.2vh)',
               lineHeight: 0.9,
               fontWeight: 700,
               letterSpacing: '-0.055em',
