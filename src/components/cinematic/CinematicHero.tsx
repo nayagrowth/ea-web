@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Act1ArtboardPoster } from './acts/Act1ArtboardPoster';
 import { Act1ArchitecturalColumns } from './acts/Act1ArchitecturalColumns';
 import { Act1PosterHook } from './acts/Act1PosterHook';
-import { Act2TrueRenderer } from './three/Act2TrueRenderer';
+import { Act2TrueRenderer, type Act2RendererHandle } from './three/Act2TrueRenderer';
 import { Act3Timeline } from './acts/Act3Timeline';
 import { Act4TriPanel } from './acts/Act4TriPanel';
 import { Act5Credibility } from './acts/Act5Credibility';
@@ -20,6 +20,7 @@ interface CinematicHeroProps {
 export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'columns' }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const act2ControllerRef = useRef<Act2RendererHandle | null>(null);
 
   useEffect(() => {
     if (!containerRef.current || !stageRef.current) return;
@@ -306,6 +307,17 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             duration: 0.9,
             ease: 'power3.out',
           }, 'PERSPECTIVE_EXPAND+=0.1');
+
+        // Imperative Act 2 Spatial Animation scrubbing across Beats A through I
+        const act2State = { progress: 0.0 };
+        tl.to(act2State, {
+          progress: 1.0,
+          duration: 5.6,
+          ease: 'none',
+          onUpdate: () => {
+            act2ControllerRef.current?.setProgress(act2State.progress);
+          },
+        }, 'PERSPECTIVE_EXPAND');
       } else {
         tl.to('.act1-stage', { autoAlpha: 0, duration: 1.0, ease: 'power2.inOut' }, 'IGNITION+=0.4')
           .to('.act2-true-stage', { autoAlpha: 1, scale: 1, duration: 1.0, ease: 'power2.out' }, 'IGNITION+=0.6');
@@ -496,7 +508,13 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
 
         {/* Layer z-20: Act 2 Real Three.js True Renderer Stage */}
         <div className="act2-true-stage absolute inset-0 z-20 w-full h-full pointer-events-none overflow-hidden">
-          <Act2TrueRenderer className="w-full h-full" />
+          <Act2TrueRenderer
+            ref={act2ControllerRef}
+            className="w-full h-full"
+            showCalibrationOverlay={false}
+            viewportMode="presentation"
+            initialProgress={0.0}
+          />
         </div>
 
         {/* Layers z-25+: Acts 3-5 */}

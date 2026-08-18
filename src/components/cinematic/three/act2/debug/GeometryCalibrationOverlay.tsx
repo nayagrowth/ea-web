@@ -10,9 +10,9 @@ interface GeometryCalibrationOverlayProps {
   onToggleWireframe?: () => void;
   isClayMode?: boolean;
   onToggleClayMode?: () => void;
-  isCanonicalLetterbox?: boolean;
-  onToggleCanonicalLetterbox?: () => void;
-  onForceCanonical?: () => void;
+  viewportMode?: 'presentation' | 'calibration';
+  onToggleViewportMode?: () => void;
+  onForceCalibrationMode?: () => void;
 }
 
 function readableName(name: string): string {
@@ -36,11 +36,12 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
   onToggleWireframe,
   isClayMode = false,
   onToggleClayMode,
-  isCanonicalLetterbox = false,
-  onToggleCanonicalLetterbox,
-  onForceCanonical,
+  viewportMode = 'presentation',
+  onToggleViewportMode,
+  onForceCalibrationMode,
 }) => {
-  const [isMinimized, setIsMinimized] = useState(false);
+  // Default to minimized pill so the right louver wall is never obscured
+  const [isMinimized, setIsMinimized] = useState(true);
   const [showReferenceOverlay, setShowReferenceOverlay] = useState(false);
   const [referenceOpacity, setReferenceOpacity] = useState(0.5);
   const [isDifferenceMode, setIsDifferenceMode] = useState(false);
@@ -53,15 +54,15 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
   const handleToggleReference = () => {
     const nextState = !showReferenceOverlay;
     setShowReferenceOverlay(nextState);
-    if (nextState && onForceCanonical) {
-      onForceCanonical();
+    if (nextState && onForceCalibrationMode) {
+      onForceCalibrationMode();
     }
   };
 
   const handleToggleDifferenceMode = () => {
     setIsDifferenceMode((prev) => !prev);
-    if (onForceCanonical) {
-      onForceCanonical();
+    if (onForceCalibrationMode) {
+      onForceCalibrationMode();
     }
   };
 
@@ -93,12 +94,12 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
         </div>
       )}
 
-      {/* Ultra-Sleek Glass HUD Panel */}
-      <div className="absolute top-4 right-4 pointer-events-auto">
+      {/* Ultra-Sleek Glass HUD Panel (Positioned on Left to Keep Right Louvers 100% Unobscured) */}
+      <div className="absolute top-4 left-4 pointer-events-auto">
         {isMinimized ? (
           <button
             onClick={() => setIsMinimized(false)}
-            className="flex items-center gap-2 bg-[#050608]/85 backdrop-blur-xl border border-white/10 rounded-full px-3.5 py-1.5 shadow-2xl text-[11px] text-neutral-300 hover:text-white transition-all cursor-pointer"
+            className="flex items-center gap-2 bg-[#050608]/90 backdrop-blur-xl border border-white/12 rounded-full px-3.5 py-1.5 shadow-2xl text-[11px] text-neutral-300 hover:text-white transition-all cursor-pointer hover:border-[#F5C200]/40"
           >
             <span
               className={`w-2 h-2 rounded-full ${
@@ -106,10 +107,12 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
               }`}
             />
             <span className="font-semibold text-neutral-200 font-qurova">ACT 2 CALIBRATION</span>
-            <span className="text-[10px] text-neutral-400">({report.vpErrorPx.toFixed(2)} px)</span>
+            <span className="text-[10px] text-neutral-400">
+              ({viewportMode === 'presentation' ? 'Cover' : 'Contain'})
+            </span>
           </button>
         ) : (
-          <div className="bg-[#050608]/92 backdrop-blur-2xl border border-white/12 rounded-2xl p-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] text-neutral-300 min-w-[285px] max-w-[315px] transition-all">
+          <div className="bg-[#050608]/95 backdrop-blur-2xl border border-white/12 rounded-2xl p-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.9)] text-neutral-300 min-w-[290px] max-w-[320px] transition-all">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-2">
               <div className="flex items-center gap-2">
@@ -144,6 +147,11 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
 
             {/* Metrics List */}
             <div className="space-y-1 text-[11px]">
+              <div className="flex justify-between">
+                <span className="text-neutral-500">STAGE MODE</span>
+                <span className="text-white font-semibold uppercase">{viewportMode}</span>
+              </div>
+
               <div className="flex justify-between">
                 <span className="text-neutral-500">TARGET VP</span>
                 <span className="text-[#F5C200] font-semibold">
@@ -227,6 +235,19 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
                   Dev Inspection Suite
                 </span>
                 <div className="flex items-center gap-1.5 flex-wrap">
+                  {onToggleViewportMode && (
+                    <button
+                      onClick={onToggleViewportMode}
+                      className={`px-2 py-1 rounded text-[10.5px] font-semibold transition-all cursor-pointer ${
+                        viewportMode === 'calibration'
+                          ? 'bg-[#F5C200] text-[#001A24]'
+                          : 'bg-white/10 text-neutral-300 hover:bg-white/15'
+                      }`}
+                      title="Toggle Contain (Calibration) vs Cover (Presentation)"
+                    >
+                      {viewportMode === 'calibration' ? 'Mode: Contain' : 'Mode: Cover'}
+                    </button>
+                  )}
                   {onToggleWireframe && (
                     <button
                       onClick={onToggleWireframe}
@@ -249,19 +270,6 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
                       }`}
                     >
                       {isClayMode ? 'Clay: ON' : 'Clay'}
-                    </button>
-                  )}
-                  {onToggleCanonicalLetterbox && (
-                    <button
-                      onClick={onToggleCanonicalLetterbox}
-                      className={`px-2 py-1 rounded text-[10.5px] font-semibold transition-all cursor-pointer ${
-                        isCanonicalLetterbox
-                          ? 'bg-[#F5C200] text-[#001A24]'
-                          : 'bg-white/10 text-neutral-300 hover:bg-white/15'
-                      }`}
-                      title="1672x941 1:1 Pixel Review Box"
-                    >
-                      {isCanonicalLetterbox ? '1672:941' : 'Letterbox'}
                     </button>
                   )}
                   <button
