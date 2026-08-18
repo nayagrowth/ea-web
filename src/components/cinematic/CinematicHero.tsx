@@ -36,11 +36,14 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act1-agencies-word', { opacity: 1 });
       gsap.set('.act1-agencies-char', { x: 0, y: 0, opacity: 1 });
       gsap.set('.act1-col2-axis', { scaleY: 1, transformOrigin: 'top center', opacity: 1 });
+      gsap.set('.act1-axis-pulse', { opacity: 0, y: 0 });
       gsap.set('.act1-run-word', { yPercent: 0, scale: 1, opacity: 1 });
       gsap.set('.act1-run-track', { opacity: 1 });
       gsap.set('.act1-run-line', { opacity: 1 });
+      gsap.set('.act1-energy-rail', { opacity: 0, strokeDasharray: '60 300', strokeDashoffset: 300 });
       gsap.set('.act1-your-word', { xPercent: 0, yPercent: 0, scale: 1, opacity: 1 });
       gsap.set('.act1-your-rule', { scaleX: 1, transformOrigin: 'right center', opacity: 1 });
+      gsap.set('.act1-your-pulse', { opacity: 0 });
       gsap.set('.act1-bridge-gold-dot', { x: 0, y: 0, scale: 1, opacity: 1 });
       gsap.set('.act1-ads-text', { scale: 1, opacity: 1 });
       gsap.set('.act1-ads-dot', { scale: 1, opacity: 1 });
@@ -55,10 +58,15 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       // Act 2 Pre-Mounted Double-Buffered Backdrop (Pre-loaded, starts dark)
       gsap.set('.bg-real-estate-tower', { autoAlpha: 0, scale: 1.035, y: 0 });
       gsap.set('.act2-stage', { autoAlpha: 0, x: 0, y: 0 });
+      gsap.set('.act2-ghost-grid', { opacity: 0 });
       gsap.set('.act2-ambient-gold', { opacity: 0 });
-      gsap.set('.sellout-gold-flare', { opacity: 0, scaleX: 0.3, height: '96px', filter: 'blur(24px)' });
+      gsap.set('.sellout-gold-flare', { opacity: 0, scaleX: 0.3, height: '80px', filter: 'blur(24px)' });
+      gsap.set('.act2-word-we', { opacity: 0, x: -20 });
+      gsap.set('.act2-sellout-wrap', { opacity: 0, scale: 0.95 });
+      gsap.set('.act2-morph-hyphen', { scaleX: 0, transformOrigin: 'left center' });
       gsap.set('.act2-your-dest', { opacity: 0, scale: 1.25 });
-      gsap.set('.sellout-char-angle', { y: 0, opacity: 1, rotateX: 0 });
+      gsap.set('.act2-word-realestate', { opacity: 0, y: 30 });
+      gsap.set('.act2-word-project', { opacity: 0, y: 25 });
 
       // Acts 3 - 5 Initial States
       gsap.set('.act3-stage', { autoAlpha: 0 });
@@ -73,221 +81,316 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act5-white-bloom', { opacity: 0 });
 
       // =====================================================================
-      // 2. MASTER CONTINUOUS TIMELINE (Deterministic, Reversible Motion Graph)
+      // 2. MASTER CONTINUOUS TIMELINE (Instant Tactile Scrub: 0.42, 0ms Delay)
       // =====================================================================
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=900%',
+          end: '+=800%',
           pin: stageRef.current,
-          scrub: 0.8,
+          scrub: 0.42, // Crisp, instant tactile response without 800ms input lag
           anticipatePin: 1,
         },
       });
 
       // ---------------------------------------------------------------------
-      // ACT 1 HOLD (0.0s - 1.2s): Calm, gallery-grade full readability
+      // BEAT 1: THE SIGNAL IGNITION (Time 0.0 - 1.2): Instant First-Scroll Hook
       // ---------------------------------------------------------------------
-      tl.addLabel('ACT1', 0);
-      tl.to({}, { duration: 1.2 });
-
-      // ---------------------------------------------------------------------
-      // BEAT 1: MOTIFS REACT (1.2s - 2.4s): Subtle kinetic awakening
-      // ---------------------------------------------------------------------
-      tl.addLabel('ACT1_REACT', 1.2);
+      tl.addLabel('IGNITION', 0);
 
       if (act1Variant === 'columns') {
-        tl.to('.act1-scroll-cue', { opacity: 0, y: 10, duration: 0.6, ease: 'power2.in' }, 'ACT1_REACT')
-          .to('.act1-most-word', {
-            xPercent: -6,
-            yPercent: 2,
-            scale: 1.025,
-            duration: 1.4,
+        // Gold dot physical compression pulse
+        tl.to('.act1-bridge-gold-dot', {
+          scale: 1.25,
+          duration: 0.5,
+          ease: 'power2.out',
+        }, 'IGNITION')
+          .to('.act1-bridge-gold-dot', {
+            scale: 1.0,
+            duration: 0.5,
+            ease: 'power2.inOut',
+          }, 'IGNITION+=0.5')
+
+          // Underline energy pulse
+          .to('.act1-your-pulse', {
+            opacity: 0.8,
+            duration: 0.4,
             ease: 'power2.out',
-          }, 'ACT1_REACT')
+          }, 'IGNITION')
+          .to('.act1-your-pulse', {
+            opacity: 0,
+            duration: 0.5,
+            ease: 'power2.in',
+          }, 'IGNITION+=0.4')
+
+          // Energy rails illuminate down the runway grooves in center-out stagger
+          .to('.act1-energy-rail-0', {
+            opacity: 0.9,
+            strokeDashoffset: 0,
+            duration: 0.7,
+            ease: 'power2.out',
+          }, 'IGNITION+=0.1')
+          .to(['.act1-energy-rail-m1', '.act1-energy-rail-p1'], {
+            opacity: 0.85,
+            strokeDashoffset: 0,
+            duration: 0.7,
+            ease: 'power2.out',
+          }, 'IGNITION+=0.15')
+          .to(['.act1-energy-rail-m2', '.act1-energy-rail-p2'], {
+            opacity: 0.8,
+            strokeDashoffset: 0,
+            duration: 0.7,
+            ease: 'power2.out',
+          }, 'IGNITION+=0.2')
+          .to(['.act1-energy-rail-m3', '.act1-energy-rail-p3'], {
+            opacity: 0.75,
+            strokeDashoffset: 0,
+            duration: 0.7,
+            ease: 'power2.out',
+          }, 'IGNITION+=0.25')
+          .to(['.act1-energy-rail-m4', '.act1-energy-rail-p4'], {
+            opacity: 0.7,
+            strokeDashoffset: 0,
+            duration: 0.7,
+            ease: 'power2.out',
+          }, 'IGNITION+=0.3')
+
+          // Agencies plumb-line traveling highlight pulse
+          .to('.act1-axis-pulse', {
+            opacity: 0.9,
+            y: 180,
+            duration: 0.8,
+            ease: 'power2.inOut',
+          }, 'IGNITION+=0.2')
+          .to('.act1-axis-pulse', {
+            opacity: 0,
+            duration: 0.3,
+          }, 'IGNITION+=0.9')
+
+          // Restrained micro-awakening on typography
+          .to('.act1-most-word', {
+            xPercent: -3,
+            scale: 1.008,
+            duration: 1.0,
+            ease: 'power2.out',
+          }, 'IGNITION')
+          .to('.act1-run-word', {
+            scale: 1.012,
+            duration: 1.0,
+            ease: 'power2.out',
+          }, 'IGNITION')
+          .to('.act1-ads-text', {
+            scale: 1.01,
+            duration: 1.0,
+            ease: 'power2.out',
+          }, 'IGNITION')
+          .to('.act1-scroll-cue', {
+            opacity: 0,
+            y: 10,
+            duration: 0.5,
+          }, 'IGNITION+=0.2');
+
+        // -------------------------------------------------------------------
+        // BEAT 2: ACT 1 DECONSTRUCTION (Time 1.2 - 2.8): Controlled Breakdown
+        // -------------------------------------------------------------------
+        tl.addLabel('DECONSTRUCT', 1.2);
+
+        // Column backgrounds dissolve into #080909
+        tl.to('.act1-col-bg', {
+          opacity: 0,
+          duration: 1.4,
+          ease: 'power2.inOut',
+        }, 'DECONSTRUCT')
           .to('.act1-col2-axis', {
             scaleY: 0,
             transformOrigin: 'top center',
-            duration: 1.0,
+            duration: 0.9,
             ease: 'power3.in',
-          }, 'ACT1_REACT')
-          .to('.act1-run-line', {
-            opacity: 0.2,
-            stagger: { each: 0.02, from: 'center' },
-            duration: 1.0,
-            ease: 'power2.in',
-          }, 'ACT1_REACT')
+          }, 'DECONSTRUCT')
           .to('.act1-your-rule', {
             scaleX: 0,
             transformOrigin: 'right center',
             duration: 0.8,
             ease: 'power3.in',
-          }, 'ACT1_REACT')
-          .to('.act1-eclipse-rig', {
-            xPercent: 12,
-            scale: 1.04,
-            duration: 1.4,
-            ease: 'power2.out',
-          }, 'ACT1_REACT');
-
-        // -------------------------------------------------------------------
-        // BEAT 2: ACT 1 DECONSTRUCTION (2.4s - 3.8s): Backgrounds dissolve
-        // -------------------------------------------------------------------
-        tl.addLabel('ACT1_DECONSTRUCT', 2.4);
-
-        // Continuous quintic smootherstep crossfade into #080909 (including runway base rect)
-        tl.to('.act1-col-bg', {
-          opacity: 0,
-          duration: 1.6,
-          ease: 'power2.inOut',
-        }, 'ACT1_DECONSTRUCT')
+          }, 'DECONSTRUCT')
           .to('.act1-most-word', {
             opacity: 0,
             xPercent: -15,
-            duration: 1.2,
+            duration: 1.1,
             ease: 'power2.in',
-          }, 'ACT1_DECONSTRUCT')
+          }, 'DECONSTRUCT')
           .to('.act1-agencies-char', {
             y: (i: number) => (i % 2 === 0 ? -35 : 35),
             x: (i: number) => (i - 3.5) * 18,
             opacity: 0,
             stagger: 0.02,
-            duration: 1.2,
+            duration: 1.1,
             ease: 'power2.in',
-          }, 'ACT1_DECONSTRUCT')
+          }, 'DECONSTRUCT')
           .to('.act1-run-word', {
             yPercent: -35,
             opacity: 0,
             scale: 0.92,
-            duration: 1.1,
+            duration: 1.0,
             ease: 'power2.in',
-          }, 'ACT1_DECONSTRUCT')
+          }, 'DECONSTRUCT')
           .to('.act1-run-track', {
             opacity: 0,
-            duration: 0.9,
+            duration: 0.8,
             ease: 'power2.in',
-          }, 'ACT1_DECONSTRUCT')
+          }, 'DECONSTRUCT')
+          .to('.act1-energy-rail', {
+            opacity: 0,
+            duration: 0.7,
+            ease: 'power2.in',
+          }, 'DECONSTRUCT')
           .to('.act1-ads-text', {
             scale: 0.88,
             opacity: 0,
-            duration: 1.1,
+            duration: 1.0,
             ease: 'power2.in',
-          }, 'ACT1_DECONSTRUCT')
+          }, 'DECONSTRUCT')
           .to('.act1-ads-dot', {
             opacity: 0,
             scale: 0.4,
-            duration: 0.8,
+            duration: 0.7,
             ease: 'power2.in',
-          }, 'ACT1_DECONSTRUCT')
+          }, 'DECONSTRUCT')
           .to('.act1-eclipse-rig', {
             scale: 0.35,
             opacity: 0,
             xPercent: -25,
             yPercent: 15,
-            duration: 1.4,
+            duration: 1.3,
             ease: 'power2.in',
-          }, 'ACT1_DECONSTRUCT');
+          }, 'DECONSTRUCT');
 
         // -------------------------------------------------------------------
-        // BEAT 3: VISUAL BRIDGE (3.6s - 5.0s): Gold Particle & "your" Flight
+        // BEAT 3: VISUAL BRIDGE (Time 2.4 - 3.8): Dot ➔ Hyphen & "your" Flight
         // -------------------------------------------------------------------
-        tl.addLabel('BRIDGE', 3.6);
+        tl.addLabel('BRIDGE', 2.4);
 
-        // Gold dot travels toward center, igniting the warm atmosphere
+        // Gold dot travels from "your" along cubic trajectory to become the hyphen in "sell—out"
         tl.to('.act1-bridge-gold-dot', {
-          xPercent: -220,
-          yPercent: -120,
-          scale: 2.4,
-          duration: 1.6,
+          xPercent: -230,
+          yPercent: -130,
+          scale: 2.2,
+          duration: 1.4,
           ease: 'power3.out',
         }, 'BRIDGE')
           .to('.act1-bridge-gold-dot', {
             opacity: 0,
-            scale: 5.0,
-            duration: 0.7,
+            scale: 4.5,
+            duration: 0.5,
             ease: 'power2.out',
-          }, 'BRIDGE+=1.1')
+          }, 'BRIDGE+=1.0')
+
+          // Traveling "your" element flies smoothly toward Act 2 destination position
           .to('.act1-your-word', {
-            xPercent: -80,
-            yPercent: -40,
+            xPercent: -75,
+            yPercent: -35,
             scale: 0.88,
             opacity: 0,
-            duration: 1.4,
+            duration: 1.3,
             ease: 'power2.inOut',
           }, 'BRIDGE')
-          // Kill Act 1 stage cleanly after bridge starts
+
+          // Clean Act 1 stage termination
           .to('.act1-stage', {
             autoAlpha: 0,
-            duration: 0.3,
-          }, 'BRIDGE+=0.9')
+            duration: 0.25,
+          }, 'BRIDGE+=0.8')
+
           // Double-buffered backdrop smooth quintic entrance (never flashes)
           .to('.bg-real-estate-tower', {
             autoAlpha: 0.48,
             scale: 1.000,
             y: -14,
-            duration: 1.8,
+            duration: 1.6,
+            ease: 'power2.out',
+          }, 'BRIDGE+=0.1')
+          .to('.act2-ghost-grid', {
+            opacity: 0.08,
+            duration: 1.2,
             ease: 'power2.out',
           }, 'BRIDGE+=0.2')
           .to('.act2-ambient-gold', {
             opacity: 1,
-            duration: 1.6,
+            duration: 1.4,
             ease: 'power2.out',
-          }, 'BRIDGE+=0.4');
+          }, 'BRIDGE+=0.3');
       } else {
         // Fallback for artboard / poster variants
-        tl.to('.act1-stage', { autoAlpha: 0, duration: 1.4, ease: 'power2.inOut' }, 'ACT1_REACT')
-          .to('.bg-real-estate-tower', { autoAlpha: 0.48, scale: 1, duration: 1.8, ease: 'power2.out' }, 'ACT1_REACT+=0.4');
+        tl.to('.act1-stage', { autoAlpha: 0, duration: 1.2, ease: 'power2.inOut' }, 'IGNITION+=0.5')
+          .to('.bg-real-estate-tower', { autoAlpha: 0.48, scale: 1, duration: 1.6, ease: 'power2.out' }, 'IGNITION+=0.8');
       }
 
       // ---------------------------------------------------------------------
-      // BEAT 4: ACT 2 ASSEMBLY (4.8s - 6.2s): Spatial Headline Locks In
+      // BEAT 4: ACT 2 ASSEMBLY (Time 3.6 - 5.2): Editorial Continuation
       // ---------------------------------------------------------------------
-      tl.addLabel('ACT2_ENTER', 4.8);
+      tl.addLabel('ACT2_ENTER', 3.6);
 
       tl.to('.act2-stage', { autoAlpha: 1, duration: 0.4 }, 'ACT2_ENTER')
+        // "WE" slides in from left in light modern sans
         .fromTo(
-          '.act2-line-1 .sellout-char-angle',
-          { y: 50, opacity: 0, rotateX: 35 },
-          { y: 0, opacity: 1, rotateX: 0, stagger: 0.02, duration: 1.2, ease: 'power3.out' },
+          '.act2-word-we',
+          { opacity: 0, x: -30 },
+          { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out' },
           'ACT2_ENTER'
         )
+        // "sell" and "out" emerge around the morphing gold hyphen
+        .fromTo(
+          '.act2-sellout-wrap',
+          { opacity: 0, scale: 0.95 },
+          { opacity: 1, scale: 1, duration: 1.0, ease: 'power3.out' },
+          'ACT2_ENTER+=0.1'
+        )
+        .fromTo(
+          '.act2-morph-hyphen',
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.8, ease: 'power3.out' },
+          'ACT2_ENTER+=0.15'
+        )
+        // "your" locks into place from bridge
         .fromTo(
           '.act2-your-dest',
-          { opacity: 0, scale: 1.25, y: 15 },
-          { opacity: 1, scale: 1, y: 0, duration: 1.0, ease: 'power3.out' },
+          { opacity: 0, scale: 1.2, y: 15 },
+          { opacity: 1, scale: 1, y: 0, duration: 0.9, ease: 'power3.out' },
           'ACT2_ENTER+=0.2'
         )
+        // "REAL ESTATE" slams in with bold modern grotesk authority
         .fromTo(
-          '.act2-line-2 .sellout-char-angle',
-          { y: 50, opacity: 0, rotateX: 35 },
-          { y: 0, opacity: 1, rotateX: 0, stagger: 0.02, duration: 1.2, ease: 'power3.out' },
+          '.act2-word-realestate',
+          { opacity: 0, y: 35 },
+          { opacity: 1, y: 0, duration: 1.0, ease: 'power3.out' },
           'ACT2_ENTER+=0.25'
         )
+        // "PROJECT." settles below
         .fromTo(
-          '.act2-line-3 .sellout-char-angle',
-          { y: 50, opacity: 0, rotateX: 35 },
-          { y: 0, opacity: 1, rotateX: 0, stagger: 0.02, duration: 1.2, ease: 'power3.out' },
-          'ACT2_ENTER+=0.45'
+          '.act2-word-project',
+          { opacity: 0, y: 25 },
+          { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' },
+          'ACT2_ENTER+=0.35'
         )
         .fromTo(
           '.sellout-gold-flare',
           { scaleX: 0.3, opacity: 0 },
-          { scaleX: 1, opacity: 1, duration: 1.4, ease: 'power2.out' },
-          'ACT2_ENTER+=0.2'
+          { scaleX: 1, opacity: 0.9, duration: 1.2, ease: 'power2.out' },
+          'ACT2_ENTER+=0.15'
         );
 
       // ---------------------------------------------------------------------
-      // BEAT 5: ACT 2 HOLD & SETTLE (6.2s - 8.0s): Luxury authoritative read
+      // BEAT 5: ACT 2 HOLD & SETTLE (Time 5.2 - 6.8): Editorial authority
       // ---------------------------------------------------------------------
-      tl.addLabel('ACT2_HOLD', 6.2);
-      tl.to('.act2-stage', { scale: 1.01, duration: 1.8, ease: 'none' }, 'ACT2_HOLD');
+      tl.addLabel('ACT2_HOLD', 5.2);
+      tl.to('.act2-stage', { scale: 1.008, duration: 1.6, ease: 'none' }, 'ACT2_HOLD');
 
       // ---------------------------------------------------------------------
-      // ACT 2 ➔ ACT 3 MOTIF MORPH (8.0s - 9.8s): Flare compresses into Laser
+      // ACT 2 ➔ ACT 3 MOTIF MORPH (Time 6.8 - 8.4): Flare compresses into Laser
       // ---------------------------------------------------------------------
-      tl.addLabel('ACT2_TO_ACT3', 8.0);
+      tl.addLabel('ACT2_TO_ACT3', 6.8);
 
       // Compress sellout gold flare into thin concentrated laser bar
       tl.to('.sellout-gold-flare', {
@@ -295,76 +398,77 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         filter: 'blur(0px)',
         scaleX: 1.2,
         opacity: 0.85,
-        duration: 1.2,
+        duration: 1.0,
         ease: 'power3.inOut',
       }, 'ACT2_TO_ACT3')
-        .to('.act2-line-1', { yPercent: -35, opacity: 0, duration: 1.0, ease: 'power2.in' }, 'ACT2_TO_ACT3')
-        .to('.act2-line-2', { yPercent: -25, opacity: 0, duration: 1.0, ease: 'power2.in' }, 'ACT2_TO_ACT3+=0.1')
-        .to('.act2-line-3', { yPercent: -15, opacity: 0, duration: 1.0, ease: 'power2.in' }, 'ACT2_TO_ACT3+=0.2')
-        .to('.act2-stage', { autoAlpha: 0, duration: 0.3 }, 'ACT2_TO_ACT3+=0.9')
+        .to('.act2-ghost-grid', { opacity: 0, duration: 0.8 }, 'ACT2_TO_ACT3')
+        .to('.act2-line-1', { yPercent: -35, opacity: 0, duration: 0.9, ease: 'power2.in' }, 'ACT2_TO_ACT3')
+        .to('.act2-line-2', { yPercent: -25, opacity: 0, duration: 0.9, ease: 'power2.in' }, 'ACT2_TO_ACT3+=0.1')
+        .to('.act2-line-3', { yPercent: -15, opacity: 0, duration: 0.9, ease: 'power2.in' }, 'ACT2_TO_ACT3+=0.2')
+        .to('.act2-stage', { autoAlpha: 0, duration: 0.3 }, 'ACT2_TO_ACT3+=0.8')
 
         // =====================================================================
         // ACT 3: KINETIC HIGH-SPEED TIMELINE ("Within Your Planned Timeline")
         // =====================================================================
-        .to('.act3-stage', { autoAlpha: 1, duration: 0.3 }, 'ACT2_TO_ACT3+=0.9')
+        .to('.act3-stage', { autoAlpha: 1, duration: 0.3 }, 'ACT2_TO_ACT3+=0.8')
         .to('.act3-horizon-wrap', {
           scaleX: 1,
-          duration: 1.4,
+          duration: 1.2,
           ease: 'power2.out',
-        }, 'ACT2_TO_ACT3+=0.9')
+        }, 'ACT2_TO_ACT3+=0.8')
         .to('.act3-line-1', {
           xPercent: 0,
           opacity: 1,
-          duration: 1.3,
+          duration: 1.2,
           ease: 'power3.out',
-        }, 'ACT2_TO_ACT3+=1.0')
+        }, 'ACT2_TO_ACT3+=0.9')
         .to('.act3-line-2', {
           xPercent: 0,
           opacity: 1,
-          duration: 1.3,
+          duration: 1.2,
           ease: 'power3.out',
-        }, 'ACT2_TO_ACT3+=1.2');
+        }, 'ACT2_TO_ACT3+=1.1');
 
       // Hold for Act 3
-      tl.to('.act3-stage', { scale: 1.01, duration: 2.0, ease: 'none' });
+      tl.to('.act3-stage', { scale: 1.008, duration: 1.8, ease: 'none' });
 
       // ---------------------------------------------------------------------
       // ACT 3 ➔ ACT 4 MOTIF SPLIT: Horizon laser divides into 3 Panel Guides
       // ---------------------------------------------------------------------
       tl.addLabel('ACT3_TO_ACT4', '+=0.1');
 
-      tl.to('.act3-line-1', { xPercent: 80, opacity: 0, duration: 0.9, ease: 'power2.in' }, 'ACT3_TO_ACT4')
-        .to('.act3-line-2', { xPercent: 80, opacity: 0, duration: 0.9, ease: 'power2.in' }, 'ACT3_TO_ACT4+=0.1')
-        .to('.act3-horizon-wrap', { scaleX: 0, opacity: 0, duration: 0.8, ease: 'power3.in' }, 'ACT3_TO_ACT4')
-        .to('.act3-stage', { autoAlpha: 0, duration: 0.2 }, 'ACT3_TO_ACT4+=0.8')
+      tl.to('.act3-line-1', { xPercent: 80, opacity: 0, duration: 0.8, ease: 'power2.in' }, 'ACT3_TO_ACT4')
+        .to('.act3-line-2', { xPercent: 80, opacity: 0, duration: 0.8, ease: 'power2.in' }, 'ACT3_TO_ACT4+=0.1')
+        .to('.act3-horizon-wrap', { scaleX: 0, opacity: 0, duration: 0.7, ease: 'power3.in' }, 'ACT3_TO_ACT4')
+        .to('.act3-stage', { autoAlpha: 0, duration: 0.2 }, 'ACT3_TO_ACT4+=0.7')
 
         // =====================================================================
         // ACT 4: TRI-PANEL ARCHITECTURAL SLICE ("4-Phase Sell-Out System")
         // =====================================================================
-        .to('.act4-tri-stage', { autoAlpha: 1, duration: 0.2 }, 'ACT3_TO_ACT4+=0.8')
+        .to('.act4-tri-stage', { autoAlpha: 1, duration: 0.2 }, 'ACT3_TO_ACT4+=0.7')
         .to('.act4-panel-1', {
           yPercent: 0,
           opacity: 1,
-          duration: 1.3,
+          duration: 1.2,
           ease: 'power3.out',
-        }, 'ACT3_TO_ACT4+=0.8')
+        }, 'ACT3_TO_ACT4+=0.7')
         .to('.act4-panel-2', {
           yPercent: 0,
           opacity: 1,
-          duration: 1.3,
+          duration: 1.2,
           ease: 'power3.out',
-        }, 'ACT3_TO_ACT4+=0.95')
+        }, 'ACT3_TO_ACT4+=0.85')
         .to('.act4-panel-3', {
           yPercent: 0,
           opacity: 1,
-          duration: 1.3,
+          duration: 1.2,
           ease: 'power3.out',
-        }, 'ACT3_TO_ACT4+=1.1')
+        }, 'ACT3_TO_ACT4+=1.0')
 
         // Subtle slow pan on the 3 imagery panels
         .to(['.act4-img-1', '.act4-img-2', '.act4-img-3'], {
           scale: 1.05,
-          duration: 2.5,
+          duration: 2.2,
           ease: 'none',
         });
 
@@ -373,10 +477,10 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       // ---------------------------------------------------------------------
       tl.addLabel('ACT4_TO_ACT5', '+=0.1');
 
-      tl.to('.act4-panel-1', { scale: 0.97, xPercent: -5, opacity: 0, duration: 1.0, ease: 'power2.in' }, 'ACT4_TO_ACT5')
-        .to('.act4-panel-2', { scale: 0.97, opacity: 0, duration: 1.0, ease: 'power2.in' }, 'ACT4_TO_ACT5')
-        .to('.act4-panel-3', { scale: 0.97, xPercent: 5, opacity: 0, duration: 1.0, ease: 'power2.in' }, 'ACT4_TO_ACT5')
-        .to('.act4-tri-stage', { autoAlpha: 0, duration: 0.2 }, 'ACT4_TO_ACT5+=0.8')
+      tl.to('.act4-panel-1', { scale: 0.97, xPercent: -5, opacity: 0, duration: 0.9, ease: 'power2.in' }, 'ACT4_TO_ACT5')
+        .to('.act4-panel-2', { scale: 0.97, opacity: 0, duration: 0.9, ease: 'power2.in' }, 'ACT4_TO_ACT5')
+        .to('.act4-panel-3', { scale: 0.97, xPercent: 5, opacity: 0, duration: 0.9, ease: 'power2.in' }, 'ACT4_TO_ACT5')
+        .to('.act4-tri-stage', { autoAlpha: 0, duration: 0.2 }, 'ACT4_TO_ACT5+=0.7')
 
         // =====================================================================
         // ACT 5: ORTHOGONAL VERTICAL SPATIAL RISE ("459+ Real Estate Projects")
@@ -385,26 +489,26 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           autoAlpha: 1,
           yPercent: 0,
           scale: 1,
-          duration: 1.3,
+          duration: 1.2,
           ease: 'power3.out',
-        }, 'ACT4_TO_ACT5+=0.8')
+        }, 'ACT4_TO_ACT5+=0.7')
         .fromTo(
           '.act5-metric-val',
           { yPercent: 40, opacity: 0 },
-          { yPercent: 0, opacity: 1, duration: 1.2, ease: 'power3.out' },
-          'ACT4_TO_ACT5+=0.8'
+          { yPercent: 0, opacity: 1, duration: 1.1, ease: 'power3.out' },
+          'ACT4_TO_ACT5+=0.7'
         )
         .fromTo(
           '.act5-headline',
           { yPercent: 25, opacity: 0 },
-          { yPercent: 0, opacity: 1, duration: 1.0, ease: 'power3.out' },
-          'ACT4_TO_ACT5+=0.95'
+          { yPercent: 0, opacity: 1, duration: 0.9, ease: 'power3.out' },
+          'ACT4_TO_ACT5+=0.85'
         )
 
         // Hold for Act 5
         .to('.act5-stage', {
-          scale: 1.01,
-          duration: 2.0,
+          scale: 1.008,
+          duration: 1.8,
           ease: 'none',
         })
 
@@ -414,21 +518,48 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         .addLabel('ACT5_TO_WHITE', '+=0.1')
         .to('.act5-white-bloom', {
           opacity: 1,
-          duration: 1.4,
+          duration: 1.2,
           ease: 'power2.inOut',
         }, 'ACT5_TO_WHITE')
         .to('.act5-stage .max-w-5xl', {
           opacity: 0,
           y: -20,
-          duration: 0.9,
+          duration: 0.8,
           ease: 'power2.in',
         }, 'ACT5_TO_WHITE')
         .to('.bg-real-estate-tower', {
           opacity: 0,
-          duration: 1.2,
+          duration: 1.0,
           ease: 'power2.in',
         }, 'ACT5_TO_WHITE');
     }, containerRef);
+
+    // =======================================================================
+    // 3. FINE-POINTER SPATIAL PARALLAX (Subtle QuickTo Interaction)
+    // =======================================================================
+    const isFinePointer = window.matchMedia('(pointer: fine)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (isFinePointer && !prefersReducedMotion && stageRef.current) {
+      const runwayX = gsap.quickTo('.act1-runway-wrap', 'x', { duration: 0.4, ease: 'power3.out' });
+      const runwayRotateY = gsap.quickTo('.act1-runway-wrap', 'rotateY', { duration: 0.4, ease: 'power3.out' });
+      const eclipseX = gsap.quickTo('.act1-eclipse-rig', 'x', { duration: 0.5, ease: 'power3.out' });
+      const mostX = gsap.quickTo('.act1-most-word', 'x', { duration: 0.5, ease: 'power3.out' });
+
+      const handleMouseMove = (e: MouseEvent) => {
+        const mx = (e.clientX / window.innerWidth) * 2 - 1; // -1 to 1
+        runwayX(mx * 5);
+        runwayRotateY(mx * 0.8);
+        eclipseX(mx * 3);
+        mostX(mx * -2);
+      };
+
+      window.addEventListener('mousemove', handleMouseMove, { passive: true });
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        ctx.revert();
+      };
+    }
 
     return () => ctx.revert();
   }, [act1Variant]);

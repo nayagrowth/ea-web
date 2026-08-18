@@ -39,8 +39,10 @@ export const Act1ArchitecturalColumns: React.FC = () => {
             ))}
           </h2>
 
-          {/* Compositional Axis / Plumb-Line Gesture */}
-          <div className="act1-col2-axis relative w-[1.5px] bg-gradient-to-b from-white/45 via-white/20 to-transparent h-[52vh] mt-7 z-10" />
+          {/* Compositional Axis / Plumb-Line Gesture with Travelling Highlight */}
+          <div className="act1-col2-axis relative w-[1.5px] bg-gradient-to-b from-white/45 via-white/20 to-transparent h-[52vh] mt-7 z-10 overflow-hidden">
+            <div className="act1-axis-pulse absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-transparent via-[#ecd08e] to-transparent opacity-0" />
+          </div>
         </div>
 
         {/* =================================================================== */}
@@ -57,10 +59,10 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               run
             </h2>
 
-            {/* Subtle Embossed Perspective Floor (Atmospheric & Soft) */}
+            {/* Embossed Perspective Floor: Zero second white rectangle, 100% transparent SVG */}
             <div className="act1-runway-wrap relative w-full h-[65%] mt-auto overflow-hidden">
               <svg
-                className="w-full h-full block"
+                className="w-full h-full block bg-transparent"
                 viewBox="0 0 400 280"
                 preserveAspectRatio="none"
               >
@@ -96,55 +98,61 @@ export const Act1ArchitecturalColumns: React.FC = () => {
                   </linearGradient>
                 </defs>
 
-                {/* Subtle Horizon Base (Tag with .act1-col-bg so it dissolves cleanly into #080909) */}
-                <rect className="act1-col-bg act1-run-base" x="0" y="0" width="400" height="280" fill="#eeeae3" />
-
-                {/* Non-Converging Softly Whispering Beams */}
+                {/* Perspective Beams */}
                 <g mask="url(#soft-runway-mask)" opacity="0.9">
                   {/* Track -4 */}
                   <polygon className="act1-run-track" points="166,35 171,35 10,280 26,280" fill="url(#soft-track-fill)" />
                   <line className="act1-run-line" x1="166" y1="35" x2="10" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
                   <line className="act1-run-line" x1="171" y1="35" x2="26" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.6" />
+                  <line className="act1-energy-rail act1-energy-rail-m4" x1="168" y1="35" x2="18" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
 
                   {/* Track -3 */}
                   <polygon className="act1-run-track" points="175,35 179,35 62,280 77,280" fill="url(#soft-track-fill)" />
                   <line className="act1-run-line" x1="175" y1="35" x2="62" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
                   <line className="act1-run-line" x1="179" y1="35" x2="77" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.5" />
+                  <line className="act1-energy-rail act1-energy-rail-m3" x1="177" y1="35" x2="69" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
 
                   {/* Track -2 */}
                   <polygon className="act1-run-track" points="183,35 186,35 116,280 129,280" fill="url(#soft-track-fill)" />
                   <line className="act1-run-line" x1="183" y1="35" x2="116" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.1" />
                   <line className="act1-run-line" x1="186" y1="35" x2="129" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.4" />
+                  <line className="act1-energy-rail act1-energy-rail-m2" x1="184.5" y1="35" x2="122.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
                   {/* Track -1 */}
                   <polygon className="act1-run-track" points="191,35 194,35 168,280 179,280" fill="url(#soft-track-fill)" />
                   <line className="act1-run-line" x1="191" y1="35" x2="168" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
                   <line className="act1-run-line" x1="194" y1="35" x2="179" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+                  <line className="act1-energy-rail act1-energy-rail-m1" x1="192.5" y1="35" x2="173.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
-                  {/* Center Track 0 */}
+                  {/* Center Track 0 (First to ignite on scroll) */}
                   <polygon className="act1-run-track" points="198.5,35 201.5,35 195,280 205,280" fill="url(#soft-track-fill)" />
                   <line className="act1-run-line" x1="198.5" y1="35" x2="195" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
                   <line className="act1-run-line" x1="201.5" y1="25" x2="205" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+                  <line className="act1-energy-rail act1-energy-rail-0" x1="200" y1="35" x2="200" y2="280" stroke="#ecd08e" strokeWidth="2.4" strokeLinecap="round" opacity="0" />
 
                   {/* Track +1 */}
                   <polygon className="act1-run-track" points="206,35 209,35 221,280 232,280" fill="url(#soft-track-fill)" />
                   <line className="act1-run-line" x1="206" y1="35" x2="221" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
                   <line className="act1-run-line" x1="209" y1="35" x2="232" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+                  <line className="act1-energy-rail act1-energy-rail-p1" x1="207.5" y1="35" x2="226.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
                   {/* Track +2 */}
                   <polygon className="act1-run-track" points="214,35 217,35 271,280 284,280" fill="url(#soft-track-fill)" />
                   <line className="act1-run-line" x1="214" y1="35" x2="271" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.1" />
                   <line className="act1-run-line" x1="217" y1="35" x2="284" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.4" />
+                  <line className="act1-energy-rail act1-energy-rail-p2" x1="215.5" y1="35" x2="277.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
                   {/* Track +3 */}
                   <polygon className="act1-run-track" points="221,35 225,35 323,280 338,280" fill="url(#soft-track-fill)" />
                   <line className="act1-run-line" x1="221" y1="35" x2="323" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
                   <line className="act1-run-line" x1="225" y1="35" x2="338" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.5" />
+                  <line className="act1-energy-rail act1-energy-rail-p3" x1="223" y1="35" x2="330.5" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
 
                   {/* Track +4 */}
                   <polygon className="act1-run-track" points="229,35 234,35 374,280 390,280" fill="url(#soft-track-fill)" />
                   <line className="act1-run-line" x1="229" y1="35" x2="374" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
                   <line className="act1-run-line" x1="234" y1="35" x2="390" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.6" />
+                  <line className="act1-energy-rail act1-energy-rail-p4" x1="231.5" y1="35" x2="382" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
                 </g>
               </svg>
             </div>
@@ -164,7 +172,9 @@ export const Act1ArchitecturalColumns: React.FC = () => {
 
               {/* Refined Signature Baseline Rule with Small Gold Dot */}
               <div className="act1-your-rule-wrap relative w-full flex items-center justify-end mt-1.5">
-                <div className="act1-your-rule w-full h-[1px] bg-[#0c0c0d]/25 origin-right" />
+                <div className="act1-your-rule w-full h-[1px] bg-[#0c0c0d]/25 origin-right relative overflow-hidden">
+                  <div className="act1-your-pulse absolute inset-0 bg-gradient-to-r from-transparent via-[#ecd08e] to-transparent opacity-0" />
+                </div>
                 <div
                   className="act1-your-dot act1-bridge-gold-dot ml-2 w-3.5 h-3.5 rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.18)] shrink-0 z-20"
                   style={{
