@@ -1,8 +1,11 @@
 import React from 'react';
 
-export const Act2VelocityPoster: React.FC = () => {
+export const Act2StaticStill: React.FC = () => {
   return (
-    <div className="act2-velocity-stage act2-stage absolute inset-0 z-20 w-full h-full pointer-events-none select-none overflow-hidden flex items-center justify-center">
+    <div className="act2-static-still relative w-screen h-screen min-h-[660px] flex items-center justify-center bg-[#08090a] overflow-hidden select-none">
+      {/* Deep Obsidian Background Base */}
+      <div className="absolute inset-0 bg-[#08090a] pointer-events-none" />
+
       {/* ===================================================================== */}
       {/* CANONICAL 1672 x 941 TRUE 3D VELOCITY CORRIDOR HERO ARTBOARD          */}
       {/* ===================================================================== */}
