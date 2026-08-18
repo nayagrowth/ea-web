@@ -298,6 +298,14 @@ export const Act1ArchitecturalColumns: React.FC = () => {
         </div>
       </div>
 
+      {/* Volumetric Perspective Light Tunnel Flash on Outro */}
+      <div
+        className="act1-volumetric-tunnel absolute inset-0 opacity-0 pointer-events-none z-40 mix-blend-screen"
+        style={{
+          background: 'radial-gradient(ellipse at 85% 62%, rgba(245, 194, 0, 0.45) 0%, rgba(255, 158, 68, 0.25) 35%, rgba(0, 0, 0, 0) 70%)',
+        }}
+      />
+
       {/* Floating Minimal Scroll Cue */}
       <div className="act1-scroll-cue absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2.5 text-[11px] font-mono tracking-widest uppercase text-gray-400 bg-black/85 border border-white/10 px-5 py-2 rounded-full backdrop-blur-md shadow-2xl z-30 pointer-events-none">
         <span className="w-2 h-2 rounded-full bg-[#F5B800] animate-ping" />

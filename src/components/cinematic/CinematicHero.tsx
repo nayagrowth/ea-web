@@ -53,6 +53,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act1-dot-glow', { opacity: 0, scale: 0.5 });
       gsap.set('.act1-dot-streak', { opacity: 0, scaleX: 0 });
       gsap.set('.act1-dot-shockwave', { opacity: 0, scale: 0.2 });
+      gsap.set('.act1-volumetric-tunnel', { opacity: 0 });
       gsap.set('.act1-ads-text', { scale: 1, opacity: 1 });
       gsap.set('.act1-ads-dot', { scale: 1, opacity: 1 });
       gsap.set('.act1-eclipse-rig', { scale: 1, xPercent: 0, yPercent: 0, opacity: 1 });
@@ -186,12 +187,15 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           }, 'IGNITION+=0.1');
 
         // -------------------------------------------------------------------
-        // BEAT 2: SOLID MATERIAL DECONSTRUCTION & RUN PLANE 3D ROTATION
+        // BEAT 2: SOLID MATERIAL DECONSTRUCTION & PERSPECTIVE TUNNEL WARP
         // -------------------------------------------------------------------
         tl.addLabel('DECONSTRUCT', 0.8);
 
+        // Column 1: Folds open like an architectural portal door
         tl.to('.act1-col-bg-1', {
           xPercent: -100,
+          rotateY: -35,
+          transformOrigin: 'left center',
           duration: 1.0,
           ease: 'power3.inOut',
         }, 'DECONSTRUCT')
@@ -202,12 +206,19 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power2.in',
           }, 'DECONSTRUCT')
 
+          // Column 2: Axis line ignites with high-speed golden pulse, then dissolves
+          .to('.act1-axis-pulse', {
+            opacity: 1,
+            y: '45vh',
+            duration: 0.7,
+            ease: 'power2.inOut',
+          }, 'DECONSTRUCT')
           .to('.act1-col2-axis', {
             scaleY: 0,
             transformOrigin: 'top center',
             duration: 0.7,
             ease: 'power3.in',
-          }, 'DECONSTRUCT')
+          }, 'DECONSTRUCT+=0.2')
           .to('.act1-agencies-word', {
             yPercent: -45,
             opacity: 0,
@@ -215,6 +226,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power2.in',
           }, 'DECONSTRUCT')
 
+          // Column 3 Top: Runway tilts into exact perspective floor plane of Act 2
           .to('.act1-run-word', {
             yPercent: -40,
             opacity: 0,
@@ -223,19 +235,26 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power2.in',
           }, 'DECONSTRUCT')
           .to('.act1-runway-wrap', {
-            rotateX: 68,
-            scaleX: 3.6,
-            yPercent: 45,
+            rotateX: 74,
+            scaleX: 3.5,
+            yPercent: 42,
             transformOrigin: 'center bottom',
             duration: 1.1,
             ease: 'power3.inOut',
           }, 'DECONSTRUCT')
+          .to('.act1-energy-rail', {
+            opacity: 1,
+            strokeDashoffset: 0,
+            duration: 0.8,
+            ease: 'power2.out',
+          }, 'DECONSTRUCT+=0.2')
           .to('.act1-col-bg-3-top', {
             opacity: 0,
             duration: 0.9,
             ease: 'power2.inOut',
           }, 'DECONSTRUCT+=0.2')
 
+          // Column 3 Bottom: Baseline rule deconstructs
           .to('.act1-col-bg-3-bottom', {
             yPercent: 100,
             duration: 0.9,
@@ -248,6 +267,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power3.in',
           }, 'DECONSTRUCT')
 
+          // Column 4: Eclipse expands into blinding cosmic back-light flood
           .to('.act1-ads-text', {
             scale: 0.9,
             opacity: 0,
@@ -261,26 +281,37 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power2.in',
           }, 'DECONSTRUCT')
           .to('.act1-eclipse-rig', {
-            scale: 0.5,
-            opacity: 0,
-            xPercent: 20,
-            yPercent: 10,
+            scale: 2.2,
+            opacity: 0.9,
+            xPercent: 15,
             duration: 1.0,
-            ease: 'power2.in',
+            ease: 'power2.inOut',
           }, 'DECONSTRUCT');
 
         // -------------------------------------------------------------------
-        // BEAT 3: ACT 2 TRUE 3D RENDERER REVEAL (Time 1.6 - 2.8)
+        // BEAT 3: ACT 1 ➔ ACT 2 PERSPECTIVE EXPAND & SINGULARITY IGNITION
         // -------------------------------------------------------------------
         tl.addLabel('PERSPECTIVE_EXPAND', 1.6);
 
-        // Phase 1: High-Energy Solar Flare Ignition on Gold Dot
-        tl.to('.act1-dot-glow', {
-          opacity: 1,
-          scale: 2.8,
-          duration: 0.35,
+        // Volumetric Light Tunnel Flash Sweep
+        tl.to('.act1-volumetric-tunnel', {
+          opacity: 0.95,
+          duration: 0.45,
           ease: 'power2.out',
         }, 'PERSPECTIVE_EXPAND')
+          .to('.act1-volumetric-tunnel', {
+            opacity: 0,
+            duration: 0.4,
+            ease: 'power2.in',
+          }, 'PERSPECTIVE_EXPAND+=0.5')
+
+          // Phase 1: High-Energy Solar Flare Ignition on Gold Dot
+          .to('.act1-dot-glow', {
+            opacity: 1,
+            scale: 2.8,
+            duration: 0.35,
+            ease: 'power2.out',
+          }, 'PERSPECTIVE_EXPAND')
           .to('.act1-dot-streak', {
             opacity: 0.95,
             scaleX: 3.0,
@@ -321,6 +352,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power2.in',
           }, 'PERSPECTIVE_EXPAND+=0.82')
 
+          // Smooth Handoff: Act 1 'your' slides into Act 2 position
           .to('.act1-your-word', {
             xPercent: -75,
             yPercent: -35,
