@@ -7,13 +7,14 @@ export interface Act2GeometryRig {
 }
 
 /**
- * EXACT ARCHITECTURAL ROOM SHELL & CORRIDOR (CALIBRATED WITH EXPANDED HERO WALL)
+ * EXACT ARCHITECTURAL ROOM SHELL & CONVERGING WEDGE PORTAL
  * 
  * Boundaries:
  * - Floor Plane Π_F: Y = 0, X in [-7.5, 5], Z in [-5, -95]
- * - Left Hero Wall Π_L: X = -7.5, Y in [0, 14.6], Z in [-5, -95] (comes slightly closer for mounting text)
+ * - Left Hero Wall Π_L: X = -7.5, Y in [0, 14.6], Z in [-5, -95]
  * - Right Rib Wall Π_R: X = 5, Y in [0, 14.7], Z in [-5, -95], Top Blade Y = 14.55
  * - Ceiling Π_C: Y = 14.6, X in [-7.5, 5], Z in [-5, -95]
+ * - Vanishing Wedge Arch Portal: Progressive concentric shrinking arches merging into infinity at Z = -95
  */
 export function createAct2Geometry(): Act2GeometryRig {
   const group = new THREE.Group();
@@ -47,7 +48,7 @@ export function createAct2Geometry(): Act2GeometryRig {
   group.add(floorMesh);
   disposables.push(floorGeo, floorMat);
 
-  // Subtle dark-silver floor panels with slight roughness variation
+  // Subtle dark-silver floor panels
   const floorPanels = [
     { x: -5.5, width: 3.5, roughness: 0.26, color: '#07080a' },
     { x: -1.8, width: 4.0, roughness: 0.18, color: '#090b0f' },
@@ -68,7 +69,7 @@ export function createAct2Geometry(): Act2GeometryRig {
     disposables.push(pGeo, pMat);
   });
 
-  // Longitudinal Floor Speed Rails (All parallel to D = (0, 0, -1))
+  // Longitudinal Floor Speed Rails (Parallel to D = (0, 0, -1))
   const railXPositions = [
     { x: -6.5, width: 0.04, color: '#ffffff', emissive: 0.4 },
     { x: -4.2, width: 0.03, color: '#555b68', emissive: 0.2 },
@@ -229,6 +230,48 @@ export function createAct2Geometry(): Act2GeometryRig {
   laserMesh.position.set(3.8, 0.02, midZ);
   group.add(laserMesh);
   disposables.push(laserGeo, laserMat);
+
+  // -------------------------------------------------------------------------
+  // 6. VANISHING WEDGE / SEMICIRCLE ARCHWAY PORTAL (Shrinking into Infinity)
+  // -------------------------------------------------------------------------
+  // 8 Concentric Semicircular Wedge Rings tapering and merging from Z = -72 down to Z = -94
+  const numWedgeRings = 8;
+  for (let i = 0; i < numWedgeRings; i++) {
+    const t = i / (numWedgeRings - 1);
+    const ringZ = -72.0 - t * 22.0; // Recedes into depth
+    // Outer radius shrinks progressively from 6.5 units down to 0.45 units (creating the merging wedge funnel)
+    const radius = 6.5 * Math.pow(1.0 - t * 0.93, 1.25);
+    const ringThickness = 0.12 * (1.0 - t * 0.7);
+
+    // Torus Arc / Semicircle Geometry spanning from -90° (floor) to +90° (top wall)
+    const archGeo = new THREE.TorusGeometry(radius, ringThickness, 12, 32, Math.PI);
+    const archMat = new THREE.MeshStandardMaterial({
+      color: '#ffffff',
+      emissive: '#ecd08e',
+      emissiveIntensity: 1.2 + t * 2.8, // Glowing hotter near vanishing center
+      roughness: 0.10,
+      metalness: 0.95,
+    });
+    const archMesh = new THREE.Mesh(archGeo, archMat);
+    archMesh.position.set(wallRightX - radius * 0.98, 0.05 + radius * 0.85, ringZ);
+    archMesh.rotation.y = Math.PI; // Arch faces down corridor
+    archMesh.rotation.z = Math.PI / 2; // Semicircular wedge orientation
+    group.add(archMesh);
+    disposables.push(archGeo, archMat);
+  }
+
+  // Radiant Portal Light Core at the convergence center
+  const portalCoreGeo = new THREE.CircleGeometry(0.5, 32);
+  const portalCoreMat = new THREE.MeshBasicMaterial({
+    color: '#ffffff',
+    transparent: true,
+    opacity: 0.95,
+    side: THREE.DoubleSide,
+  });
+  const portalCoreMesh = new THREE.Mesh(portalCoreGeo, portalCoreMat);
+  portalCoreMesh.position.set(4.8, 1.2, -94.8);
+  group.add(portalCoreMesh);
+  disposables.push(portalCoreGeo, portalCoreMat);
 
   return {
     group,
