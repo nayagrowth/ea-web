@@ -3,34 +3,36 @@ import { Navbar } from './components/common/Navbar';
 import { Hero } from './components/homepage/Hero';
 import { ProblemSection } from './components/homepage/ProblemSection';
 import { CinematicExperience } from './components/cinematic/CinematicExperience';
+import { Act2StaticStill } from './components/cinematic/acts/Act2StaticStill';
 import type { Act1Variant } from './components/cinematic/CinematicHero';
 
 /**
  * TOGGLE MODE & ACT 1 HERO VARIATION:
  * 'cinematic' -> Advanced GSAP ScrollTrigger kinetic storytelling experience
+ * 'act2-still' -> Direct Frozen Static 3D Act 2 True Renderer
  * 'classic'   -> Pristine original responsive 2-section layout with standard Navbar
  */
-const DEFAULT_MODE: 'cinematic' | 'classic' = 'cinematic';
+const DEFAULT_MODE: 'cinematic' | 'act2-still' | 'classic' = 'cinematic';
 const DEFAULT_HERO_VARIANT: Act1Variant = 'columns';
 
 export const App: React.FC = () => {
-  const [mode, setMode] = useState<'cinematic' | 'classic'>(DEFAULT_MODE);
+  const [mode, setMode] = useState<'cinematic' | 'act2-still' | 'classic'>(DEFAULT_MODE);
   const [heroVariant, setHeroVariant] = useState<Act1Variant>(DEFAULT_HERO_VARIANT);
   const [isUiCollapsed, setIsUiCollapsed] = useState(false);
 
   return (
     <div
       className={`w-full min-h-screen flex flex-col selection:bg-[#F5B800] selection:text-gray-950 transition-colors duration-300 ${
-        mode === 'classic' ? 'bg-white text-gray-900' : 'bg-[#0b0c0d] text-white'
+        mode === 'classic' ? 'bg-white text-gray-900' : 'bg-[#08090a] text-white'
       }`}
     >
       {/* Classic Navbar rendered only in Classic Mode */}
       {mode === 'classic' && <Navbar />}
 
       <main className="w-full flex flex-col">
-        {mode === 'cinematic' ? (
-          <CinematicExperience act1Variant={heroVariant} />
-        ) : (
+        {mode === 'cinematic' && <CinematicExperience act1Variant={heroVariant} />}
+        {mode === 'act2-still' && <Act2StaticStill />}
+        {mode === 'classic' && (
           <>
             <Hero />
             <ProblemSection />
@@ -61,6 +63,17 @@ export const App: React.FC = () => {
                 }`}
               >
                 Cinematic
+              </button>
+              <button
+                onClick={() => setMode('act2-still')}
+                className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+                  mode === 'act2-still'
+                    ? 'bg-[#ecd08e] text-gray-950 shadow-md'
+                    : 'text-gray-400 hover:text-white'
+                }`}
+                title="Direct Frozen Static Act 2 3D Frame"
+              >
+                Act 2 (3D Still)
               </button>
               <button
                 onClick={() => setMode('classic')}
