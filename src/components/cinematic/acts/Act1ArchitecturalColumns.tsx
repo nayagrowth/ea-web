@@ -161,92 +161,101 @@ export const Act1ArchitecturalColumns: React.FC = () => {
       </div>
 
       {/* ===================================================================== */}
-      {/* COLUMN 4: "ads." (Solar Eclipse Refraction with Physical Backlight)   */}
+      {/* COLUMN 4: "ads." (4-Layer Lighting Eclipse with Reference Artboard)   */}
       {/* ===================================================================== */}
-      <div className="act1-col-4 relative h-full bg-[#08080A] flex items-center justify-center overflow-hidden">
-        {/* Layer 1: Occluded Sun Radiant Backlight Concentrated on the Mid/Lower Rim */}
+      <div
+        className="act1-col-4 relative h-full flex items-center justify-center overflow-hidden"
+        style={{
+          background: 'radial-gradient(ellipse at 50% 42%, #141414 0%, #0d0d0e 55%, #0a0a0b 100%)',
+        }}
+      >
+        {/* Fixed Ratio 278:608 Reference Artboard (aspect ratio ~0.45724) */}
         <div
-          className="absolute -right-[8vw] bottom-[10vh] w-[38vw] h-[75vh] rounded-full pointer-events-none blur-3xl opacity-95"
+          className="relative h-full pointer-events-none overflow-hidden"
           style={{
-            background: 'radial-gradient(ellipse at 70% 60%, rgba(255, 220, 120, 0.75) 0%, rgba(245, 184, 0, 0.45) 30%, rgba(180, 120, 20, 0.18) 55%, transparent 75%)',
-          }}
-        />
-
-        {/* Layer 2: Real Atmospheric Corona Dispersion & Calibrated Eclipse Arc */}
-        <svg
-          className="act1-gold-eclipse absolute inset-0 w-full h-full pointer-events-none"
-          viewBox="0 0 300 600"
-          preserveAspectRatio="none"
-        >
-          <defs>
-            {/* Incandescent Core Rim Gradient */}
-            <linearGradient id="calibrated-eclipse-rim" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#FFF7D6" />
-              <stop offset="25%" stopColor="#F9E28A" />
-              <stop offset="50%" stopColor="#D4AF37" />
-              <stop offset="80%" stopColor="#E5B242" />
-              <stop offset="100%" stopColor="#A6761A" />
-            </linearGradient>
-
-            {/* Gaussian Corona Filter */}
-            <filter id="calibrated-corona-glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="22" result="ambientGlow" />
-              <feGaussianBlur stdDeviation="6" result="innerCorona" />
-              <feMerge>
-                <feMergeNode in="ambientGlow" />
-                <feMergeNode in="innerCorona" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-
-          {/* Broad Radiant Corona Arc starting at Top-Center (84, 0) and curving to (0, 513) */}
-          <path
-            d="M 84,0 A 269,269 0 0,1 0,513"
-            fill="none"
-            stroke="#F5B800"
-            strokeWidth="32"
-            opacity="0.35"
-            filter="url(#calibrated-corona-glow)"
-          />
-
-          {/* Intense Golden Corona Flame */}
-          <path
-            d="M 84,0 A 269,269 0 0,1 0,513"
-            fill="none"
-            stroke="#D4AF37"
-            strokeWidth="14"
-            opacity="0.85"
-            filter="url(#calibrated-corona-glow)"
-          />
-
-          {/* Razor-Sharp Incandescent Solar Rim Core */}
-          <path
-            d="M 84,0 A 269,269 0 0,1 0,513"
-            fill="none"
-            stroke="url(#calibrated-eclipse-rim)"
-            strokeWidth="4.5"
-            strokeLinecap="round"
-          />
-
-          {/* Occluding Dark Celestial Body (The Moon) covering upper-left */}
-          <path
-            d="M 0,0 L 84,0 A 269,269 0 0,1 0,513 Z"
-            fill="#08080A"
-          />
-        </svg>
-
-        {/* Layer 3: "ads." Typography in Antique Brushed Gold */}
-        <h2
-          className="act1-ads-word relative z-10 font-sans text-[clamp(4.5rem,8.6vw,9.5rem)] font-black tracking-[-0.04em] leading-none drop-shadow-[0_14px_45px_rgba(0,0,0,0.98)]"
-          style={{
-            background: 'linear-gradient(135deg, #F9E7A2 0%, #D4AF37 38%, #AA7E24 75%, #F0CE6E 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+            width: 'min(100%, calc(100vh * 0.45724))',
           }}
         >
-          ads.
-        </h2>
+          {/* z1: Broad Corona Glow */}
+          <div
+            className="act1-gold-eclipse absolute rounded-full pointer-events-none"
+            style={{
+              width: '195%',
+              aspectRatio: '1',
+              left: '-105.5%',
+              top: '-3.1%',
+              background: '#b8873f',
+              transform: 'translate(2.5%, 1.8%) scale(1.018)',
+              filter: 'blur(34px)',
+              opacity: 0.30,
+            }}
+          />
+
+          {/* z2: Tight Brighter Corona Glow */}
+          <div
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width: '195%',
+              aspectRatio: '1',
+              left: '-105.5%',
+              top: '-3.1%',
+              background: '#efce8e',
+              transform: 'translate(1.1%, 0.7%) scale(1.007)',
+              filter: 'blur(9px)',
+              opacity: 0.72,
+            }}
+          />
+
+          {/* z3: Foreground Dark Occluding Eclipse Disc */}
+          <div
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width: '195%',
+              aspectRatio: '1',
+              left: '-105.5%',
+              top: '-3.1%',
+              background: 'radial-gradient(circle at 72% 42%, #111112 0%, #0d0d0e 48%, #09090a 100%)',
+              boxShadow: '1px 0 0 rgba(247, 222, 170, 0.28), 3px 2px 5px rgba(235, 193, 113, 0.14)',
+            }}
+          />
+
+          {/* z4: "ads." Typography with Metallic Champagne Shading & Custom Punctuation Dot */}
+          <div
+            className="act1-ads-word absolute z-10 flex items-baseline select-none"
+            style={{
+              left: '14%',
+              top: '43.4%',
+              fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+              fontSize: 'min(24vw, 11.2vh)',
+              lineHeight: 0.9,
+              fontWeight: 700,
+              letterSpacing: '-0.055em',
+            }}
+          >
+            <span
+              style={{
+                background: 'linear-gradient(105deg, #9d702c 0%, #c99d50 22%, #deb96f 42%, #bc8b3d 63%, #dfbd79 80%, #a8752e 100%)',
+                color: 'transparent',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                textShadow: '0 1px 1px rgba(255, 238, 198, 0.04), 0 5px 14px rgba(89, 54, 15, 0.08)',
+              }}
+            >
+              ads
+            </span>
+            <span
+              style={{
+                display: 'inline-block',
+                width: '0.19em',
+                height: '0.19em',
+                marginLeft: '0.075em',
+                borderRadius: '999px',
+                transform: 'translateY(-0.03em)',
+                background: 'radial-gradient(circle at 38% 35%, #dfbd78, #b98539 70%, #956928 100%)',
+              }}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Floating Minimal Scroll Cue */}
