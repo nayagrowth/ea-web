@@ -2,181 +2,176 @@ import React from 'react';
 
 export const Act1ArchitecturalColumns: React.FC = () => {
   return (
-    <div className="act1-stage act1-columns-variant absolute inset-0 z-20 w-screen h-screen grid grid-cols-4 overflow-hidden pointer-events-none select-none bg-[#08080A]">
+    <section className="act1-stage act1-columns-variant absolute inset-0 z-20 w-screen h-screen overflow-hidden pointer-events-none select-none bg-[#0b0c0d]">
       {/* ===================================================================== */}
-      {/* COLUMN 1: "Most" (Gallery Porcelain Ground + Pure Didone Serif)       */}
+      {/* MASTER 100VW / 100VH FULL-BLEED GRID (Zero Side Pillars / Full Viewport)*/}
       {/* ===================================================================== */}
-      <div className="act1-col-1 relative h-full bg-[#F5F5F4] flex items-center justify-center border-r border-black/10 overflow-hidden">
-        <h1 className="act1-most-word font-serif text-[clamp(4.8rem,9vw,10.5rem)] font-normal text-[#080808] tracking-[-0.04em] leading-none select-none">
-          Most
-        </h1>
-      </div>
+      <div className="act1-artboard relative h-full w-full w-screen h-screen grid grid-cols-[24.5%_24.5%_24.5%_26.5%] overflow-hidden">
+        {/* =================================================================== */}
+        {/* PANEL 1: "Most" (Cool Gallery Porcelain + Quiet High-Contrast Serif) */}
+        {/* =================================================================== */}
+        <div className="act1-col-1 relative h-full bg-[#ecebe8] flex flex-col items-center justify-start pt-[52vh] border-r border-black/[0.08] overflow-hidden">
+          {/* Subtle printed surface tone */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#f2f1ee] via-[#ecebe8] to-[#e6e5e0] opacity-60 pointer-events-none" />
 
-      {/* ===================================================================== */}
-      {/* COLUMN 2: "agencies" (Deep Matte Obsidian + Geometric Sans + Axis)     */}
-      {/* ===================================================================== */}
-      <div className="act1-col-2 relative h-full bg-[#08080A] flex flex-col items-center justify-start pt-[20vh] border-r border-white/10 overflow-hidden">
-        <h2 className="act1-agencies-word font-sans text-[clamp(2.5rem,4.6vw,5.2rem)] font-light text-[#FFFFFF] tracking-[-0.03em] leading-none z-10">
-          agencies
-        </h2>
-        {/* Crisp Plumb-Line Axis dropping from center of 'agencies' */}
-        <div className="act1-col2-axis relative w-[1.5px] bg-gradient-to-b from-white/80 via-white/40 to-transparent h-[58vh] mt-5 z-10" />
-      </div>
-
-      {/* ===================================================================== */}
-      {/* COLUMN 3: Split Stack (3D Perspective Runway "run" + Textured "your.") */}
-      {/* ===================================================================== */}
-      <div className="act1-col-3 relative h-full flex flex-col border-r border-white/10 overflow-hidden">
-        {/* Top 54%: "run" with 20% More Converging Runway & Atmospheric Blur */}
-        <div className="act1-run-panel relative h-[54%] bg-[#F3F0EC] flex flex-col items-center justify-between pt-[7vh] overflow-hidden border-b border-black/15">
-          {/* Extended Bold Modern Display Sans "run" */}
-          <h2 className="act1-run-word relative z-10 font-sans text-[clamp(4.2rem,8vw,8.5rem)] font-black text-[#0A0A0A] tracking-[-0.04em] leading-none">
-            run
-          </h2>
-
-          {/* Calibrated 3D Perspective Floor with Atmospheric Horizon Dissolve */}
-          <div className="relative w-full h-[68%] mt-auto overflow-hidden">
-            <svg
-              className="w-full h-full block"
-              viewBox="0 0 400 280"
-              preserveAspectRatio="none"
-            >
-              <defs>
-                {/* Atmospheric Fog Mask */}
-                <mask id="runway-fog-mask">
-                  <linearGradient id="fog-grad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#000000" stopOpacity="0" />
-                    <stop offset="25%" stopColor="#FFFFFF" stopOpacity="0.3" />
-                    <stop offset="65%" stopColor="#FFFFFF" stopOpacity="0.85" />
-                    <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
-                  </linearGradient>
-                  <rect x="0" y="0" width="400" height="280" fill="url(#fog-grad)" />
-                </mask>
-
-                {/* Shading Gradients for Metallic Tracks */}
-                <linearGradient id="track-surface" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#ECE8E0" stopOpacity="0.2" />
-                  <stop offset="50%" stopColor="#DDD8CD" stopOpacity="0.7" />
-                  <stop offset="100%" stopColor="#CCC6B8" stopOpacity="1" />
-                </linearGradient>
-
-                <linearGradient id="rail-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.3" />
-                  <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
-                </linearGradient>
-
-                <linearGradient id="rail-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#A8A399" stopOpacity="0.2" />
-                  <stop offset="50%" stopColor="#8C867B" stopOpacity="0.65" />
-                  <stop offset="100%" stopColor="#6E685E" stopOpacity="0.9" />
-                </linearGradient>
-              </defs>
-
-              {/* Distant Atmospheric Horizon Floor Shading */}
-              <rect x="0" y="0" width="400" height="280" fill="#F0EDE7" />
-
-              {/* Group of 3D Perspective Tracks */}
-              <g mask="url(#runway-fog-mask)">
-                {/* Track -5 */}
-                <polygon points="160,25 165,25 -55,280 -35,280" fill="url(#track-surface)" />
-                <line x1="160" y1="25" x2="-55" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
-                <line x1="165" y1="25" x2="-35" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
-
-                {/* Track -4 */}
-                <polygon points="168,25 173,25 0,280 18,280" fill="url(#track-surface)" />
-                <line x1="168" y1="25" x2="0" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
-                <line x1="173" y1="25" x2="18" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
-
-                {/* Track -3 */}
-                <polygon points="176,25 180,25 55,280 72,280" fill="url(#track-surface)" />
-                <line x1="176" y1="25" x2="55" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.6" />
-                <line x1="180" y1="25" x2="72" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.0" />
-
-                {/* Track -2 */}
-                <polygon points="184,25 188,25 110,280 125,280" fill="url(#track-surface)" />
-                <line x1="184" y1="25" x2="110" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.5" />
-                <line x1="188" y1="25" x2="125" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.8" />
-
-                {/* Track -1 */}
-                <polygon points="192,25 195,25 165,280 178,280" fill="url(#track-surface)" />
-                <line x1="192" y1="25" x2="165" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.4" />
-                <line x1="195" y1="25" x2="178" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.6" />
-
-                {/* Center Track 0 */}
-                <polygon points="198.5,25 201.5,25 194,280 206,280" fill="url(#track-surface)" />
-                <line x1="198.5" y1="25" x2="194" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.4" />
-                <line x1="201.5" y1="25" x2="206" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.6" />
-
-                {/* Track +1 */}
-                <polygon points="205,25 208,25 222,280 235,280" fill="url(#track-surface)" />
-                <line x1="205" y1="25" x2="222" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.4" />
-                <line x1="208" y1="25" x2="235" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.6" />
-
-                {/* Track +2 */}
-                <polygon points="212,25 216,25 275,280 290,280" fill="url(#track-surface)" />
-                <line x1="212" y1="25" x2="275" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.5" />
-                <line x1="216" y1="25" x2="290" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.8" />
-
-                {/* Track +3 */}
-                <polygon points="220,25 224,25 328,280 345,280" fill="url(#track-surface)" />
-                <line x1="220" y1="25" x2="328" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.6" />
-                <line x1="224" y1="25" x2="345" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.0" />
-
-                {/* Track +4 */}
-                <polygon points="227,25 232,25 382,280 400,280" fill="url(#track-surface)" />
-                <line x1="227" y1="25" x2="382" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
-                <line x1="232" y1="25" x2="400" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
-
-                {/* Track +5 */}
-                <polygon points="235,25 240,25 435,280 455,280" fill="url(#track-surface)" />
-                <line x1="235" y1="25" x2="435" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
-                <line x1="240" y1="25" x2="455" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
-              </g>
-            </svg>
-          </div>
+          <h1 className="act1-most-word relative z-10 font-serif text-[clamp(3.6rem,6.8vw,7.8rem)] font-normal text-[#0c0c0d] tracking-[-0.035em] leading-none select-none">
+            Most
+          </h1>
         </div>
 
-        {/* Bottom 46%: "your." with Procedural Stone Card & 3D Shaded Gold Dot */}
-        <div className="act1-your-panel relative h-[46%] bg-[#E8E3DA] flex flex-col items-center justify-center px-8 overflow-hidden">
-          {/* Subtle noise/texture overlay for architectural card feel */}
-          <div className="absolute inset-0 bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:16px_16px] opacity-[0.06] pointer-events-none" />
+        {/* =================================================================== */}
+        {/* PANEL 2: "agencies" (Matte Charcoal + Ultra-Light Sans + Axis)      */}
+        {/* =================================================================== */}
+        <div className="act1-col-2 relative h-full bg-[#0b0c0d] flex flex-col items-center justify-start pt-[23vh] border-r border-white/[0.06] overflow-hidden">
+          {/* Subtle vertical atmospheric depth */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#111214] via-[#0b0c0d] to-[#080809] opacity-80 pointer-events-none" />
 
-          <div className="relative flex flex-col items-start w-full max-w-[280px]">
-            <h2 className="act1-your-word font-serif italic text-[clamp(4.2rem,8vw,8.5rem)] font-normal text-[#080808] tracking-[-0.04em] leading-[0.88] select-none">
-              your
+          <h2 className="act1-agencies-word relative z-10 font-sans text-[clamp(2.1rem,3.8vw,4.2rem)] font-extralight text-[#FFFFFF] tracking-[-0.025em] leading-none">
+            agencies
+          </h2>
+
+          {/* Compositional Axis / Plumb-Line Gesture */}
+          <div className="act1-col2-axis relative w-[1px] bg-gradient-to-b from-white/40 via-white/18 to-transparent h-[50vh] mt-7 z-10" />
+        </div>
+
+        {/* =================================================================== */}
+        {/* PANEL 3: "run / your" (Sculpted Center Stack)                       */}
+        {/* =================================================================== */}
+        <div className="act1-col-3 relative h-full flex flex-col border-r border-white/[0.06] overflow-hidden bg-[#e8e3d9]">
+          {/* Top 54%: "run" with Soft Whispering Perspective Runway */}
+          <div className="act1-run-panel relative h-[54%] bg-[#f2efea] flex flex-col items-center justify-between pt-[7.5vh] overflow-hidden border-b border-black/[0.12]">
+            {/* Bold Assertive Modern Grotesk Sans */}
+            <h2 className="act1-run-word relative z-10 font-sans text-[clamp(3.4rem,6.5vw,7.2rem)] font-black text-[#0c0c0d] tracking-[-0.045em] leading-none">
+              run
             </h2>
-            {/* Fine Baseline Rule with 3D Gold Dot */}
-            <div className="act1-your-rule-wrap relative w-full flex items-center justify-end mt-1">
-              <div className="act1-your-rule w-full h-[1.5px] bg-[#1a1a1a]/40" />
-              <div
-                className="act1-your-dot ml-2.5 w-4 h-4 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.25)] shrink-0"
-                style={{
-                  background: 'radial-gradient(circle at 35% 35%, #F7E59D 0%, #D4AF37 50%, #8C6B1C 100%)',
-                }}
-              />
+
+            {/* Subtle Embossed Perspective Floor (Atmospheric & Soft) */}
+            <div className="relative w-full h-[66%] mt-auto overflow-hidden">
+              <svg
+                className="w-full h-full block"
+                viewBox="0 0 400 280"
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  {/* Atmospheric Dissolve Mask — Lines melt into paper before meeting */}
+                  <mask id="soft-runway-mask">
+                    <linearGradient id="soft-fog-grad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#000000" stopOpacity="0" />
+                      <stop offset="30%" stopColor="#FFFFFF" stopOpacity="0.2" />
+                      <stop offset="70%" stopColor="#FFFFFF" stopOpacity="0.75" />
+                      <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+                    </linearGradient>
+                    <rect x="0" y="0" width="400" height="280" fill="url(#soft-fog-grad)" />
+                  </mask>
+
+                  {/* Soft Track Shading */}
+                  <linearGradient id="soft-track-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#ede9e2" stopOpacity="0.1" />
+                    <stop offset="60%" stopColor="#ded9cf" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#cec8bd" stopOpacity="0.85" />
+                  </linearGradient>
+
+                  <linearGradient id="soft-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+                    <stop offset="40%" stopColor="#ffffff" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0.9" />
+                  </linearGradient>
+
+                  <linearGradient id="soft-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#b5afa5" stopOpacity="0" />
+                    <stop offset="40%" stopColor="#9e978c" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#80796e" stopOpacity="0.7" />
+                  </linearGradient>
+                </defs>
+
+                {/* Subtle Horizon Base */}
+                <rect x="0" y="0" width="400" height="280" fill="#eeeae3" />
+
+                {/* Non-Converging Softly Whispering Beams */}
+                <g mask="url(#soft-runway-mask)" opacity="0.9">
+                  {/* Track -4 */}
+                  <polygon points="166,35 171,35 10,280 26,280" fill="url(#soft-track-fill)" />
+                  <line x1="166" y1="35" x2="10" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
+                  <line x1="171" y1="35" x2="26" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.6" />
+
+                  {/* Track -3 */}
+                  <polygon points="175,35 179,35 62,280 77,280" fill="url(#soft-track-fill)" />
+                  <line x1="175" y1="35" x2="62" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
+                  <line x1="179" y1="35" x2="77" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.5" />
+
+                  {/* Track -2 */}
+                  <polygon points="183,35 186,35 116,280 129,280" fill="url(#soft-track-fill)" />
+                  <line x1="183" y1="35" x2="116" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.1" />
+                  <line x1="186" y1="35" x2="129" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.4" />
+
+                  {/* Track -1 */}
+                  <polygon points="191,35 194,35 168,280 179,280" fill="url(#soft-track-fill)" />
+                  <line x1="191" y1="35" x2="168" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
+                  <line x1="194" y1="35" x2="179" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+
+                  {/* Center Track 0 */}
+                  <polygon points="198.5,35 201.5,35 195,280 205,280" fill="url(#soft-track-fill)" />
+                  <line x1="198.5" y1="35" x2="195" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
+                  <line x1="201.5" y1="35" x2="205" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+
+                  {/* Track +1 */}
+                  <polygon points="206,35 209,35 221,280 232,280" fill="url(#soft-track-fill)" />
+                  <line x1="206" y1="35" x2="221" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
+                  <line x1="209" y1="35" x2="232" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+
+                  {/* Track +2 */}
+                  <polygon points="214,35 217,35 271,280 284,280" fill="url(#soft-track-fill)" />
+                  <line x1="214" y1="35" x2="271" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.1" />
+                  <line x1="217" y1="35" x2="284" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.4" />
+
+                  {/* Track +3 */}
+                  <polygon points="221,35 225,35 323,280 338,280" fill="url(#soft-track-fill)" />
+                  <line x1="221" y1="35" x2="323" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
+                  <line x1="225" y1="35" x2="338" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.5" />
+
+                  {/* Track +4 */}
+                  <polygon points="229,35 234,35 374,280 390,280" fill="url(#soft-track-fill)" />
+                  <line x1="229" y1="35" x2="374" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
+                  <line x1="234" y1="35" x2="390" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.6" />
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          {/* Bottom 46%: "your." (Warm Editorial Paper Tone + Italic Serif + Dot) */}
+          <div className="act1-your-panel relative h-[46%] bg-[#e8e3d9] flex flex-col items-center justify-center px-7 overflow-hidden">
+            {/* Subtle natural paper gradient */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#eae5db] to-[#e4ded3] opacity-50 pointer-events-none" />
+
+            <div className="relative flex flex-col items-start w-full max-w-[240px]">
+              <h2 className="act1-your-word font-serif italic text-[clamp(3.6rem,6.8vw,7.4rem)] font-normal text-[#0c0c0d] tracking-[-0.035em] leading-[0.88] select-none">
+                your
+              </h2>
+
+              {/* Refined Signature Baseline Rule with Small Gold Dot */}
+              <div className="act1-your-rule-wrap relative w-full flex items-center justify-end mt-1.5">
+                <div className="act1-your-rule w-full h-[1px] bg-[#0c0c0d]/25" />
+                <div
+                  className="act1-your-dot ml-2 w-3 h-3 rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.18)] shrink-0"
+                  style={{
+                    background: 'radial-gradient(circle at 35% 35%, #ecd08e 0%, #c79846 55%, #8b6228 100%)',
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* ===================================================================== */}
-      {/* COLUMN 4: "ads." (4-Layer Lighting Eclipse with Reference Artboard)   */}
-      {/* ===================================================================== */}
-      <div
-        className="act1-col-4 relative h-full flex items-center justify-center overflow-hidden"
-        style={{
-          background: 'radial-gradient(ellipse at 50% 42%, #141414 0%, #0d0d0e 55%, #0a0a0b 100%)',
-        }}
-      >
-        {/* Fixed Ratio 278:608 Reference Artboard (aspect ratio ~0.45724) */}
+        {/* =================================================================== */}
+        {/* PANEL 4: "ads." (4-Layer Optical Eclipse + Champagne Bronze Shading)*/}
+        {/* =================================================================== */}
         <div
-          className="relative h-full pointer-events-none overflow-hidden"
+          className="act1-col-4 relative h-full w-full flex items-center justify-center overflow-hidden"
           style={{
-            width: 'min(100%, calc(100vh * 0.45724))',
+            background: 'radial-gradient(ellipse at 50% 42%, #141414 0%, #0b0c0d 55%, #080809 100%)',
           }}
         >
-          {/* z1: Broad Corona Glow */}
+          {/* Layer z1: Broad Warm Corona Haze (fades softly to black) */}
           <div
             className="act1-gold-eclipse absolute rounded-full pointer-events-none"
             style={{
@@ -187,11 +182,11 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               background: '#b8873f',
               transform: 'translate(2.5%, 1.8%) scale(1.018)',
               filter: 'blur(34px)',
-              opacity: 0.30,
+              opacity: 0.28,
             }}
           />
 
-          {/* z2: Tight Brighter Corona Glow */}
+          {/* Layer z2: Tight Brighter Corona Core */}
           <div
             className="absolute rounded-full pointer-events-none"
             style={{
@@ -202,11 +197,11 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               background: '#efce8e',
               transform: 'translate(1.1%, 0.7%) scale(1.007)',
               filter: 'blur(9px)',
-              opacity: 0.72,
+              opacity: 0.68,
             }}
           />
 
-          {/* z3: Foreground Dark Occluding Eclipse Disc */}
+          {/* Layer z3: Foreground Dark Occluding Disc */}
           <div
             className="absolute rounded-full pointer-events-none"
             style={{
@@ -214,19 +209,19 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               aspectRatio: '1',
               left: '-105.5%',
               top: '-3.1%',
-              background: 'radial-gradient(circle at 72% 42%, #111112 0%, #0d0d0e 48%, #09090a 100%)',
-              boxShadow: '1px 0 0 rgba(247, 222, 170, 0.28), 3px 2px 5px rgba(235, 193, 113, 0.14)',
+              background: 'radial-gradient(circle at 72% 42%, #111112 0%, #0b0c0d 48%, #080809 100%)',
+              boxShadow: '1px 0 0 rgba(247, 222, 170, 0.26), 3px 2px 6px rgba(235, 193, 113, 0.12)',
             }}
           />
 
-          {/* z4: "ads." Typography with Metallic Champagne Shading & Custom Punctuation Dot */}
+          {/* Layer z4: "ads." Typography with Champagne Bronze Shading & Punctuation Dot */}
           <div
             className="act1-ads-word absolute z-10 flex items-baseline select-none"
             style={{
               left: '14%',
               top: '43.4%',
               fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              fontSize: 'min(24vw, 11.2vh)',
+              fontSize: 'min(20vw, 9.4vh)',
               lineHeight: 0.9,
               fontWeight: 700,
               letterSpacing: '-0.055em',
@@ -238,12 +233,13 @@ export const Act1ArchitecturalColumns: React.FC = () => {
                 color: 'transparent',
                 WebkitBackgroundClip: 'text',
                 backgroundClip: 'text',
-                textShadow: '0 1px 1px rgba(255, 238, 198, 0.04), 0 5px 14px rgba(89, 54, 15, 0.08)',
+                textShadow: '0 1px 1px rgba(255, 238, 198, 0.04), 0 4px 12px rgba(89, 54, 15, 0.08)',
               }}
             >
               ads
             </span>
             <span
+              className="adsDot"
               style={{
                 display: 'inline-block',
                 width: '0.19em',
@@ -266,6 +262,6 @@ export const Act1ArchitecturalColumns: React.FC = () => {
           <line x1="12" y1="5" x2="12" y2="19" /><polyline points="19 12 12 19 5 12" />
         </svg>
       </div>
-    </div>
+    </section>
   );
 };
