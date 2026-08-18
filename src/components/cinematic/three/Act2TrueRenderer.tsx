@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
 interface Act2TrueRendererProps {
   progress?: number;
@@ -19,32 +18,34 @@ interface TypographyConfig {
   depthZ: number;
   yawOffset?: number;
   pitchOffset?: number;
+  rollOffset?: number;
 }
 
 /**
- * Creates high-resolution, tightly cropped 2D canvas texture with exact glyph bounding box measurement
+ * Creates high-resolution 4K canvas texture with exact glyph measurement, drop shadow, and crisp anti-aliasing
  */
 function createCrispTextTexture(
   text: string,
   font: string,
   color: string,
-  isGold: boolean = false
+  isGold: boolean = false,
+  hasShadow: boolean = true
 ): { texture: THREE.CanvasTexture; aspect: number } {
   const offscreen = document.createElement('canvas');
   const ctx = offscreen.getContext('2d', { willReadFrequently: true })!;
 
-  // Measure text with high-resolution base size
-  const baseFontSize = 180;
+  // 4x supersampling base font size for razor-sharp rendering in 3D perspective
+  const baseFontSize = 240;
   ctx.font = font.replace(/__SIZE__/g, `${baseFontSize}px`);
   const metrics = ctx.measureText(text);
 
   const textWidth = Math.ceil(metrics.width);
-  const actualAscent = Math.ceil(metrics.actualBoundingBoxAscent || baseFontSize * 0.8);
-  const actualDescent = Math.ceil(metrics.actualBoundingBoxDescent || baseFontSize * 0.25);
+  const actualAscent = Math.ceil(metrics.actualBoundingBoxAscent || baseFontSize * 0.85);
+  const actualDescent = Math.ceil(metrics.actualBoundingBoxDescent || baseFontSize * 0.3);
   const textHeight = actualAscent + actualDescent;
 
-  const padX = 24;
-  const padY = 24;
+  const padX = 64;
+  const padY = 64;
   const canvasWidth = THREE.MathUtils.ceilPowerOfTwo(textWidth + padX * 2);
   const canvasHeight = THREE.MathUtils.ceilPowerOfTwo(textHeight + padY * 2);
 
@@ -59,12 +60,20 @@ function createCrispTextTexture(
   const drawX = padX;
   const drawY = padY + actualAscent;
 
+  // Cinematic Deep Drop Shadow
+  if (hasShadow) {
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+    ctx.shadowBlur = 32;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 16;
+  }
+
   if (isGold) {
-    const grad = ctx.createLinearGradient(drawX, drawY - actualAscent, drawX + textWidth * 0.85, drawY + actualDescent);
-    grad.addColorStop(0, '#fef1d6');
+    const grad = ctx.createLinearGradient(drawX, drawY - actualAscent, drawX + textWidth * 0.9, drawY + actualDescent);
+    grad.addColorStop(0, '#fff4db');
     grad.addColorStop(0.35, '#ecd08e');
     grad.addColorStop(0.75, '#c79846');
-    grad.addColorStop(1, '#9e732b');
+    grad.addColorStop(1, '#946c26');
     ctx.fillStyle = grad;
   } else {
     ctx.fillStyle = color;
@@ -80,13 +89,34 @@ function createCrispTextTexture(
   texture.magFilter = THREE.LinearFilter;
   texture.needsUpdate = true;
 
-  // Aspect ratio of the actual text area
   const contentAspect = (textWidth + padX * 2) / (textHeight + padY * 2);
   return { texture, aspect: contentAspect };
 }
 
 /**
- * Calculates exact world-space position and size from 2D screen pixel coordinates using Camera Unprojection
+ * Creates soft volumetric bloom gradient texture for horizon laser
+ */
+function createBloomHazeTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 128;
+  const ctx = canvas.getContext('2d')!;
+
+  const grad = ctx.createLinearGradient(0, 0, 0, 128);
+  grad.addColorStop(0, 'rgba(236, 208, 142, 0)');
+  grad.addColorStop(0.5, 'rgba(236, 208, 142, 0.85)');
+  grad.addColorStop(1, 'rgba(236, 208, 142, 0)');
+
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 512, 128);
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+/**
+ * Calculates exact world-space position and plane size from 2D screen pixel coordinates using Camera Unprojection
  */
 function calculateWorldSpaceTransform(
   camera: THREE.PerspectiveCamera,
@@ -98,25 +128,24 @@ function calculateWorldSpaceTransform(
   depthZ: number,
   textureAspect: number
 ): { position: THREE.Vector3; planeWidth: number; planeHeight: number } {
-  // 1. Center of the text bounding box in screen pixels
   const estHeight = pixelWidth / textureAspect;
   const centerPxX = pixelLeft + pixelWidth / 2;
   const centerPxY = pixelTop + estHeight / 2;
 
-  // 2. Convert to Normalized Device Coordinates (NDC: [-1, 1])
+  // NDC [-1, 1]
   const ndcX = (centerPxX / refWidth) * 2 - 1;
   const ndcY = 1 - (centerPxY / refHeight) * 2;
 
-  // 3. Unproject through PerspectiveCamera
+  // Unproject ray through camera
   const rayVector = new THREE.Vector3(ndcX, ndcY, 0.5);
   rayVector.unproject(camera);
   const rayDir = rayVector.sub(camera.position).normalize();
 
-  // 4. Intersect ray with chosen world-space Z depth plane
+  // Intersect with chosen world Z depth plane
   const distance = (depthZ - camera.position.z) / rayDir.z;
   const worldPos = camera.position.clone().add(rayDir.multiplyScalar(distance));
 
-  // 5. Compute world plane width based on camera frustum at this distance
+  // Compute world width to match exact screen pixel scale
   const vFovRad = THREE.MathUtils.degToRad(camera.fov);
   const frustumHeightAtDepth = 2 * Math.tan(vFovRad / 2) * Math.abs(distance);
   const frustumWidthAtDepth = frustumHeightAtDepth * camera.aspect;
@@ -128,13 +157,9 @@ function calculateWorldSpaceTransform(
 }
 
 export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
-  progress = 1.0,
   className = '',
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
-  const progressRef = useRef(progress);
-  progressRef.current = progress;
-
   const sceneStateRef = useRef<{
     scene: THREE.Scene;
     camera: THREE.PerspectiveCamera;
@@ -155,17 +180,17 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     const width = container.clientWidth || window.innerWidth;
     const height = container.clientHeight || window.innerHeight;
 
-    // 1. SCENE SETUP
+    // 1. SCENE SETUP (Deep Pitch Obsidian Black Environment)
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#08090a');
-    scene.fog = new THREE.FogExp2('#08090a', 0.012);
+    scene.background = new THREE.Color('#050608');
+    scene.fog = new THREE.FogExp2('#050608', 0.012);
 
-    // 2. PERSPECTIVE CAMERA (Calibrated to Target 42° FOV)
+    // 2. PERSPECTIVE CAMERA (Calibrated FOV 42°)
     const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 300);
     camera.position.set(0, 0, 18.0);
-    camera.lookAt(new THREE.Vector3(0.6, -0.4, 0));
+    camera.lookAt(new THREE.Vector3(0.5, -0.3, 0));
 
-    // 3. WEBGL RENDERER & PMREM ENVIRONMENT
+    // 3. WEBGL RENDERER
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       powerPreference: 'high-performance',
@@ -174,38 +199,30 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(width, height);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.35;
     container.appendChild(renderer.domElement);
 
-    // PMREM Environment for physically accurate specular reflections on metallic bevels
-    const pmremGenerator = new THREE.PMREMGenerator(renderer);
-    pmremGenerator.compileEquirectangularShader();
-    const roomEnv = new RoomEnvironment();
-    const envMap = pmremGenerator.fromScene(roomEnv, 0.04).texture;
-    scene.environment = envMap;
-    disposables.push(pmremGenerator);
-
-    // 4. LIGHTING SYSTEM (PBR Grazing & Accent Lights)
-    const ambientLight = new THREE.AmbientLight('#0a0c10', 0.45);
+    // 4. LIGHTING SYSTEM (Controlled Moody Specular Grazing Lights)
+    const ambientLight = new THREE.AmbientLight('#08090c', 0.25);
     scene.add(ambientLight);
 
-    // High-angle directional key light creating metallic grazing edge highlights on louvers
-    const keyLight = new THREE.DirectionalLight('#ffffff', 3.8);
-    keyLight.position.set(16, 12, 14);
-    scene.add(keyLight);
+    // Sharp grazing directional key light along the right architectural wall louvers
+    const wallKeyLight = new THREE.DirectionalLight('#ffffff', 4.2);
+    wallKeyLight.position.set(18, 14, 12);
+    scene.add(wallKeyLight);
 
-    // Warm champagne fill along the velocity corridor
-    const warmFill = new THREE.DirectionalLight('#ecd08e', 1.6);
-    warmFill.position.set(-6, 2, 8);
-    scene.add(warmFill);
+    // Floor specular grazing light
+    const floorKeyLight = new THREE.DirectionalLight('#ffffff', 1.8);
+    floorKeyLight.position.set(-6, 12, 10);
+    scene.add(floorKeyLight);
 
-    // Point light at the horizon beam
-    const laserPoint = new THREE.PointLight('#ecd08e', 2.4, 30);
-    laserPoint.position.set(4, -1.2, 2);
-    scene.add(laserPoint);
+    // Warm champagne accent light along horizon
+    const laserLight = new THREE.PointLight('#ecd08e', 3.2, 35);
+    laserLight.position.set(4, -1.2, 2);
+    scene.add(laserLight);
 
     // =======================================================================
-    // 5. ONE SHARED 3D WORLD RIG (`act2World`)
+    // 5. ONE UNIFIED 3D WORLD COORDINATE GROUP (`act2World`)
     // =======================================================================
     const act2World = new THREE.Group();
     // Calibrated spatial corridor tilt: yaw ~ -25.7°, pitch ~ -5.5°
@@ -214,14 +231,14 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     scene.add(act2World);
 
     // -----------------------------------------------------------------------
-    // A. DARK TARMAC / LACQUER PHYSICAL FLOOR & BROAD SWEPT PANELS
+    // A. GLOSSY BLACK TARMAC / LACQUER FLOOR & BROAD REFLECTIVE PANELS
     // -----------------------------------------------------------------------
-    // Base Floor Plane (Physical dark lacquer, not chrome mirror)
-    const floorGeo = new THREE.PlaneGeometry(65, 110);
+    // Base Floor Mesh (Glossy Pitch-Black Lacquer)
+    const floorGeo = new THREE.PlaneGeometry(75, 120);
     const floorMat = new THREE.MeshStandardMaterial({
-      color: '#08090b',
-      roughness: 0.22,
-      metalness: 0.14,
+      color: '#050608',
+      roughness: 0.12,
+      metalness: 0.85,
     });
     const floorMesh = new THREE.Mesh(floorGeo, floorMat);
     floorMesh.rotation.x = -Math.PI / 2;
@@ -229,46 +246,46 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     act2World.add(floorMesh);
     disposables.push(floorGeo, floorMat);
 
-    // Broad Dark-Silver Sweeps (Large shallow floor panels with roughness variation)
+    // Broad Deep Dark-Silver Floor Sheens
     const broadSweeps = [
-      { x: -14, width: 9, roughness: 0.18, elev: 0.005, color: '#0d0f14' },
-      { x: -3, width: 8, roughness: 0.15, elev: 0.008, color: '#12141a' },
-      { x: 7, width: 7, roughness: 0.20, elev: 0.006, color: '#0f1116' },
-      { x: 16, width: 10, roughness: 0.16, elev: 0.010, color: '#141720' },
+      { x: -16, width: 10, roughness: 0.14, color: '#090a0f' },
+      { x: -4, width: 9, roughness: 0.10, color: '#0c0e14' },
+      { x: 8, width: 8, roughness: 0.12, color: '#0a0c11' },
+      { x: 18, width: 12, roughness: 0.08, color: '#0e1118' },
     ];
 
-    broadSweeps.forEach((sweep) => {
-      const sweepGeo = new THREE.PlaneGeometry(sweep.width, 105);
+    broadSweeps.forEach((sweep, idx) => {
+      const sweepGeo = new THREE.PlaneGeometry(sweep.width, 115);
       const sweepMat = new THREE.MeshStandardMaterial({
         color: sweep.color,
         roughness: sweep.roughness,
-        metalness: 0.25,
+        metalness: 0.90,
       });
       const sweepMesh = new THREE.Mesh(sweepGeo, sweepMat);
       sweepMesh.rotation.x = -Math.PI / 2;
-      sweepMesh.position.set(sweep.x, -5.2 + sweep.elev, -30);
+      sweepMesh.position.set(sweep.x, -5.19 + idx * 0.002, -30);
       act2World.add(sweepMesh);
       disposables.push(sweepGeo, sweepMat);
     });
 
-    // Recessed Metallic Speed Rails on the floor
+    // Metallic Speed Rails recessed into floor
     const railConfigs = [
-      { x: -16, width: 0.06, color: '#ffffff', emissive: 0.5 },
-      { x: -9, width: 0.04, color: '#656b78', emissive: 0.2 },
-      { x: -2, width: 0.08, color: '#ffffff', emissive: 0.7 },
-      { x: 4, width: 0.14, color: '#ecd08e', emissive: 2.4 }, // Champagne Gold
-      { x: 10, width: 0.16, color: '#dfbd78', emissive: 2.8 }, // Champagne Gold
-      { x: 17, width: 0.10, color: '#ffffff', emissive: 1.1 },
+      { x: -18, width: 0.06, color: '#ffffff', emissive: 0.4 },
+      { x: -11, width: 0.04, color: '#555b68', emissive: 0.2 },
+      { x: -3, width: 0.08, color: '#ffffff', emissive: 0.7 },
+      { x: 4, width: 0.14, color: '#ecd08e', emissive: 2.6 }, // Champagne Gold
+      { x: 11, width: 0.18, color: '#dfbd78', emissive: 3.2 }, // Champagne Gold
+      { x: 19, width: 0.12, color: '#ffffff', emissive: 1.2 },
     ];
 
     railConfigs.forEach((cfg) => {
-      const railGeo = new THREE.BoxGeometry(cfg.width, 0.03, 105);
+      const railGeo = new THREE.BoxGeometry(cfg.width, 0.03, 115);
       const railMat = new THREE.MeshStandardMaterial({
         color: cfg.color,
         emissive: cfg.color,
         emissiveIntensity: cfg.emissive,
-        roughness: 0.08,
-        metalness: 0.95,
+        roughness: 0.05,
+        metalness: 0.98,
       });
       const railMesh = new THREE.Mesh(railGeo, railMat);
       railMesh.position.set(cfg.x, -5.17, -30);
@@ -277,73 +294,110 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     });
 
     // -----------------------------------------------------------------------
-    // B. RIGHT ARCHITECTURAL WALL & 14 BEVELED METALLIC LOUVER FINS
+    // B. RIGHT ARCHITECTURAL WALL & 16 BEVELED METALLIC LOUVER FINS
     // -----------------------------------------------------------------------
     // Wall Backplane
-    const wallBaseGeo = new THREE.PlaneGeometry(30, 105);
+    const wallBaseGeo = new THREE.PlaneGeometry(32, 115);
     const wallBaseMat = new THREE.MeshStandardMaterial({
-      color: '#0a0b0e',
-      roughness: 0.5,
-      metalness: 0.75,
+      color: '#07080a',
+      roughness: 0.4,
+      metalness: 0.85,
     });
     const wallBaseMesh = new THREE.Mesh(wallBaseGeo, wallBaseMat);
     wallBaseMesh.rotation.y = -Math.PI / 2;
-    wallBaseMesh.position.set(22.0, 4.0, -30);
+    wallBaseMesh.position.set(24.0, 4.0, -30);
     act2World.add(wallBaseMesh);
     disposables.push(wallBaseGeo, wallBaseMat);
 
-    // 14 Thick Architectural Fins with Real Physical Thickness and Bevels
-    const finsCount = 14;
+    // 16 Thick Architectural Louver Fins with Real Specular Edge Bevels
+    const finsCount = 16;
     for (let i = 0; i < finsCount; i++) {
       const t = i / (finsCount - 1);
-      const y = 11.5 - t * 16.5;
-      const finLength = 100;
+      const y = 13.0 - t * 18.5;
+      const finLength = 110;
 
-      // Real 3D Louver Fin Body
-      const finGeo = new THREE.BoxGeometry(2.2, 0.18, finLength);
+      // Dark Metallic Louver Fin Body
+      const finGeo = new THREE.BoxGeometry(2.4, 0.22, finLength);
       const finMat = new THREE.MeshStandardMaterial({
-        color: '#13151b',
-        roughness: 0.24,
-        metalness: 0.88,
+        color: '#0c0d12',
+        roughness: 0.18,
+        metalness: 0.92,
       });
       const finMesh = new THREE.Mesh(finGeo, finMat);
-      finMesh.position.set(21.0, y, -30);
+      finMesh.position.set(22.8, y, -30);
       act2World.add(finMesh);
       disposables.push(finGeo, finMat);
+
+      // Specular Top Edge Bevel catching grazing light
+      const edgeGeo = new THREE.BoxGeometry(0.08, 0.05, finLength);
+      const edgeMat = new THREE.MeshStandardMaterial({
+        color: '#ffffff',
+        roughness: 0.02,
+        metalness: 0.99,
+        emissive: '#ffffff',
+        emissiveIntensity: 0.6 + (1 - t) * 0.4,
+      });
+      const edgeMesh = new THREE.Mesh(edgeGeo, edgeMat);
+      edgeMesh.position.set(21.55, y + 0.11, -30);
+      act2World.add(edgeMesh);
+      disposables.push(edgeGeo, edgeMat);
     }
 
     // Dominant Upper Right Silver Blade (Structural Beveled Extrusion)
-    const bladeGeo = new THREE.BoxGeometry(0.35, 0.35, 105);
+    const bladeGeo = new THREE.BoxGeometry(0.45, 0.45, 115);
     const bladeMat = new THREE.MeshStandardMaterial({
       color: '#ffffff',
       emissive: '#ffffff',
-      emissiveIntensity: 0.9,
-      roughness: 0.05,
-      metalness: 0.98,
+      emissiveIntensity: 1.4,
+      roughness: 0.02,
+      metalness: 0.99,
     });
     const bladeMesh = new THREE.Mesh(bladeGeo, bladeMat);
-    bladeMesh.position.set(19.8, 12.2, -30);
+    bladeMesh.position.set(21.4, 13.8, -30);
     act2World.add(bladeMesh);
     disposables.push(bladeGeo, bladeMat);
 
     // -----------------------------------------------------------------------
-    // C. PHYSICAL GOLDEN HORIZON LASER BEAM
+    // C. RADIANT GOLDEN HORIZON LASER BEAM & UPPER VELOCITY SLASH
     // -----------------------------------------------------------------------
-    const horizonGeo = new THREE.BoxGeometry(55, 0.09, 0.09);
-    const horizonMat = new THREE.MeshStandardMaterial({
-      color: '#ffffff',
-      emissive: '#ecd08e',
-      emissiveIntensity: 3.5,
-      roughness: 0.1,
-      metalness: 0.9,
+    // Core High-Intensity Horizon Laser Filament
+    const horizonCoreGeo = new THREE.BoxGeometry(60, 0.08, 0.08);
+    const horizonCoreMat = new THREE.MeshBasicMaterial({ color: '#ffffff' });
+    const horizonCoreMesh = new THREE.Mesh(horizonCoreGeo, horizonCoreMat);
+    horizonCoreMesh.position.set(0, -1.1, -12);
+    act2World.add(horizonCoreMesh);
+    disposables.push(horizonCoreGeo, horizonCoreMat);
+
+    // Radiant Gold Bloom Strip
+    const bloomHazeTex = createBloomHazeTexture();
+    disposables.push(bloomHazeTex);
+    const horizonGlowGeo = new THREE.PlaneGeometry(60, 0.95);
+    const horizonGlowMat = new THREE.MeshBasicMaterial({
+      map: bloomHazeTex,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      opacity: 0.9,
     });
-    const horizonMesh = new THREE.Mesh(horizonGeo, horizonMat);
-    horizonMesh.position.set(0, -1.1, -12);
-    act2World.add(horizonMesh);
-    disposables.push(horizonGeo, horizonMat);
+    const horizonGlowMesh = new THREE.Mesh(horizonGlowGeo, horizonGlowMat);
+    horizonGlowMesh.position.set(0, -1.1, -12.02);
+    act2World.add(horizonGlowMesh);
+    disposables.push(horizonGlowGeo, horizonGlowMat);
+
+    // Upper Diagonal Champagne Velocity Slash behind "We"
+    const slashGeo = new THREE.BoxGeometry(50, 0.04, 0.04);
+    const slashMat = new THREE.MeshStandardMaterial({
+      color: '#ecd08e',
+      emissive: '#ecd08e',
+      emissiveIntensity: 2.2,
+    });
+    const slashMesh = new THREE.Mesh(slashGeo, slashMat);
+    slashMesh.position.set(-6, 6.2, -15);
+    slashMesh.rotation.z = -0.06;
+    act2World.add(slashMesh);
+    disposables.push(slashGeo, slashMat);
 
     // =======================================================================
-    // 6. WORLD-SPACE TYPOGRAPHY (Rendered Once Exact Webfonts Load)
+    // 6. WORLD-SPACE TYPOGRAPHY (Exact Unprojected Reference Geometry)
     // =======================================================================
     const typographyConfigs: TypographyConfig[] = [
       {
@@ -357,6 +411,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         depthZ: 3.5,
         yawOffset: -0.06,
         pitchOffset: -0.02,
+        rollOffset: -0.045,
       },
       {
         id: 'sellout',
@@ -370,6 +425,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         depthZ: 1.2,
         yawOffset: -0.08,
         pitchOffset: -0.02,
+        rollOffset: -0.040,
       },
       {
         id: 'your',
@@ -382,6 +438,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         depthZ: 2.4,
         yawOffset: -0.06,
         pitchOffset: -0.02,
+        rollOffset: -0.045,
       },
       {
         id: 'realestate',
@@ -394,6 +451,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         depthZ: 0.0,
         yawOffset: -0.10,
         pitchOffset: -0.02,
+        rollOffset: -0.045,
       },
       {
         id: 'project',
@@ -406,10 +464,10 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         depthZ: -1.2,
         yawOffset: -0.10,
         pitchOffset: -0.02,
+        rollOffset: -0.045,
       },
     ];
 
-    // Load fonts and mount world-space text planes with exact unprojected coordinates
     const initTypography = async () => {
       try {
         await document.fonts.ready;
@@ -419,7 +477,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
       if (isDisposed) return;
 
       typographyConfigs.forEach((cfg) => {
-        const { texture, aspect } = createCrispTextTexture(cfg.text, cfg.font, cfg.color, cfg.isGold);
+        const { texture, aspect } = createCrispTextTexture(cfg.text, cfg.font, cfg.color, cfg.isGold, true);
         disposables.push(texture);
 
         const transform = calculateWorldSpaceTransform(
@@ -444,9 +502,27 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         textMesh.position.copy(transform.position);
         textMesh.rotation.y = cfg.yawOffset || -0.08;
         textMesh.rotation.x = cfg.pitchOffset || -0.02;
-        textMesh.rotation.z = -0.035;
+        textMesh.rotation.z = cfg.rollOffset || -0.045;
         scene.add(textMesh);
         disposables.push(textGeo, textMat);
+
+        // Add Inverted Floor Reflection for "project"
+        if (cfg.id === 'project') {
+          const reflMat = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            opacity: 0.14,
+            depthWrite: false,
+          });
+          const reflMesh = new THREE.Mesh(textGeo, reflMat);
+          reflMesh.position.set(transform.position.x, transform.position.y - transform.planeHeight * 0.95, transform.position.z - 0.4);
+          reflMesh.scale.set(1, -0.55, 1);
+          reflMesh.rotation.y = cfg.yawOffset || -0.08;
+          reflMesh.rotation.x = -(cfg.pitchOffset || -0.02);
+          reflMesh.rotation.z = -(cfg.rollOffset || -0.045);
+          scene.add(reflMesh);
+          disposables.push(reflMat);
+        }
       });
     };
     initTypography();
@@ -466,7 +542,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     };
     animate();
 
-    // 8. RESIZE HANDLER (Maintains Exact 1672x941 Reference Framing)
+    // 8. RESIZE HANDLER
     const handleResize = () => {
       if (!container || isDisposed) return;
       const w = container.clientWidth || window.innerWidth;
