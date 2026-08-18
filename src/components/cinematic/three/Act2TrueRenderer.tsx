@@ -22,7 +22,7 @@ interface TypographyConfig {
 }
 
 /**
- * Creates high-resolution 4K canvas texture with exact glyph measurement, drop shadow, and crisp anti-aliasing
+ * Creates high-resolution 4K canvas texture with exact glyph measurement and deep drop shadow
  */
 function createCrispTextTexture(
   text: string,
@@ -34,8 +34,7 @@ function createCrispTextTexture(
   const offscreen = document.createElement('canvas');
   const ctx = offscreen.getContext('2d', { willReadFrequently: true })!;
 
-  // 4x supersampling base font size for razor-sharp rendering in 3D perspective
-  const baseFontSize = 240;
+  const baseFontSize = 260;
   ctx.font = font.replace(/__SIZE__/g, `${baseFontSize}px`);
   const metrics = ctx.measureText(text);
 
@@ -60,20 +59,19 @@ function createCrispTextTexture(
   const drawX = padX;
   const drawY = padY + actualAscent;
 
-  // Cinematic Deep Drop Shadow
   if (hasShadow) {
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-    ctx.shadowBlur = 32;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.98)';
+    ctx.shadowBlur = 36;
     ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 16;
+    ctx.shadowOffsetY = 18;
   }
 
   if (isGold) {
     const grad = ctx.createLinearGradient(drawX, drawY - actualAscent, drawX + textWidth * 0.9, drawY + actualDescent);
-    grad.addColorStop(0, '#fff4db');
+    grad.addColorStop(0, '#fff6e0');
     grad.addColorStop(0.35, '#ecd08e');
     grad.addColorStop(0.75, '#c79846');
-    grad.addColorStop(1, '#946c26');
+    grad.addColorStop(1, '#8f6823');
     ctx.fillStyle = grad;
   } else {
     ctx.fillStyle = color;
@@ -98,17 +96,17 @@ function createCrispTextTexture(
  */
 function createBloomHazeTexture(): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
-  canvas.width = 512;
-  canvas.height = 128;
+  canvas.width = 1024;
+  canvas.height = 256;
   const ctx = canvas.getContext('2d')!;
 
-  const grad = ctx.createLinearGradient(0, 0, 0, 128);
+  const grad = ctx.createLinearGradient(0, 0, 0, 256);
   grad.addColorStop(0, 'rgba(236, 208, 142, 0)');
-  grad.addColorStop(0.5, 'rgba(236, 208, 142, 0.85)');
+  grad.addColorStop(0.5, 'rgba(236, 208, 142, 0.95)');
   grad.addColorStop(1, 'rgba(236, 208, 142, 0)');
 
   ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 512, 128);
+  ctx.fillRect(0, 0, 1024, 256);
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
@@ -132,20 +130,16 @@ function calculateWorldSpaceTransform(
   const centerPxX = pixelLeft + pixelWidth / 2;
   const centerPxY = pixelTop + estHeight / 2;
 
-  // NDC [-1, 1]
   const ndcX = (centerPxX / refWidth) * 2 - 1;
   const ndcY = 1 - (centerPxY / refHeight) * 2;
 
-  // Unproject ray through camera
   const rayVector = new THREE.Vector3(ndcX, ndcY, 0.5);
   rayVector.unproject(camera);
   const rayDir = rayVector.sub(camera.position).normalize();
 
-  // Intersect with chosen world Z depth plane
   const distance = (depthZ - camera.position.z) / rayDir.z;
   const worldPos = camera.position.clone().add(rayDir.multiplyScalar(distance));
 
-  // Compute world width to match exact screen pixel scale
   const vFovRad = THREE.MathUtils.degToRad(camera.fov);
   const frustumHeightAtDepth = 2 * Math.tan(vFovRad / 2) * Math.abs(distance);
   const frustumWidthAtDepth = frustumHeightAtDepth * camera.aspect;
@@ -183,12 +177,12 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     // 1. SCENE SETUP (Deep Pitch Obsidian Black Environment)
     const scene = new THREE.Scene();
     scene.background = new THREE.Color('#050608');
-    scene.fog = new THREE.FogExp2('#050608', 0.012);
+    scene.fog = new THREE.FogExp2('#050608', 0.010);
 
-    // 2. PERSPECTIVE CAMERA (Calibrated FOV 42°)
+    // 2. PERSPECTIVE CAMERA (Calibrated to Target 42° FOV)
     const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 300);
     camera.position.set(0, 0, 18.0);
-    camera.lookAt(new THREE.Vector3(0.5, -0.3, 0));
+    camera.lookAt(new THREE.Vector3(0.6, -0.35, 0));
 
     // 3. WEBGL RENDERER
     const renderer = new THREE.WebGLRenderer({
@@ -202,84 +196,175 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     renderer.toneMappingExposure = 1.35;
     container.appendChild(renderer.domElement);
 
-    // 4. LIGHTING SYSTEM (Controlled Moody Specular Grazing Lights)
-    const ambientLight = new THREE.AmbientLight('#08090c', 0.25);
+    // 4. LIGHTING SYSTEM (Controlled Cinematic Grazing Lights)
+    const ambientLight = new THREE.AmbientLight('#08090c', 0.3);
     scene.add(ambientLight);
 
-    // Sharp grazing directional key light along the right architectural wall louvers
-    const wallKeyLight = new THREE.DirectionalLight('#ffffff', 4.2);
-    wallKeyLight.position.set(18, 14, 12);
-    scene.add(wallKeyLight);
+    // Grazing key light hitting right wall metallic fins
+    const rightWallKeyLight = new THREE.DirectionalLight('#ffffff', 4.5);
+    rightWallKeyLight.position.set(20, 16, 14);
+    scene.add(rightWallKeyLight);
 
-    // Floor specular grazing light
-    const floorKeyLight = new THREE.DirectionalLight('#ffffff', 1.8);
-    floorKeyLight.position.set(-6, 12, 10);
-    scene.add(floorKeyLight);
+    // Soft fill along the left curved wall
+    const leftWallFill = new THREE.DirectionalLight('#ecd08e', 1.4);
+    leftWallFill.position.set(-14, 8, 12);
+    scene.add(leftWallFill);
 
-    // Warm champagne accent light along horizon
-    const laserLight = new THREE.PointLight('#ecd08e', 3.2, 35);
-    laserLight.position.set(4, -1.2, 2);
-    scene.add(laserLight);
+    // Horizon Point Light
+    const laserPoint = new THREE.PointLight('#ecd08e', 3.5, 35);
+    laserPoint.position.set(4, -1.2, 2);
+    scene.add(laserPoint);
 
     // =======================================================================
-    // 5. ONE UNIFIED 3D WORLD COORDINATE GROUP (`act2World`)
+    // 5. THE ARCHITECTURAL ROOM RIG (`roomRig`)
     // =======================================================================
-    const act2World = new THREE.Group();
-    // Calibrated spatial corridor tilt: yaw ~ -25.7°, pitch ~ -5.5°
-    act2World.rotation.y = -0.448;
-    act2World.rotation.x = -0.096;
-    scene.add(act2World);
+    const roomRig = new THREE.Group();
+    scene.add(roomRig);
 
     // -----------------------------------------------------------------------
-    // A. GLOSSY BLACK TARMAC / LACQUER FLOOR & BROAD REFLECTIVE PANELS
+    // A. LEFT-TO-RIGHT CURVING BACK WALL (Protruding Left -> Deep Right Corner)
     // -----------------------------------------------------------------------
-    // Base Floor Mesh (Glossy Pitch-Black Lacquer)
-    const floorGeo = new THREE.PlaneGeometry(75, 120);
+    const segmentsX = 40;
+    const curveWidth = 60;
+    const curveHeight = 32;
+    const backWallGeo = new THREE.PlaneGeometry(curveWidth, curveHeight, segmentsX, 1);
+    const posAttr = backWallGeo.attributes.position;
+
+    // Apply smooth logarithmic curvature: left side (x < 0) is closer to viewer, curving back into depth on right
+    for (let i = 0; i < posAttr.count; i++) {
+      const vx = posAttr.getX(i);
+      // Normalized from -1 (left) to 1 (right)
+      const u = (vx + curveWidth / 2) / curveWidth;
+      // Curvature depth formula: starts at z = 4.0 on far left and curves back to z = -28.0 in right corner
+      const vz = 4.0 - Math.pow(u, 1.35) * 32.0;
+      posAttr.setZ(i, vz);
+    }
+    backWallGeo.computeVertexNormals();
+
+    const backWallMat = new THREE.MeshStandardMaterial({
+      color: '#07080a',
+      roughness: 0.35,
+      metalness: 0.70,
+    });
+    const backWallMesh = new THREE.Mesh(backWallGeo, backWallMat);
+    backWallMesh.position.set(-4.0, 5.5, -4.0);
+    roomRig.add(backWallMesh);
+    disposables.push(backWallGeo, backWallMat);
+
+    // -----------------------------------------------------------------------
+    // B. RIGHT ANGLE WALL (Merging into the Right Vanishing Corner Seam)
+    // -----------------------------------------------------------------------
+    const rightWallBaseGeo = new THREE.PlaneGeometry(36, 120);
+    const rightWallBaseMat = new THREE.MeshStandardMaterial({
+      color: '#060709',
+      roughness: 0.3,
+      metalness: 0.85,
+    });
+    const rightWallMesh = new THREE.Mesh(rightWallBaseGeo, rightWallBaseMat);
+    rightWallMesh.rotation.y = -Math.PI / 2 + 0.32; // Angled inward to meet the curved back wall
+    rightWallMesh.position.set(24.5, 4.0, -26);
+    roomRig.add(rightWallMesh);
+    disposables.push(rightWallBaseGeo, rightWallBaseMat);
+
+    // 16 Thick Architectural Metallic Fins/Louvers on Right Wall
+    const finsCount = 16;
+    for (let i = 0; i < finsCount; i++) {
+      const t = i / (finsCount - 1);
+      const y = 14.5 - t * 20.0;
+      const finLength = 115;
+
+      const finGeo = new THREE.BoxGeometry(2.6, 0.24, finLength);
+      const finMat = new THREE.MeshStandardMaterial({
+        color: '#0b0c10',
+        roughness: 0.16,
+        metalness: 0.94,
+      });
+      const finMesh = new THREE.Mesh(finGeo, finMat);
+      finMesh.rotation.y = -Math.PI / 2 + 0.32;
+      finMesh.position.set(23.2, y, -26);
+      roomRig.add(finMesh);
+      disposables.push(finGeo, finMat);
+
+      // Specular Top Edge Bevel
+      const edgeGeo = new THREE.BoxGeometry(0.08, 0.06, finLength);
+      const edgeMat = new THREE.MeshStandardMaterial({
+        color: '#ffffff',
+        roughness: 0.02,
+        metalness: 0.99,
+        emissive: '#ffffff',
+        emissiveIntensity: 0.7 + (1 - t) * 0.5,
+      });
+      const edgeMesh = new THREE.Mesh(edgeGeo, edgeMat);
+      edgeMesh.rotation.y = -Math.PI / 2 + 0.32;
+      edgeMesh.position.set(21.85, y + 0.12, -26);
+      roomRig.add(edgeMesh);
+      disposables.push(edgeGeo, edgeMat);
+    }
+
+    // Dominant Upper Right Silver Blade
+    const bladeGeo = new THREE.BoxGeometry(0.48, 0.48, 120);
+    const bladeMat = new THREE.MeshStandardMaterial({
+      color: '#ffffff',
+      emissive: '#ffffff',
+      emissiveIntensity: 1.5,
+      roughness: 0.02,
+      metalness: 0.99,
+    });
+    const bladeMesh = new THREE.Mesh(bladeGeo, bladeMat);
+    bladeMesh.rotation.y = -Math.PI / 2 + 0.32;
+    bladeMesh.position.set(21.6, 15.2, -26);
+    roomRig.add(bladeMesh);
+    disposables.push(bladeGeo, bladeMat);
+
+    // -----------------------------------------------------------------------
+    // C. GLOSSY OBSIDIAN FLOOR & VELOCITY SPEED RAILS
+    // -----------------------------------------------------------------------
+    const floorGeo = new THREE.PlaneGeometry(80, 130);
     const floorMat = new THREE.MeshStandardMaterial({
       color: '#050608',
       roughness: 0.12,
-      metalness: 0.85,
+      metalness: 0.88,
     });
     const floorMesh = new THREE.Mesh(floorGeo, floorMat);
     floorMesh.rotation.x = -Math.PI / 2;
-    floorMesh.position.set(0, -5.2, -30);
-    act2World.add(floorMesh);
+    floorMesh.position.set(0, -5.2, -25);
+    roomRig.add(floorMesh);
     disposables.push(floorGeo, floorMat);
 
     // Broad Deep Dark-Silver Floor Sheens
     const broadSweeps = [
-      { x: -16, width: 10, roughness: 0.14, color: '#090a0f' },
-      { x: -4, width: 9, roughness: 0.10, color: '#0c0e14' },
-      { x: 8, width: 8, roughness: 0.12, color: '#0a0c11' },
-      { x: 18, width: 12, roughness: 0.08, color: '#0e1118' },
+      { x: -18, width: 11, roughness: 0.14, color: '#080a0f' },
+      { x: -5, width: 10, roughness: 0.10, color: '#0b0d13' },
+      { x: 8, width: 9, roughness: 0.12, color: '#090b10' },
+      { x: 20, width: 14, roughness: 0.08, color: '#0d1017' },
     ];
 
     broadSweeps.forEach((sweep, idx) => {
-      const sweepGeo = new THREE.PlaneGeometry(sweep.width, 115);
+      const sweepGeo = new THREE.PlaneGeometry(sweep.width, 125);
       const sweepMat = new THREE.MeshStandardMaterial({
         color: sweep.color,
         roughness: sweep.roughness,
-        metalness: 0.90,
+        metalness: 0.92,
       });
       const sweepMesh = new THREE.Mesh(sweepGeo, sweepMat);
       sweepMesh.rotation.x = -Math.PI / 2;
-      sweepMesh.position.set(sweep.x, -5.19 + idx * 0.002, -30);
-      act2World.add(sweepMesh);
+      sweepMesh.position.set(sweep.x, -5.19 + idx * 0.002, -25);
+      roomRig.add(sweepMesh);
       disposables.push(sweepGeo, sweepMat);
     });
 
-    // Metallic Speed Rails recessed into floor
+    // Speed Rails along the floor
     const railConfigs = [
-      { x: -18, width: 0.06, color: '#ffffff', emissive: 0.4 },
-      { x: -11, width: 0.04, color: '#555b68', emissive: 0.2 },
-      { x: -3, width: 0.08, color: '#ffffff', emissive: 0.7 },
-      { x: 4, width: 0.14, color: '#ecd08e', emissive: 2.6 }, // Champagne Gold
-      { x: 11, width: 0.18, color: '#dfbd78', emissive: 3.2 }, // Champagne Gold
-      { x: 19, width: 0.12, color: '#ffffff', emissive: 1.2 },
+      { x: -20, width: 0.06, color: '#ffffff', emissive: 0.4 },
+      { x: -12, width: 0.04, color: '#555b68', emissive: 0.2 },
+      { x: -4, width: 0.08, color: '#ffffff', emissive: 0.7 },
+      { x: 5, width: 0.14, color: '#ecd08e', emissive: 2.6 }, // Champagne Gold
+      { x: 12, width: 0.18, color: '#dfbd78', emissive: 3.2 }, // Champagne Gold
+      { x: 21, width: 0.12, color: '#ffffff', emissive: 1.2 },
     ];
 
     railConfigs.forEach((cfg) => {
-      const railGeo = new THREE.BoxGeometry(cfg.width, 0.03, 115);
+      const railGeo = new THREE.BoxGeometry(cfg.width, 0.03, 125);
       const railMat = new THREE.MeshStandardMaterial({
         color: cfg.color,
         emissive: cfg.color,
@@ -288,116 +373,52 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         metalness: 0.98,
       });
       const railMesh = new THREE.Mesh(railGeo, railMat);
-      railMesh.position.set(cfg.x, -5.17, -30);
-      act2World.add(railMesh);
+      railMesh.position.set(cfg.x, -5.17, -25);
+      roomRig.add(railMesh);
       disposables.push(railGeo, railMat);
     });
 
     // -----------------------------------------------------------------------
-    // B. RIGHT ARCHITECTURAL WALL & 16 BEVELED METALLIC LOUVER FINS
+    // D. RADIANT GOLD LASER HORIZON & UPPER VELOCITY SLASH
     // -----------------------------------------------------------------------
-    // Wall Backplane
-    const wallBaseGeo = new THREE.PlaneGeometry(32, 115);
-    const wallBaseMat = new THREE.MeshStandardMaterial({
-      color: '#07080a',
-      roughness: 0.4,
-      metalness: 0.85,
-    });
-    const wallBaseMesh = new THREE.Mesh(wallBaseGeo, wallBaseMat);
-    wallBaseMesh.rotation.y = -Math.PI / 2;
-    wallBaseMesh.position.set(24.0, 4.0, -30);
-    act2World.add(wallBaseMesh);
-    disposables.push(wallBaseGeo, wallBaseMat);
-
-    // 16 Thick Architectural Louver Fins with Real Specular Edge Bevels
-    const finsCount = 16;
-    for (let i = 0; i < finsCount; i++) {
-      const t = i / (finsCount - 1);
-      const y = 13.0 - t * 18.5;
-      const finLength = 110;
-
-      // Dark Metallic Louver Fin Body
-      const finGeo = new THREE.BoxGeometry(2.4, 0.22, finLength);
-      const finMat = new THREE.MeshStandardMaterial({
-        color: '#0c0d12',
-        roughness: 0.18,
-        metalness: 0.92,
-      });
-      const finMesh = new THREE.Mesh(finGeo, finMat);
-      finMesh.position.set(22.8, y, -30);
-      act2World.add(finMesh);
-      disposables.push(finGeo, finMat);
-
-      // Specular Top Edge Bevel catching grazing light
-      const edgeGeo = new THREE.BoxGeometry(0.08, 0.05, finLength);
-      const edgeMat = new THREE.MeshStandardMaterial({
-        color: '#ffffff',
-        roughness: 0.02,
-        metalness: 0.99,
-        emissive: '#ffffff',
-        emissiveIntensity: 0.6 + (1 - t) * 0.4,
-      });
-      const edgeMesh = new THREE.Mesh(edgeGeo, edgeMat);
-      edgeMesh.position.set(21.55, y + 0.11, -30);
-      act2World.add(edgeMesh);
-      disposables.push(edgeGeo, edgeMat);
-    }
-
-    // Dominant Upper Right Silver Blade (Structural Beveled Extrusion)
-    const bladeGeo = new THREE.BoxGeometry(0.45, 0.45, 115);
-    const bladeMat = new THREE.MeshStandardMaterial({
-      color: '#ffffff',
-      emissive: '#ffffff',
-      emissiveIntensity: 1.4,
-      roughness: 0.02,
-      metalness: 0.99,
-    });
-    const bladeMesh = new THREE.Mesh(bladeGeo, bladeMat);
-    bladeMesh.position.set(21.4, 13.8, -30);
-    act2World.add(bladeMesh);
-    disposables.push(bladeGeo, bladeMat);
-
-    // -----------------------------------------------------------------------
-    // C. RADIANT GOLDEN HORIZON LASER BEAM & UPPER VELOCITY SLASH
-    // -----------------------------------------------------------------------
-    // Core High-Intensity Horizon Laser Filament
-    const horizonCoreGeo = new THREE.BoxGeometry(60, 0.08, 0.08);
+    // High-Intensity Laser Filament running along the wall-floor junction
+    const horizonCoreGeo = new THREE.BoxGeometry(65, 0.09, 0.09);
     const horizonCoreMat = new THREE.MeshBasicMaterial({ color: '#ffffff' });
     const horizonCoreMesh = new THREE.Mesh(horizonCoreGeo, horizonCoreMat);
-    horizonCoreMesh.position.set(0, -1.1, -12);
-    act2World.add(horizonCoreMesh);
+    horizonCoreMesh.position.set(0, -1.05, -10.5);
+    roomRig.add(horizonCoreMesh);
     disposables.push(horizonCoreGeo, horizonCoreMat);
 
     // Radiant Gold Bloom Strip
     const bloomHazeTex = createBloomHazeTexture();
     disposables.push(bloomHazeTex);
-    const horizonGlowGeo = new THREE.PlaneGeometry(60, 0.95);
+    const horizonGlowGeo = new THREE.PlaneGeometry(65, 1.1);
     const horizonGlowMat = new THREE.MeshBasicMaterial({
       map: bloomHazeTex,
       transparent: true,
       blending: THREE.AdditiveBlending,
-      opacity: 0.9,
+      opacity: 0.92,
     });
     const horizonGlowMesh = new THREE.Mesh(horizonGlowGeo, horizonGlowMat);
-    horizonGlowMesh.position.set(0, -1.1, -12.02);
-    act2World.add(horizonGlowMesh);
+    horizonGlowMesh.position.set(0, -1.05, -10.52);
+    roomRig.add(horizonGlowMesh);
     disposables.push(horizonGlowGeo, horizonGlowMat);
 
     // Upper Diagonal Champagne Velocity Slash behind "We"
-    const slashGeo = new THREE.BoxGeometry(50, 0.04, 0.04);
+    const slashGeo = new THREE.BoxGeometry(55, 0.04, 0.04);
     const slashMat = new THREE.MeshStandardMaterial({
       color: '#ecd08e',
       emissive: '#ecd08e',
-      emissiveIntensity: 2.2,
+      emissiveIntensity: 2.4,
     });
     const slashMesh = new THREE.Mesh(slashGeo, slashMat);
-    slashMesh.position.set(-6, 6.2, -15);
-    slashMesh.rotation.z = -0.06;
-    act2World.add(slashMesh);
+    slashMesh.position.set(-6, 6.4, -14);
+    slashMesh.rotation.z = -0.055;
+    roomRig.add(slashMesh);
     disposables.push(slashGeo, slashMat);
 
     // =======================================================================
-    // 6. WORLD-SPACE TYPOGRAPHY (Exact Unprojected Reference Geometry)
+    // 6. WORLD-SPACE TYPOGRAPHY (Unprojected to Exact Reference Anchors)
     // =======================================================================
     const typographyConfigs: TypographyConfig[] = [
       {
