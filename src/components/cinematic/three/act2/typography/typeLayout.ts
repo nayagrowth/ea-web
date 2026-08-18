@@ -7,6 +7,7 @@ export interface ScreenTextBox {
   maxX: number;
   minY: number;
   maxY: number;
+  targetZ: number;
   text: string;
   fontFamily: string;
   fontWeight: string;
@@ -20,22 +21,23 @@ export interface ScreenTextBox {
 export interface WallTextQuadGeometryData {
   name: string;
   text: string;
-  pTL: THREE.Vector3;
-  pTR: THREE.Vector3;
-  pBR: THREE.Vector3;
-  pBL: THREE.Vector3;
+  centroid: THREE.Vector3;
+  localTL: THREE.Vector3;
+  localTR: THREE.Vector3;
+  localBR: THREE.Vector3;
+  localBL: THREE.Vector3;
+  worldTL: THREE.Vector3;
+  worldTR: THREE.Vector3;
+  worldBR: THREE.Vector3;
+  worldBL: THREE.Vector3;
   screenBox: ScreenTextBox;
 }
 
 /**
- * Unprojects a canonical 1672x941 screen point (x, y) through the calibrated
- * off-axis pinhole camera onto the left hero wall plane X = -7.46.
+ * Computes the normalized ray direction in world space for a screen pixel (x, y)
+ * using the calibrated off-axis camera intrinsics.
  */
-export function unprojectScreenToHeroWall(
-  x: number,
-  y: number,
-  wallX = -7.46
-): THREE.Vector3 {
+export function rayForScreenPixel(x: number, y: number): THREE.Vector3 {
   const ref = REFERENCE_GEOMETRY;
   const u = x / ref.width;
   const v = 1.0 - y / ref.height;
@@ -50,49 +52,60 @@ export function unprojectScreenToHeroWall(
   const yc = bottom + (top - bottom) * v;
   const zc = -near;
 
-  const camX = ref.camera.position.x;
-  const camY = ref.camera.position.y;
-  const camZ = ref.camera.position.z;
-
-  if (Math.abs(xc) < 1e-7) {
-    return new THREE.Vector3(wallX, camY, -90.0);
-  }
-
-  const t = (wallX - camX) / xc;
-  const wy = camY + t * yc;
-  const wz = camZ + t * zc;
-
-  return new THREE.Vector3(wallX, wy, wz);
+  const dir = new THREE.Vector3(xc, yc, zc);
+  return dir.normalize();
 }
 
 /**
- * Canonical Screen Bounding Boxes for Act 2 Spatial Typography (W = 1672, H = 941)
+ * Unprojects a screen point (x, y) onto a plane at target depth Z.
+ */
+export function unprojectScreenToPlaneZ(
+  x: number,
+  y: number,
+  targetZ: number
+): THREE.Vector3 {
+  const ref = REFERENCE_GEOMETRY;
+  const cam = ref.camera.position;
+  const D = rayForScreenPixel(x, y);
+
+  if (Math.abs(D.z) < 1e-7) {
+    return new THREE.Vector3(cam.x, cam.y, targetZ);
+  }
+
+  const t = (targetZ - cam.z) / D.z;
+  return new THREE.Vector3(cam.x + t * D.x, cam.y + t * D.y, targetZ);
+}
+
+/**
+ * Exact Measured Reference Text Bounds from Canonical 1672x941 Source Frame
  */
 export const ACT2_TEXT_BOXES: Record<string, ScreenTextBox> = {
   we: {
     name: 'we',
-    minX: 230,
-    maxX: 550,
-    minY: 130,
-    maxY: 335,
-    text: 'WE',
+    minX: 239,
+    maxX: 605,
+    minY: 136,
+    maxY: 348,
+    targetZ: -12.0,
+    text: 'We',
     fontFamily: 'Qurova, sans-serif',
     fontWeight: '700',
-    fontSize: 160,
+    fontSize: 168,
     fontStyle: 'normal',
     color: '#ffffff',
     opacity: 1.0,
   },
   sellOut: {
     name: 'sellOut',
-    minX: 580,
-    maxX: 1050,
-    minY: 215,
-    maxY: 395,
+    minX: 746,
+    maxX: 1231,
+    minY: 232,
+    maxY: 408,
+    targetZ: -16.0,
     text: 'sell-out',
-    fontFamily: 'Playfair Display, Cormorant Garamond, serif',
+    fontFamily: 'Playfair Display, Cormorant Garamond, Georgia, serif',
     fontWeight: '400',
-    fontSize: 130,
+    fontSize: 138,
     fontStyle: 'italic',
     color: '#F5C200',
     opacity: 0.95,
@@ -101,65 +114,86 @@ export const ACT2_TEXT_BOXES: Record<string, ScreenTextBox> = {
   your: {
     name: 'your',
     minX: 220,
-    maxX: 650,
-    minY: 390,
-    maxY: 575,
+    maxX: 691,
+    minY: 395,
+    maxY: 586,
+    targetZ: -13.0,
     text: 'your',
-    fontFamily: 'Playfair Display, Cormorant Garamond, serif',
+    fontFamily: 'Playfair Display, Cormorant Garamond, Georgia, serif',
     fontWeight: '400',
-    fontSize: 155,
+    fontSize: 160,
     fontStyle: 'italic',
     color: '#ffffff',
     opacity: 1.0,
   },
   realEstate: {
     name: 'realEstate',
-    minX: 650,
-    maxX: 1200,
-    minY: 405,
-    maxY: 600,
+    minX: 731,
+    maxX: 1440,
+    minY: 410,
+    maxY: 574,
+    targetZ: -20.0,
     text: 'real estate',
     fontFamily: 'Qurova, sans-serif',
     fontWeight: '700',
-    fontSize: 145,
+    fontSize: 142,
     fontStyle: 'normal',
     color: '#ffffff',
     opacity: 1.0,
   },
   project: {
     name: 'project',
-    minX: 650,
-    maxX: 1150,
-    minY: 585,
-    maxY: 770,
+    minX: 724,
+    maxX: 1388,
+    minY: 604,
+    maxY: 784,
+    targetZ: -18.0,
     text: 'project',
     fontFamily: 'Qurova, sans-serif',
     fontWeight: '300',
-    fontSize: 140,
+    fontSize: 148,
     fontStyle: 'normal',
     color: '#e5e8ec',
-    opacity: 0.85,
+    opacity: 0.88,
     letterSpacing: 14,
   },
 };
 
 /**
- * Calculates physical 3D wall quad corner vertices for each text phrase.
+ * Calculates centered 3D quad geometry with centroid origin for all 5 phrases.
  */
-export function getAct2TextQuadData(wallX = -7.46): WallTextQuadGeometryData[] {
+export function getAct2TextQuadData(): WallTextQuadGeometryData[] {
   return Object.values(ACT2_TEXT_BOXES).map((box) => {
-    const pTL = unprojectScreenToHeroWall(box.minX, box.minY, wallX);
-    const pTR = unprojectScreenToHeroWall(box.maxX, box.minY, wallX);
-    const pBR = unprojectScreenToHeroWall(box.maxX, box.maxY, wallX);
-    const pBL = unprojectScreenToHeroWall(box.minX, box.maxY, wallX);
+    const worldTL = unprojectScreenToPlaneZ(box.minX, box.minY, box.targetZ);
+    const worldTR = unprojectScreenToPlaneZ(box.maxX, box.minY, box.targetZ);
+    const worldBR = unprojectScreenToPlaneZ(box.maxX, box.maxY, box.targetZ);
+    const worldBL = unprojectScreenToPlaneZ(box.minX, box.maxY, box.targetZ);
+
+    // Compute Exact Centroid C
+    const centroid = new THREE.Vector3(
+      (worldTL.x + worldTR.x + worldBR.x + worldBL.x) / 4.0,
+      (worldTL.y + worldTR.y + worldBR.y + worldBL.y) / 4.0,
+      (worldTL.z + worldTR.z + worldBR.z + worldBL.z) / 4.0
+    );
+
+    // Local Coordinates around Centroid (P_local = P_world - C)
+    const localTL = worldTL.clone().sub(centroid);
+    const localTR = worldTR.clone().sub(centroid);
+    const localBR = worldBR.clone().sub(centroid);
+    const localBL = worldBL.clone().sub(centroid);
 
     return {
       name: box.name,
       text: box.text,
-      pTL,
-      pTR,
-      pBR,
-      pBL,
+      centroid,
+      localTL,
+      localTR,
+      localBR,
+      localBL,
+      worldTL,
+      worldTR,
+      worldBR,
+      worldBL,
       screenBox: box,
     };
   });

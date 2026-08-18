@@ -201,7 +201,7 @@ export const Act2TrueRenderer = forwardRef<Act2RendererHandle, Act2TrueRendererP
       disposables.push(...geometryRig.disposables);
 
       // 6. SPATIAL TYPOGRAPHY RIG (V7)
-      const typeRig = createAct2TypeRig(-7.46);
+      const typeRig = createAct2TypeRig();
       typeRigRef.current = typeRig;
       scene.add(typeRig.group);
       disposables.push(...typeRig.disposables);

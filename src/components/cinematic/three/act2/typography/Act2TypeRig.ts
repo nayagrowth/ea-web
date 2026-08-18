@@ -9,14 +9,14 @@ export interface Act2TypeRig {
 }
 
 /**
- * Creates the complete Act 2 Spatial Typography Rig containing the 5 discrete
- * 3D word quads unprojected onto the left hero wall.
+ * Creates the Act 2 Spatial Typography Rig containing the 5 discrete
+ * 3D word quads unprojected from canonical reference screen rays.
  */
-export function createAct2TypeRig(wallX = -7.46): Act2TypeRig {
+export function createAct2TypeRig(): Act2TypeRig {
   const group = new THREE.Group();
   group.name = 'Act2_SpatialTypographyRig';
 
-  const quadDataList = getAct2TextQuadData(wallX);
+  const quadDataList = getAct2TextQuadData();
   const quads: Record<string, WallTextQuad> = {};
   const disposables: Array<{ dispose: () => void }> = [];
 
