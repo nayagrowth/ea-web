@@ -175,24 +175,12 @@ export const Act1ArchitecturalColumns: React.FC = () => {
                 <div className="act1-your-rule w-full h-[1px] bg-[#0c0c0d]/25 origin-right relative overflow-hidden">
                   <div className="act1-your-pulse absolute inset-0 bg-gradient-to-r from-transparent via-[#ecd08e] to-transparent opacity-0" />
                 </div>
-                <div className="act1-your-dot act1-bridge-gold-dot relative ml-2 w-4 h-4 rounded-full shrink-0 z-30 flex items-center justify-center pointer-events-none">
-                  {/* Outer Solar Flare Glow */}
-                  <div className="act1-dot-glow absolute -inset-3 rounded-full bg-[#F5C200]/40 blur-md opacity-0 pointer-events-none transition-opacity" />
-                  
-                  {/* Directional Energy Streak Tail */}
-                  <div className="act1-dot-streak absolute w-24 h-1 bg-gradient-to-r from-transparent via-[#F5C200] to-white rounded-full opacity-0 pointer-events-none origin-right -right-1" />
-
-                  {/* Expanding Hyper-speed Shockwave Ring */}
-                  <div className="act1-dot-shockwave absolute -inset-6 rounded-full border-2 border-[#F5C200] opacity-0 pointer-events-none" />
-
-                  {/* Main High-Fidelity Radiant Dot Core */}
-                  <div
-                    className="act1-dot-core w-full h-full rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.3)] relative z-10"
-                    style={{
-                      background: 'radial-gradient(circle at 35% 35%, #fff6d6 0%, #F5C200 45%, #c79846 75%, #7a501e 100%)',
-                    }}
-                  />
-                </div>
+                <div
+                  className="act1-your-dot act1-bridge-gold-dot ml-2 w-3.5 h-3.5 rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.18)] shrink-0 z-20"
+                  style={{
+                    background: 'radial-gradient(circle at 35% 35%, #ecd08e 0%, #c79846 55%, #8b6228 100%)',
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -297,14 +285,6 @@ export const Act1ArchitecturalColumns: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Volumetric Perspective Light Tunnel Flash on Outro */}
-      <div
-        className="act1-volumetric-tunnel absolute inset-0 opacity-0 pointer-events-none z-40 mix-blend-screen"
-        style={{
-          background: 'radial-gradient(ellipse at 85% 62%, rgba(245, 194, 0, 0.45) 0%, rgba(255, 158, 68, 0.25) 35%, rgba(0, 0, 0, 0) 70%)',
-        }}
-      />
 
       {/* Floating Minimal Scroll Cue */}
       <div className="act1-scroll-cue absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2.5 text-[11px] font-mono tracking-widest uppercase text-gray-400 bg-black/85 border border-white/10 px-5 py-2 rounded-full backdrop-blur-md shadow-2xl z-30 pointer-events-none">

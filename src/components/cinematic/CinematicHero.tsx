@@ -49,11 +49,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act1-your-word', { xPercent: 0, yPercent: 0, scale: 1, opacity: 1 });
       gsap.set('.act1-your-rule', { scaleX: 1, transformOrigin: 'right center', opacity: 1 });
       gsap.set('.act1-your-pulse', { opacity: 0 });
-      gsap.set('.act1-bridge-gold-dot', { x: 0, y: 0, scale: 1, opacity: 1, xPercent: 0, yPercent: 0 });
-      gsap.set('.act1-dot-glow', { opacity: 0, scale: 0.5 });
-      gsap.set('.act1-dot-streak', { opacity: 0, scaleX: 0 });
-      gsap.set('.act1-dot-shockwave', { opacity: 0, scale: 0.2 });
-      gsap.set('.act1-volumetric-tunnel', { opacity: 0 });
+      gsap.set('.act1-bridge-gold-dot', { x: 0, y: 0, scale: 1, opacity: 1 });
       gsap.set('.act1-ads-text', { scale: 1, opacity: 1 });
       gsap.set('.act1-ads-dot', { scale: 1, opacity: 1 });
       gsap.set('.act1-eclipse-rig', { scale: 1, xPercent: 0, yPercent: 0, opacity: 1 });
@@ -187,15 +183,12 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           }, 'IGNITION+=0.1');
 
         // -------------------------------------------------------------------
-        // BEAT 2: SOLID MATERIAL DECONSTRUCTION & PERSPECTIVE TUNNEL WARP
+        // BEAT 2: SOLID MATERIAL DECONSTRUCTION & RUN PLANE 3D ROTATION
         // -------------------------------------------------------------------
         tl.addLabel('DECONSTRUCT', 0.8);
 
-        // Column 1: Folds open like an architectural portal door
         tl.to('.act1-col-bg-1', {
           xPercent: -100,
-          rotateY: -35,
-          transformOrigin: 'left center',
           duration: 1.0,
           ease: 'power3.inOut',
         }, 'DECONSTRUCT')
@@ -206,19 +199,12 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power2.in',
           }, 'DECONSTRUCT')
 
-          // Column 2: Axis line ignites with high-speed golden pulse, then dissolves
-          .to('.act1-axis-pulse', {
-            opacity: 1,
-            y: '45vh',
-            duration: 0.7,
-            ease: 'power2.inOut',
-          }, 'DECONSTRUCT')
           .to('.act1-col2-axis', {
             scaleY: 0,
             transformOrigin: 'top center',
             duration: 0.7,
             ease: 'power3.in',
-          }, 'DECONSTRUCT+=0.2')
+          }, 'DECONSTRUCT')
           .to('.act1-agencies-word', {
             yPercent: -45,
             opacity: 0,
@@ -226,7 +212,6 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power2.in',
           }, 'DECONSTRUCT')
 
-          // Column 3 Top: Runway tilts into exact perspective floor plane of Act 2
           .to('.act1-run-word', {
             yPercent: -40,
             opacity: 0,
@@ -235,26 +220,19 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power2.in',
           }, 'DECONSTRUCT')
           .to('.act1-runway-wrap', {
-            rotateX: 74,
-            scaleX: 3.5,
-            yPercent: 42,
+            rotateX: 68,
+            scaleX: 3.6,
+            yPercent: 45,
             transformOrigin: 'center bottom',
             duration: 1.1,
             ease: 'power3.inOut',
           }, 'DECONSTRUCT')
-          .to('.act1-energy-rail', {
-            opacity: 1,
-            strokeDashoffset: 0,
-            duration: 0.8,
-            ease: 'power2.out',
-          }, 'DECONSTRUCT+=0.2')
           .to('.act1-col-bg-3-top', {
             opacity: 0,
             duration: 0.9,
             ease: 'power2.inOut',
           }, 'DECONSTRUCT+=0.2')
 
-          // Column 3 Bottom: Baseline rule deconstructs
           .to('.act1-col-bg-3-bottom', {
             yPercent: 100,
             duration: 0.9,
@@ -267,7 +245,6 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power3.in',
           }, 'DECONSTRUCT')
 
-          // Column 4: Eclipse expands into blinding cosmic back-light flood
           .to('.act1-ads-text', {
             scale: 0.9,
             opacity: 0,
@@ -281,78 +258,33 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power2.in',
           }, 'DECONSTRUCT')
           .to('.act1-eclipse-rig', {
-            scale: 2.2,
-            opacity: 0.9,
-            xPercent: 15,
+            scale: 0.5,
+            opacity: 0,
+            xPercent: 20,
+            yPercent: 10,
             duration: 1.0,
-            ease: 'power2.inOut',
+            ease: 'power2.in',
           }, 'DECONSTRUCT');
 
         // -------------------------------------------------------------------
-        // BEAT 3: ACT 1 ➔ ACT 2 PERSPECTIVE EXPAND & SINGULARITY IGNITION
+        // BEAT 3: ACT 2 TRUE 3D RENDERER REVEAL (Time 1.6 - 2.8)
         // -------------------------------------------------------------------
         tl.addLabel('PERSPECTIVE_EXPAND', 1.6);
 
-        // Volumetric Light Tunnel Flash Sweep
-        tl.to('.act1-volumetric-tunnel', {
-          opacity: 0.95,
-          duration: 0.45,
-          ease: 'power2.out',
+        tl.to('.act1-bridge-gold-dot', {
+          xPercent: -230,
+          yPercent: -130,
+          scale: 2.2,
+          duration: 1.1,
+          ease: 'power3.out',
         }, 'PERSPECTIVE_EXPAND')
-          .to('.act1-volumetric-tunnel', {
+          .to('.act1-bridge-gold-dot', {
             opacity: 0,
+            scale: 4.5,
             duration: 0.4,
-            ease: 'power2.in',
-          }, 'PERSPECTIVE_EXPAND+=0.5')
-
-          // Phase 1: High-Energy Solar Flare Ignition on Gold Dot
-          .to('.act1-dot-glow', {
-            opacity: 1,
-            scale: 2.8,
-            duration: 0.35,
             ease: 'power2.out',
-          }, 'PERSPECTIVE_EXPAND')
-          .to('.act1-dot-streak', {
-            opacity: 0.95,
-            scaleX: 3.0,
-            duration: 0.45,
-            ease: 'power3.out',
-          }, 'PERSPECTIVE_EXPAND+=0.05')
-          .to('.act1-bridge-gold-dot', {
-            scale: 2.6,
-            duration: 0.35,
-            ease: 'power2.out',
-          }, 'PERSPECTIVE_EXPAND')
+          }, 'PERSPECTIVE_EXPAND+=0.8')
 
-          // Phase 2: Hyper-Speed Flight towards Vanishing Point Singularity
-          .to('.act1-bridge-gold-dot', {
-            xPercent: 120,
-            yPercent: 42,
-            scale: 1.6,
-            duration: 0.6,
-            ease: 'power3.in',
-          }, 'PERSPECTIVE_EXPAND+=0.25')
-
-          // Phase 3: Singularity Collapse & High-Energy Shockwave Wavefront
-          .to('.act1-dot-shockwave', {
-            opacity: 1,
-            scale: 5.2,
-            duration: 0.4,
-            ease: 'power3.out',
-          }, 'PERSPECTIVE_EXPAND+=0.75')
-          .to('.act1-dot-shockwave', {
-            opacity: 0,
-            duration: 0.25,
-            ease: 'power2.in',
-          }, 'PERSPECTIVE_EXPAND+=0.95')
-          .to('.act1-bridge-gold-dot', {
-            opacity: 0,
-            scale: 0.05,
-            duration: 0.2,
-            ease: 'power2.in',
-          }, 'PERSPECTIVE_EXPAND+=0.82')
-
-          // Smooth Handoff: Act 1 'your' slides into Act 2 position
           .to('.act1-your-word', {
             xPercent: -75,
             yPercent: -35,
@@ -368,30 +300,31 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             duration: 0.4,
           }, 'PERSPECTIVE_EXPAND+=0.5')
 
-          // Real Three.js Act 2 Stage reveals with full physical 3D scene (Scale locked strictly at 1.0)
+          // Real Three.js Act 2 Stage reveals with full physical 3D scene
           .to('.act2-true-stage', {
             autoAlpha: 1,
-            duration: 0.6,
-            ease: 'power2.out',
+            scale: 1,
+            duration: 0.9,
+            ease: 'power3.out',
           }, 'PERSPECTIVE_EXPAND+=0.1');
 
         // Imperative Act 2 Spatial Animation scrubbing across Beats A through I
         const act2State = { progress: 0.0 };
         tl.to(act2State, {
           progress: 1.0,
-          duration: 4.0, // Exactly spans PERSPECTIVE_EXPAND (1.6) to ACT2_TO_ACT3 (5.6)
+          duration: 4.0,
           ease: 'none',
           onUpdate: () => {
             act2ControllerRef.current?.setProgress(act2State.progress);
           },
         }, 'PERSPECTIVE_EXPAND');
       } else {
-        tl.to('.act1-stage', { autoAlpha: 0, duration: 0.8, ease: 'power2.inOut' }, 'IGNITION+=0.4')
-          .to('.act2-true-stage', { autoAlpha: 1, duration: 0.8, ease: 'power2.out' }, 'IGNITION+=0.6');
+        tl.to('.act1-stage', { autoAlpha: 0, duration: 1.0, ease: 'power2.inOut' }, 'IGNITION+=0.4')
+          .to('.act2-true-stage', { autoAlpha: 1, scale: 1, duration: 1.0, ease: 'power2.out' }, 'IGNITION+=0.6');
       }
 
       // ---------------------------------------------------------------------
-      // BEAT 4: ACT 2 READABLE HOLD (Time 2.8 - 5.6, Pure Spatial Stillness)
+      // BEAT 4: ACT 2 STATIC READABLE HOLD (Time 2.8 - 5.6)
       // ---------------------------------------------------------------------
       tl.addLabel('ACT2_HOLD', 2.8);
 

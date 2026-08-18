@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Navbar } from './components/common/Navbar';
 import { Hero } from './components/homepage/Hero';
 import { ProblemSection } from './components/homepage/ProblemSection';
-import { PresenceSection } from './components/homepage/PresenceSection';
 import { CinematicExperience } from './components/cinematic/CinematicExperience';
 import { Act2StaticStill } from './components/cinematic/acts/Act2StaticStill';
 import type { Act1Variant } from './components/cinematic/CinematicHero';
@@ -11,7 +10,7 @@ import type { Act1Variant } from './components/cinematic/CinematicHero';
  * TOGGLE MODE & ACT 1 HERO VARIATION:
  * 'act2-still' -> Direct Frozen Static 3D Act 2 True Renderer (Default for 1:1 Geometry Review)
  * 'cinematic' -> Advanced GSAP ScrollTrigger kinetic storytelling experience
- * 'classic'   -> Pristine original responsive layout with standard Navbar
+ * 'classic'   -> Pristine original responsive 2-section layout with standard Navbar
  */
 const DEFAULT_MODE: 'cinematic' | 'act2-still' | 'classic' = 'act2-still';
 const DEFAULT_HERO_VARIANT: Act1Variant = 'columns';
@@ -32,17 +31,11 @@ export const App: React.FC = () => {
 
       <main className="w-full flex flex-col">
         {mode === 'act2-still' && <Act2StaticStill />}
-        {mode === 'cinematic' && (
-          <>
-            <CinematicExperience act1Variant={heroVariant} />
-            <PresenceSection />
-          </>
-        )}
+        {mode === 'cinematic' && <CinematicExperience act1Variant={heroVariant} />}
         {mode === 'classic' && (
           <>
             <Hero />
             <ProblemSection />
-            <PresenceSection />
           </>
         )}
       </main>
