@@ -27,100 +27,116 @@ export const Act1ArchitecturalColumns: React.FC = () => {
       {/* COLUMN 3: Split Stack (3D Perspective Runway "run" + Textured "your.") */}
       {/* ===================================================================== */}
       <div className="act1-col-3 relative h-full flex flex-col border-r border-white/10 overflow-hidden">
-        {/* Top 54%: "run" with Realistic Architectural 3D Ground Perspective Runway */}
-        <div className="act1-run-panel relative h-[54%] bg-[#F3F0EC] flex flex-col items-center justify-between pt-[8vh] overflow-hidden border-b border-black/15">
-          {/* Extended Bold Modern Sans "run" */}
-          <h2 className="act1-run-word relative z-10 font-sans text-[clamp(4.2rem,8vw,8.4rem)] font-black text-[#0A0A0A] tracking-[-0.05em] leading-none scale-y-95">
+        {/* Top 54%: "run" with Non-Converging Atmospheric Horizon Runway */}
+        <div className="act1-run-panel relative h-[54%] bg-[#F3F0EC] flex flex-col items-center justify-between pt-[7vh] overflow-hidden border-b border-black/15">
+          {/* Extended Bold Modern Display Sans "run" */}
+          <h2 className="act1-run-word relative z-10 font-sans text-[clamp(4.2rem,8vw,8.5rem)] font-black text-[#0A0A0A] tracking-[-0.04em] leading-none">
             run
           </h2>
 
-          {/* Mathematical 3D Floor Perspective Runway Floor */}
-          <div className="relative w-full h-[66%] mt-auto overflow-hidden">
+          {/* Architectural Ground Perspective Tracks with Open Horizon & Atmospheric Depth Blur */}
+          <div className="relative w-full h-[68%] mt-auto overflow-hidden">
             <svg
               className="w-full h-full block"
-              viewBox="0 0 400 300"
+              viewBox="0 0 400 280"
               preserveAspectRatio="none"
             >
               <defs>
-                {/* Longitudinal Beam Shading */}
-                <linearGradient id="beam-fade" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#EDEAE4" stopOpacity="0" />
-                  <stop offset="25%" stopColor="#E2DDD4" stopOpacity="0.4" />
-                  <stop offset="100%" stopColor="#CCC6BB" stopOpacity="1" />
+                {/* Atmospheric Fog Mask — Lines smoothly dissolve into blur before ever converging */}
+                <mask id="runway-fog-mask">
+                  <linearGradient id="fog-grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#000000" stopOpacity="0" />
+                    <stop offset="35%" stopColor="#FFFFFF" stopOpacity="0.25" />
+                    <stop offset="70%" stopColor="#FFFFFF" stopOpacity="0.85" />
+                    <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+                  </linearGradient>
+                  <rect x="0" y="0" width="400" height="280" fill="url(#fog-grad)" />
+                </mask>
+
+                {/* Soft Horizon Depth Blur Filter */}
+                <filter id="horizon-haze" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" />
+                </filter>
+
+                {/* Shading Gradients for Metallic Tracks */}
+                <linearGradient id="track-surface" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#ECE8E0" stopOpacity="0.2" />
+                  <stop offset="50%" stopColor="#DDD8CD" stopOpacity="0.7" />
+                  <stop offset="100%" stopColor="#CCC6B8" stopOpacity="1" />
                 </linearGradient>
 
-                <linearGradient id="ridge-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
-                  <stop offset="30%" stopColor="#FFFFFF" stopOpacity="0.7" />
+                <linearGradient id="rail-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.3" />
+                  <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.8" />
                   <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
                 </linearGradient>
 
-                <linearGradient id="ridge-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#9E9A92" stopOpacity="0" />
-                  <stop offset="30%" stopColor="#9E9A92" stopOpacity="0.5" />
-                  <stop offset="100%" stopColor="#7A756C" stopOpacity="0.9" />
+                <linearGradient id="rail-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#A8A399" stopOpacity="0.2" />
+                  <stop offset="50%" stopColor="#8C867B" stopOpacity="0.65" />
+                  <stop offset="100%" stopColor="#6E685E" stopOpacity="0.9" />
                 </linearGradient>
               </defs>
 
-              {/* Distant Atmospheric Horizon Fade */}
-              <rect x="0" y="0" width="400" height="300" fill="url(#beam-fade)" opacity="0.3" />
+              {/* Distant Atmospheric Horizon Floor Shading */}
+              <rect x="0" y="0" width="400" height="280" fill="#F0EDE7" />
 
-              {/* 3D Longitudinal Runway Tracks (Vanishing Point at x: 200, y: 15) */}
-              <g>
+              {/* Group of Non-Converging 3D Tracks masked with atmospheric depth dissolve */}
+              <g mask="url(#runway-fog-mask)">
                 {/* Track -5 */}
-                <polygon points="199,15 201,15 -60,300 -40,300" fill="url(#beam-fade)" />
-                <line x1="199" y1="15" x2="-60" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.8" />
-                <line x1="201" y1="15" x2="-40" y2="300" stroke="url(#ridge-shadow)" strokeWidth="2.2" />
+                <polygon points="120,40 128,40 -65,280 -45,280" fill="url(#track-surface)" />
+                <line x1="120" y1="40" x2="-65" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
+                <line x1="128" y1="40" x2="-45" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
 
                 {/* Track -4 */}
-                <polygon points="199.2,15 200.8,15 0,300 20,300" fill="url(#beam-fade)" />
-                <line x1="199.2" y1="15" x2="0" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.8" />
-                <line x1="200.8" y1="15" x2="20" y2="300" stroke="url(#ridge-shadow)" strokeWidth="2.2" />
+                <polygon points="138,40 145,40 -5,280 15,280" fill="url(#track-surface)" />
+                <line x1="138" y1="40" x2="-5" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
+                <line x1="145" y1="40" x2="15" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
 
                 {/* Track -3 */}
-                <polygon points="199.4,15 200.6,15 60,300 78,300" fill="url(#beam-fade)" />
-                <line x1="199.4" y1="15" x2="60" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.6" />
-                <line x1="200.6" y1="15" x2="78" y2="300" stroke="url(#ridge-shadow)" strokeWidth="2.0" />
+                <polygon points="154,40 160,40 55,280 73,280" fill="url(#track-surface)" />
+                <line x1="154" y1="40" x2="55" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.6" />
+                <line x1="160" y1="40" x2="73" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.0" />
 
                 {/* Track -2 */}
-                <polygon points="199.6,15 200.4,15 115,300 130,300" fill="url(#beam-fade)" />
-                <line x1="199.6" y1="15" x2="115" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.5" />
-                <line x1="200.4" y1="15" x2="130" y2="300" stroke="url(#ridge-shadow)" strokeWidth="1.8" />
+                <polygon points="170,40 175,40 115,280 130,280" fill="url(#track-surface)" />
+                <line x1="170" y1="40" x2="115" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.5" />
+                <line x1="175" y1="40" x2="130" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.8" />
 
                 {/* Track -1 */}
-                <polygon points="199.8,15 200.2,15 165,300 178,300" fill="url(#beam-fade)" />
-                <line x1="199.8" y1="15" x2="165" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.4" />
-                <line x1="200.2" y1="15" x2="178" y2="300" stroke="url(#ridge-shadow)" strokeWidth="1.6" />
+                <polygon points="185,40 189,40 168,280 180,280" fill="url(#track-surface)" />
+                <line x1="185" y1="40" x2="168" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.4" />
+                <line x1="189" y1="40" x2="180" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.6" />
 
                 {/* Center Track 0 */}
-                <polygon points="199.9,15 200.1,15 194,300 206,300" fill="url(#beam-fade)" />
-                <line x1="199.9" y1="15" x2="194" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.4" />
-                <line x1="200.1" y1="15" x2="206" y2="300" stroke="url(#ridge-shadow)" strokeWidth="1.6" />
+                <polygon points="198,40 202,40 194,280 206,280" fill="url(#track-surface)" />
+                <line x1="198" y1="40" x2="194" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.4" />
+                <line x1="202" y1="40" x2="206" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.6" />
 
                 {/* Track +1 */}
-                <polygon points="199.8,15 200.2,15 222,300 235,300" fill="url(#beam-fade)" />
-                <line x1="199.8" y1="15" x2="222" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.4" />
-                <line x1="200.2" y1="15" x2="235" y2="300" stroke="url(#ridge-shadow)" strokeWidth="1.6" />
+                <polygon points="211,40 215,40 220,280 232,280" fill="url(#track-surface)" />
+                <line x1="211" y1="40" x2="220" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.4" />
+                <line x1="215" y1="40" x2="232" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.6" />
 
                 {/* Track +2 */}
-                <polygon points="199.6,15 200.4,15 270,300 285,300" fill="url(#beam-fade)" />
-                <line x1="199.6" y1="15" x2="270" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.5" />
-                <line x1="200.4" y1="15" x2="285" y2="300" stroke="url(#ridge-shadow)" strokeWidth="1.8" />
+                <polygon points="225,40 230,40 270,280 285,280" fill="url(#track-surface)" />
+                <line x1="225" y1="40" x2="270" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.5" />
+                <line x1="230" y1="40" x2="285" y2="280" stroke="url(#rail-shadow)" strokeWidth="1.8" />
 
                 {/* Track +3 */}
-                <polygon points="199.4,15 200.6,15 322,300 340,300" fill="url(#beam-fade)" />
-                <line x1="199.4" y1="15" x2="322" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.6" />
-                <line x1="200.6" y1="15" x2="340" y2="300" stroke="url(#ridge-shadow)" strokeWidth="2.0" />
+                <polygon points="240,40 246,40 327,280 345,280" fill="url(#track-surface)" />
+                <line x1="240" y1="40" x2="327" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.6" />
+                <line x1="246" y1="40" x2="345" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.0" />
 
                 {/* Track +4 */}
-                <polygon points="199.2,15 200.8,15 380,300 400,300" fill="url(#beam-fade)" />
-                <line x1="199.2" y1="15" x2="380" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.8" />
-                <line x1="200.8" y1="15" x2="400" y2="300" stroke="url(#ridge-shadow)" strokeWidth="2.2" />
+                <polygon points="255,40 262,40 385,280 405,280" fill="url(#track-surface)" />
+                <line x1="255" y1="40" x2="385" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
+                <line x1="262" y1="40" x2="405" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
 
                 {/* Track +5 */}
-                <polygon points="199,15 201,15 440,300 460,300" fill="url(#beam-fade)" />
-                <line x1="199" y1="15" x2="440" y2="300" stroke="url(#ridge-highlight)" strokeWidth="1.8" />
-                <line x1="201" y1="15" x2="460" y2="300" stroke="url(#ridge-shadow)" strokeWidth="2.2" />
+                <polygon points="272,40 280,40 445,280 465,280" fill="url(#track-surface)" />
+                <line x1="272" y1="40" x2="445" y2="280" stroke="url(#rail-highlight)" strokeWidth="1.8" />
+                <line x1="280" y1="40" x2="465" y2="280" stroke="url(#rail-shadow)" strokeWidth="2.2" />
               </g>
             </svg>
           </div>
