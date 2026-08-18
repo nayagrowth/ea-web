@@ -12,6 +12,7 @@ interface TypographyConfig {
   font: string;
   color: string;
   isGold?: boolean;
+  letterSpacing?: string;
   pixelLeft: number;
   pixelTop: number;
   pixelWidth: number;
@@ -22,20 +23,27 @@ interface TypographyConfig {
 }
 
 /**
- * Creates high-resolution 4K canvas texture with exact glyph measurement and deep drop shadow
+ * Creates high-resolution 4K canvas texture with exact font rendering, drop shadow, and crisp anti-aliasing
  */
 function createCrispTextTexture(
   text: string,
   font: string,
   color: string,
   isGold: boolean = false,
+  letterSpacing: string = '0px',
   hasShadow: boolean = true
 ): { texture: THREE.CanvasTexture; aspect: number } {
   const offscreen = document.createElement('canvas');
   const ctx = offscreen.getContext('2d', { willReadFrequently: true })!;
 
-  const baseFontSize = 260;
+  // 4x supersampling base font size for razor-sharp rendering in 3D perspective
+  const baseFontSize = 280;
   ctx.font = font.replace(/__SIZE__/g, `${baseFontSize}px`);
+  try {
+    (ctx as unknown as { letterSpacing?: string }).letterSpacing = letterSpacing;
+  } catch {
+    // fallback if unsupported
+  }
   const metrics = ctx.measureText(text);
 
   const textWidth = Math.ceil(metrics.width);
@@ -53,21 +61,27 @@ function createCrispTextTexture(
 
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
   ctx.font = font.replace(/__SIZE__/g, `${baseFontSize}px`);
+  try {
+    (ctx as unknown as { letterSpacing?: string }).letterSpacing = letterSpacing;
+  } catch {
+    // fallback
+  }
   ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
 
   const drawX = padX;
   const drawY = padY + actualAscent;
 
+  // Deep Editorial Drop Shadow
   if (hasShadow) {
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.98)';
-    ctx.shadowBlur = 36;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.96)';
+    ctx.shadowBlur = 40;
     ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 18;
+    ctx.shadowOffsetY = 20;
   }
 
   if (isGold) {
-    const grad = ctx.createLinearGradient(drawX, drawY - actualAscent, drawX + textWidth * 0.9, drawY + actualDescent);
+    const grad = ctx.createLinearGradient(drawX, drawY - actualAscent, drawX + textWidth * 0.95, drawY + actualDescent);
     grad.addColorStop(0, '#fff6e0');
     grad.addColorStop(0.35, '#ecd08e');
     grad.addColorStop(0.75, '#c79846');
@@ -182,7 +196,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     // 2. PERSPECTIVE CAMERA (Calibrated to Target 42° FOV)
     const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 300);
     camera.position.set(0, 0, 18.0);
-    camera.lookAt(new THREE.Vector3(0.6, -0.35, 0));
+    camera.lookAt(new THREE.Vector3(0.55, -0.35, 0));
 
     // 3. WEBGL RENDERER
     const renderer = new THREE.WebGLRenderer({
@@ -197,21 +211,21 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     container.appendChild(renderer.domElement);
 
     // 4. LIGHTING SYSTEM (Controlled Cinematic Grazing Lights)
-    const ambientLight = new THREE.AmbientLight('#08090c', 0.3);
+    const ambientLight = new THREE.AmbientLight('#08090c', 0.32);
     scene.add(ambientLight);
 
     // Grazing key light hitting right wall metallic fins
-    const rightWallKeyLight = new THREE.DirectionalLight('#ffffff', 4.5);
-    rightWallKeyLight.position.set(20, 16, 14);
+    const rightWallKeyLight = new THREE.DirectionalLight('#ffffff', 4.8);
+    rightWallKeyLight.position.set(22, 18, 14);
     scene.add(rightWallKeyLight);
 
     // Soft fill along the left curved wall
-    const leftWallFill = new THREE.DirectionalLight('#ecd08e', 1.4);
+    const leftWallFill = new THREE.DirectionalLight('#ecd08e', 1.5);
     leftWallFill.position.set(-14, 8, 12);
     scene.add(leftWallFill);
 
     // Horizon Point Light
-    const laserPoint = new THREE.PointLight('#ecd08e', 3.5, 35);
+    const laserPoint = new THREE.PointLight('#ecd08e', 3.8, 35);
     laserPoint.position.set(4, -1.2, 2);
     scene.add(laserPoint);
 
@@ -233,9 +247,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     // Apply smooth logarithmic curvature: left side (x < 0) is closer to viewer, curving back into depth on right
     for (let i = 0; i < posAttr.count; i++) {
       const vx = posAttr.getX(i);
-      // Normalized from -1 (left) to 1 (right)
       const u = (vx + curveWidth / 2) / curveWidth;
-      // Curvature depth formula: starts at z = 4.0 on far left and curves back to z = -28.0 in right corner
       const vz = 4.0 - Math.pow(u, 1.35) * 32.0;
       posAttr.setZ(i, vz);
     }
@@ -261,7 +273,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
       metalness: 0.85,
     });
     const rightWallMesh = new THREE.Mesh(rightWallBaseGeo, rightWallBaseMat);
-    rightWallMesh.rotation.y = -Math.PI / 2 + 0.32; // Angled inward to meet the curved back wall
+    rightWallMesh.rotation.y = -Math.PI / 2 + 0.32;
     rightWallMesh.position.set(24.5, 4.0, -26);
     roomRig.add(rightWallMesh);
     disposables.push(rightWallBaseGeo, rightWallBaseMat);
@@ -292,7 +304,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         roughness: 0.02,
         metalness: 0.99,
         emissive: '#ffffff',
-        emissiveIntensity: 0.7 + (1 - t) * 0.5,
+        emissiveIntensity: 0.75 + (1 - t) * 0.5,
       });
       const edgeMesh = new THREE.Mesh(edgeGeo, edgeMat);
       edgeMesh.rotation.y = -Math.PI / 2 + 0.32;
@@ -306,7 +318,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     const bladeMat = new THREE.MeshStandardMaterial({
       color: '#ffffff',
       emissive: '#ffffff',
-      emissiveIntensity: 1.5,
+      emissiveIntensity: 1.6,
       roughness: 0.02,
       metalness: 0.99,
     });
@@ -358,9 +370,9 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
       { x: -20, width: 0.06, color: '#ffffff', emissive: 0.4 },
       { x: -12, width: 0.04, color: '#555b68', emissive: 0.2 },
       { x: -4, width: 0.08, color: '#ffffff', emissive: 0.7 },
-      { x: 5, width: 0.14, color: '#ecd08e', emissive: 2.6 }, // Champagne Gold
-      { x: 12, width: 0.18, color: '#dfbd78', emissive: 3.2 }, // Champagne Gold
-      { x: 21, width: 0.12, color: '#ffffff', emissive: 1.2 },
+      { x: 5, width: 0.14, color: '#ecd08e', emissive: 2.8 }, // Champagne Gold
+      { x: 12, width: 0.18, color: '#dfbd78', emissive: 3.4 }, // Champagne Gold
+      { x: 21, width: 0.12, color: '#ffffff', emissive: 1.3 },
     ];
 
     railConfigs.forEach((cfg) => {
@@ -397,7 +409,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
       map: bloomHazeTex,
       transparent: true,
       blending: THREE.AdditiveBlending,
-      opacity: 0.92,
+      opacity: 0.94,
     });
     const horizonGlowMesh = new THREE.Mesh(horizonGlowGeo, horizonGlowMat);
     horizonGlowMesh.position.set(0, -1.05, -10.52);
@@ -409,7 +421,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     const slashMat = new THREE.MeshStandardMaterial({
       color: '#ecd08e',
       emissive: '#ecd08e',
-      emissiveIntensity: 2.4,
+      emissiveIntensity: 2.5,
     });
     const slashMesh = new THREE.Mesh(slashGeo, slashMat);
     slashMesh.position.set(-6, 6.4, -14);
@@ -426,6 +438,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         text: 'We',
         font: '900 __SIZE__ "Inter", "Plus Jakarta Sans", sans-serif',
         color: '#ffffff',
+        letterSpacing: '-12px',
         pixelLeft: 237,
         pixelTop: 128,
         pixelWidth: 370,
@@ -466,6 +479,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         text: 'real estate',
         font: '900 __SIZE__ "Inter", "Plus Jakarta Sans", sans-serif',
         color: '#ffffff',
+        letterSpacing: '-14px',
         pixelLeft: 710,
         pixelTop: 395,
         pixelWidth: 720,
@@ -479,6 +493,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
         text: 'project',
         font: '200 __SIZE__ "Inter", "Plus Jakarta Sans", sans-serif',
         color: '#ffffff',
+        letterSpacing: '-8px',
         pixelLeft: 715,
         pixelTop: 565,
         pixelWidth: 670,
@@ -491,14 +506,26 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
 
     const initTypography = async () => {
       try {
-        await document.fonts.ready;
+        await Promise.all([
+          document.fonts.load('900 260px "Inter"'),
+          document.fonts.load('italic 400 260px "Playfair Display"'),
+          document.fonts.load('200 260px "Inter"'),
+          document.fonts.ready,
+        ]);
       } catch {
         // Fallback gracefully
       }
       if (isDisposed) return;
 
       typographyConfigs.forEach((cfg) => {
-        const { texture, aspect } = createCrispTextTexture(cfg.text, cfg.font, cfg.color, cfg.isGold, true);
+        const { texture, aspect } = createCrispTextTexture(
+          cfg.text,
+          cfg.font,
+          cfg.color,
+          cfg.isGold,
+          cfg.letterSpacing || '0px',
+          true
+        );
         disposables.push(texture);
 
         const transform = calculateWorldSpaceTransform(
