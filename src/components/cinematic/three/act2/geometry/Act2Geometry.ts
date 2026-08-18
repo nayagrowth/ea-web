@@ -7,15 +7,13 @@ export interface Act2GeometryRig {
 }
 
 /**
- * EXACT ARCHITECTURAL ROOM SHELL & CORRIDOR
+ * EXACT ARCHITECTURAL ROOM SHELL & CORRIDOR (CALIBRATED WITH EXPANDED HERO WALL)
  * 
  * Boundaries:
- * - Floor Plane Π_F: Y = 0, X in [-8, 5], Z in [-5, -95]
- * - Left Hero Wall Π_L: X = -8, Y in [0, 14.6], Z in [-5, -95]
+ * - Floor Plane Π_F: Y = 0, X in [-7.5, 5], Z in [-5, -95]
+ * - Left Hero Wall Π_L: X = -7.5, Y in [0, 14.6], Z in [-5, -95] (comes slightly closer for mounting text)
  * - Right Rib Wall Π_R: X = 5, Y in [0, 14.7], Z in [-5, -95], Top Blade Y = 14.55
- * - Ceiling Π_C: Y = 14.6, X in [-8, 5], Z in [-5, -95]
- * 
- * Every longitudinal edge is parallel to depth direction D = (0, 0, -1)
+ * - Ceiling Π_C: Y = 14.6, X in [-7.5, 5], Z in [-5, -95]
  */
 export function createAct2Geometry(): Act2GeometryRig {
   const group = new THREE.Group();
@@ -27,21 +25,21 @@ export function createAct2Geometry(): Act2GeometryRig {
   const corridorLength = Math.abs(zEnd - zStart); // 90 units
   const midZ = (zStart + zEnd) / 2; // -50.0
 
-  const wallLeftX = -8.0;
+  const wallLeftX = -7.5;
   const wallRightX = 5.0;
   const ceilingY = 14.6;
 
   // -------------------------------------------------------------------------
-  // 1. FLOOR PLANE (Π_F: Y = 0, X in [-8, 5])
+  // 1. FLOOR PLANE (Π_F: Y = 0, X in [-7.5, 5])
   // -------------------------------------------------------------------------
-  const floorWidth = wallRightX - wallLeftX; // 13 units
-  const floorMidX = (wallLeftX + wallRightX) / 2; // -1.5
+  const floorWidth = wallRightX - wallLeftX; // 12.5 units
+  const floorMidX = (wallLeftX + wallRightX) / 2; // -1.25
 
   const floorGeo = new THREE.PlaneGeometry(floorWidth, corridorLength);
   const floorMat = new THREE.MeshStandardMaterial({
     color: '#08090b',
-    roughness: 0.22,
-    metalness: 0.35,
+    roughness: 0.20,
+    metalness: 0.38,
   });
   const floorMesh = new THREE.Mesh(floorGeo, floorMat);
   floorMesh.rotation.x = -Math.PI / 2;
@@ -51,9 +49,9 @@ export function createAct2Geometry(): Act2GeometryRig {
 
   // Subtle dark-silver floor panels with slight roughness variation
   const floorPanels = [
-    { x: -6.0, width: 3.5, roughness: 0.28, color: '#07080a' },
-    { x: -2.0, width: 4.0, roughness: 0.18, color: '#090b0f' },
-    { x: 2.5, width: 4.5, roughness: 0.24, color: '#0a0c12' },
+    { x: -5.5, width: 3.5, roughness: 0.26, color: '#07080a' },
+    { x: -1.8, width: 4.0, roughness: 0.18, color: '#090b0f' },
+    { x: 2.6, width: 4.5, roughness: 0.22, color: '#0a0c12' },
   ];
 
   floorPanels.forEach((p, idx) => {
@@ -61,7 +59,7 @@ export function createAct2Geometry(): Act2GeometryRig {
     const pMat = new THREE.MeshStandardMaterial({
       color: p.color,
       roughness: p.roughness,
-      metalness: 0.40,
+      metalness: 0.42,
     });
     const pMesh = new THREE.Mesh(pGeo, pMat);
     pMesh.rotation.x = -Math.PI / 2;
@@ -72,9 +70,9 @@ export function createAct2Geometry(): Act2GeometryRig {
 
   // Longitudinal Floor Speed Rails (All parallel to D = (0, 0, -1))
   const railXPositions = [
-    { x: -7.0, width: 0.04, color: '#ffffff', emissive: 0.4 },
-    { x: -4.5, width: 0.03, color: '#555b68', emissive: 0.2 },
-    { x: -1.0, width: 0.05, color: '#ffffff', emissive: 0.7 },
+    { x: -6.5, width: 0.04, color: '#ffffff', emissive: 0.4 },
+    { x: -4.2, width: 0.03, color: '#555b68', emissive: 0.2 },
+    { x: -0.8, width: 0.05, color: '#ffffff', emissive: 0.7 },
     { x: 2.2, width: 0.08, color: '#ecd08e', emissive: 2.6 },  // Champagne Gold
     { x: 3.8, width: 0.10, color: '#dfbd78', emissive: 3.2 },  // Champagne Gold
     { x: 4.85, width: 0.06, color: '#ffffff', emissive: 1.2 },
@@ -102,13 +100,13 @@ export function createAct2Geometry(): Act2GeometryRig {
   });
 
   // -------------------------------------------------------------------------
-  // 2. LEFT HERO WALL (Π_L: X = -8, Receding longitudinally from z = -5 to -95)
+  // 2. LEFT HERO WALL (Π_L: X = -7.5, Receding longitudinally from z = -5 to -95)
   // -------------------------------------------------------------------------
   const leftWallGeo = new THREE.PlaneGeometry(corridorLength, ceilingY);
   const leftWallMat = new THREE.MeshStandardMaterial({
     color: '#090a0d',
-    roughness: 0.76,
-    metalness: 0.08,
+    roughness: 0.74,
+    metalness: 0.10,
   });
   const leftWallMesh = new THREE.Mesh(leftWallGeo, leftWallMat);
   leftWallMesh.rotation.y = Math.PI / 2; // Normal faces into corridor (+X)
@@ -116,7 +114,7 @@ export function createAct2Geometry(): Act2GeometryRig {
   group.add(leftWallMesh);
   disposables.push(leftWallGeo, leftWallMat);
 
-  // Left Wall/Floor Seam Trim Line (at X = -8, Y = 0.01)
+  // Left Wall/Floor Seam Trim Line (at X = -7.5, Y = 0.01)
   keyLongitudinalLines.push({
     p0: new THREE.Vector3(wallLeftX, 0.01, zStart),
     p1: new THREE.Vector3(wallLeftX, 0.01, zEnd),
