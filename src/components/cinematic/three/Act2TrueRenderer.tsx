@@ -12,19 +12,21 @@ interface Act2TrueRendererProps {
 }
 
 /**
- * Geometry-first Act 2 renderer (Sweep V6).
+ * Geometry-first Act 2 renderer (Sweep V6.1 Final Geometry-Lock).
  *
  * Invariants:
- * - Measured canonical VP (1433.21, 586.43) is strictly preserved.
- * - Slat bodies are genuine architectural slabs derived from ray interval occupancy.
- * - Real 3D Floor Sweep Ribbon unprojected from screen space.
- * - Normalized `aDepth` baked into all geometries for animation readiness.
+ * - Canonical VP (1433.21, 586.43) is strictly preserved.
+ * - Slat bodies are real architectural slabs with gap-derived occupancy verified via camera projection.
+ * - Real 3D Floor Sweep Ribbon unprojected without arbitrary clamping.
+ * - World-transformed `aDepth` vertex attributes on all planes and objects.
+ * - Real Clay Mode via scene.overrideMaterial.
  */
 export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
   className = '',
   showCalibrationOverlay = true,
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
   const [calibrationReport, setCalibrationReport] = useState<CalibrationReport | null>(null);
   const [viewportDims, setViewportDims] = useState<{ width: number; height: number }>({
     width: REFERENCE_GEOMETRY.width,
@@ -33,8 +35,10 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
 
   const [isWireframe, setIsWireframe] = useState(false);
   const [isClayMode, setIsClayMode] = useState(false);
+  const [isCanonicalLetterbox, setIsCanonicalLetterbox] = useState(false);
 
   const materialsRef = useRef<THREE.Material[]>([]);
+  const clayMaterialRef = useRef<THREE.MeshStandardMaterial | null>(null);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -51,9 +55,19 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     // 1. SCENE
     const scene = new THREE.Scene();
     scene.background = new THREE.Color('#030405');
-    scene.fog = new THREE.FogExp2('#030405', 0.0065);
+    scene.fog = new THREE.FogExp2('#030405', 0.0055);
+    sceneRef.current = scene;
 
-    // 2. CALIBRATED OFF-AXIS CAMERA
+    // Calibrated Clay Material for Dev Mode
+    const clayMat = new THREE.MeshStandardMaterial({
+      color: '#848890',
+      roughness: 0.88,
+      metalness: 0.05,
+    });
+    clayMaterialRef.current = clayMat;
+    disposables.push(clayMat);
+
+    // 2. CALIBRATED OFF-AXIS CAMERA (far = 500.0)
     const camera = new THREE.PerspectiveCamera(
       REFERENCE_GEOMETRY.fovY,
       width / height,
@@ -81,11 +95,11 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     renderer.toneMappingExposure = 1.10;
     container.appendChild(renderer.domElement);
 
-    // 4. LIGHTING RIG (Restrained Specular Modeling)
-    const ambientLight = new THREE.AmbientLight('#080a0e', 0.30);
+    // 4. LIGHTING RIG
+    const ambientLight = new THREE.AmbientLight('#080a0e', 0.32);
     scene.add(ambientLight);
 
-    const rightWallKey = new THREE.DirectionalLight('#eef1f5', 4.2);
+    const rightWallKey = new THREE.DirectionalLight('#eef1f5', 4.4);
     rightWallKey.position.set(11, 17, 3);
     scene.add(rightWallKey);
 
@@ -93,18 +107,15 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     leftHeroFill.position.set(-1, 9, 5);
     scene.add(leftHeroFill);
 
-    // Broad soft wall wash
     const wallModelLight = new THREE.PointLight('#aeb2ba', 2.2, 58, 2);
     wallModelLight.position.set(-2.5, 7.2, -17);
     scene.add(wallModelLight);
 
-    // Warm energy spill along horizon
     const warmRailLight = new THREE.PointLight('#c39443', 1.4, 42, 2);
     warmRailLight.position.set(-5.5, 2.2, -14);
     scene.add(warmRailLight);
 
-    // Deep convergence accent
-    const vpLight = new THREE.PointLight('#c7a052', 1.2, 48, 2);
+    const vpLight = new THREE.PointLight('#c7a052', 1.25, 60, 2);
     vpLight.position.set(2.8, 1.8, -78);
     scene.add(vpLight);
 
@@ -113,7 +124,7 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     scene.add(geometryRig.group);
     disposables.push(...geometryRig.disposables);
 
-    // Collect materials for wireframe/clay toggles
+    // Collect materials
     const mats: THREE.Material[] = [];
     geometryRig.group.traverse((child) => {
       if ((child as THREE.Mesh).isMesh && (child as THREE.Mesh).material) {
@@ -179,31 +190,47 @@ export const Act2TrueRenderer: React.FC<Act2TrueRendererProps> = ({
     };
   }, []);
 
-  // Update wireframe / clay mode dynamically on materials
+  // Update wireframe / clay mode dynamically
   useEffect(() => {
     materialsRef.current.forEach((m) => {
       if (m instanceof THREE.MeshStandardMaterial || m instanceof THREE.MeshBasicMaterial) {
         m.wireframe = isWireframe;
       }
     });
-  }, [isWireframe]);
+
+    if (clayMaterialRef.current) {
+      clayMaterialRef.current.wireframe = isWireframe;
+    }
+
+    if (sceneRef.current) {
+      sceneRef.current.overrideMaterial = isClayMode ? clayMaterialRef.current : null;
+    }
+  }, [isWireframe, isClayMode]);
 
   return (
-    <div
-      ref={mountRef}
-      className={`act2-true-renderer relative w-full h-full pointer-events-none select-none overflow-hidden ${className}`}
-    >
-      {showCalibrationOverlay && (
-        <GeometryCalibrationOverlay
-          report={calibrationReport}
-          viewportWidth={viewportDims.width}
-          viewportHeight={viewportDims.height}
-          isWireframe={isWireframe}
-          onToggleWireframe={() => setIsWireframe((prev) => !prev)}
-          isClayMode={isClayMode}
-          onToggleClayMode={() => setIsClayMode((prev) => !prev)}
-        />
-      )}
+    <div className={`relative w-full h-full flex items-center justify-center bg-[#030405] overflow-hidden ${className}`}>
+      <div
+        ref={mountRef}
+        className={`act2-true-renderer relative pointer-events-none select-none overflow-hidden transition-all duration-300 ${
+          isCanonicalLetterbox
+            ? 'w-[1672px] h-[941px] max-w-full max-h-full aspect-[1672/941] shadow-[0_0_80px_rgba(0,0,0,0.95)] border border-white/10'
+            : 'w-full h-full'
+        }`}
+      >
+        {showCalibrationOverlay && (
+          <GeometryCalibrationOverlay
+            report={calibrationReport}
+            viewportWidth={viewportDims.width}
+            viewportHeight={viewportDims.height}
+            isWireframe={isWireframe}
+            onToggleWireframe={() => setIsWireframe((prev) => !prev)}
+            isClayMode={isClayMode}
+            onToggleClayMode={() => setIsClayMode((prev) => !prev)}
+            isCanonicalLetterbox={isCanonicalLetterbox}
+            onToggleCanonicalLetterbox={() => setIsCanonicalLetterbox((prev) => !prev)}
+          />
+        )}
+      </div>
     </div>
   );
 };

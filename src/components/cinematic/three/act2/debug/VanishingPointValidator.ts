@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { REFERENCE_GEOMETRY } from '../constants/referenceGeometry';
 import { projectWorldLineToScreen, intersectLines } from '../camera/projection';
+import type { SlatMetricData } from '../geometry/Act2Geometry';
 
 export interface SilhouetteError {
   name: string;
@@ -12,8 +13,9 @@ export interface SilhouetteError {
 
 export interface SlatThicknessValidation {
   name: string;
-  thicknessPx: number;
-  worldHeight: number;
+  renderedThicknessPx: number;
+  targetThicknessPx: number;
+  errorPx: number;
   status: 'PASS' | 'FAIL';
 }
 
@@ -87,16 +89,17 @@ function evaluateReferenceLineError(
 /**
  * Validates:
  * 1) One-point convergence to canonical VP (1433.21, 586.43),
- * 2) Primary structural silhouettes and visible endpoint accuracy,
- * 3) Right-wall ray-family spacing & slat thickness occupancy,
- * 4) Top Silver Blade top-boundary entry point.
+ * 2) Primary structural silhouettes and true viewport-entry accuracy,
+ * 3) Right-wall ray-family spacing,
+ * 4) Real camera-projected slat thickness occupancy (|T_render - T_target| < 3.0 px),
+ * 5) Top Silver Blade screen top-boundary entry (x at y=0).
  */
 export function validateVanishingPoint(
   keyLines: Array<{ p0: THREE.Vector3; p1: THREE.Vector3; name: string }>,
   camera: THREE.Camera,
   viewportWidth: number,
   viewportHeight: number,
-  slatMetrics: Array<{ index: number; name: string; worldHeight: number; projectedThicknessPx: number }> = []
+  slatMetrics: SlatMetricData[] = []
 ): CalibrationReport {
   const projected = keyLines.map((line) => ({
     name: line.name,
@@ -165,8 +168,19 @@ export function validateVanishingPoint(
       target.p1
     );
 
+    // Precise Top Blade Entry Validation at Screen Top Boundary Y = 0
     if (target.keyLineName === 'TopSilverBlade') {
-      topBladeEntryErrorPx = startEndpointError;
+      const refP0 = viewportPointToReference(projectedLine.p0Px, viewportWidth, viewportHeight);
+      const refP1 = viewportPointToReference(projectedLine.p1Px, viewportWidth, viewportHeight);
+      const lineEq = lineFromPoints(refP0, refP1);
+
+      // Solve X when Y = 0: a*X + b*(0) + c = 0 => X = -c / a
+      if (Math.abs(lineEq.x) > 1e-7) {
+        const xAtTop = -lineEq.z / lineEq.x;
+        topBladeEntryErrorPx = Math.abs(xAtTop - target.p0.x);
+      } else {
+        topBladeEntryErrorPx = startEndpointError;
+      }
     }
 
     silhouettes.push({
@@ -210,13 +224,39 @@ export function validateVanishingPoint(
       ? 'PASS'
       : 'FAIL';
 
-  // Slat Thickness Validation (Ensures slabs are real 3D volumes > 8px thickness, not thin lines)
-  const slatThicknesses: SlatThicknessValidation[] = slatMetrics.map((m) => ({
-    name: m.name,
-    thicknessPx: m.projectedThicknessPx,
-    worldHeight: m.worldHeight,
-    status: m.projectedThicknessPx >= 8.0 ? 'PASS' : 'FAIL',
-  }));
+  // Real Slat Thickness Projection Validation at X = 1672
+  const slatThicknesses: SlatThicknessValidation[] = slatMetrics.map((m) => {
+    // Project top and bottom lines to find Y at X = 1672
+    const topProj = projectWorldLineToScreen(m.topEdgeWorld, new THREE.Vector3(m.topEdgeWorld.x, m.topEdgeWorld.y, -95.0), camera, viewportWidth, viewportHeight);
+    const botProj = projectWorldLineToScreen(m.bottomEdgeWorld, new THREE.Vector3(m.bottomEdgeWorld.x, m.bottomEdgeWorld.y, -95.0), camera, viewportWidth, viewportHeight);
+
+    const refTopP0 = viewportPointToReference(topProj.p0Px, viewportWidth, viewportHeight);
+    const refTopP1 = viewportPointToReference(topProj.p1Px, viewportWidth, viewportHeight);
+    const topEq = lineFromPoints(refTopP0, refTopP1);
+
+    const refBotP0 = viewportPointToReference(botProj.p0Px, viewportWidth, viewportHeight);
+    const refBotP1 = viewportPointToReference(botProj.p1Px, viewportWidth, viewportHeight);
+    const botEq = lineFromPoints(refBotP0, refBotP1);
+
+    let renderedThicknessPx = 0;
+    if (Math.abs(topEq.y) > 1e-7 && Math.abs(botEq.y) > 1e-7) {
+      const yTop = (-topEq.x * REFERENCE_GEOMETRY.width - topEq.z) / topEq.y;
+      const yBot = (-botEq.x * REFERENCE_GEOMETRY.width - botEq.z) / botEq.y;
+      renderedThicknessPx = Math.abs(yTop - yBot);
+    } else {
+      renderedThicknessPx = m.worldHeight * 52.6;
+    }
+
+    const errorPx = Math.abs(renderedThicknessPx - m.targetThicknessPx);
+
+    return {
+      name: m.name,
+      renderedThicknessPx,
+      targetThicknessPx: m.targetThicknessPx,
+      errorPx,
+      status: errorPx <= 3.0 ? 'PASS' : 'FAIL',
+    };
+  });
 
   const slatOccupancyStatus: 'PASS' | 'FAIL' =
     slatThicknesses.length > 0 && slatThicknesses.every((s) => s.status === 'PASS')
@@ -230,7 +270,8 @@ export function validateVanishingPoint(
 
   const primarySilhouettesPass =
     silhouettes.length === Object.keys(REFERENCE_GEOMETRY.targetLines).length &&
-    silhouettes.every((s) => s.status === 'PASS');
+    silhouettes.every((s) => s.status === 'PASS') &&
+    topBladeEntryErrorPx < 3.0;
 
   const status: 'PASS' | 'FAIL' =
     vpErrorPx < 3.0 &&

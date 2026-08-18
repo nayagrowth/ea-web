@@ -10,6 +10,8 @@ interface GeometryCalibrationOverlayProps {
   onToggleWireframe?: () => void;
   isClayMode?: boolean;
   onToggleClayMode?: () => void;
+  isCanonicalLetterbox?: boolean;
+  onToggleCanonicalLetterbox?: () => void;
 }
 
 function readableName(name: string): string {
@@ -33,6 +35,8 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
   onToggleWireframe,
   isClayMode = false,
   onToggleClayMode,
+  isCanonicalLetterbox = false,
+  onToggleCanonicalLetterbox,
 }) => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [showReferenceOverlay, setShowReferenceOverlay] = useState(false);
@@ -48,7 +52,7 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
     <div className="absolute inset-0 pointer-events-none select-none z-50 overflow-hidden font-mono text-xs">
       {/* Precision Reticle Crosshair at Canonical Reference VP */}
       <div
-        className="absolute w-6 h-6 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none opacity-80 hover:opacity-100 transition-opacity"
+        className="absolute w-6 h-6 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none opacity-85 hover:opacity-100 transition-opacity"
         style={{ left: `${vpScreenX}px`, top: `${vpScreenY}px` }}
       >
         <div className="absolute w-full h-[1px] bg-[#F5C200]/80" />
@@ -56,7 +60,7 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
         <div className="w-2.5 h-2.5 rounded-full border border-[#F5C200]/90 shadow-[0_0_8px_#F5C200]" />
       </div>
 
-      {/* Optional Reference Comparison Overlay (Difference / Overlay Mode) */}
+      {/* Optional Reference Comparison Overlay (Difference / Screen Mode) */}
       {showReferenceOverlay && (
         <div
           className={`absolute inset-0 pointer-events-none ${
@@ -67,7 +71,7 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
           <img
             src="/reference_act2.png"
             alt="Reference Act 2 Alignment"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
         </div>
       )}
@@ -88,7 +92,7 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
             <span className="text-[10px] text-neutral-400">({report.vpErrorPx.toFixed(2)} px)</span>
           </button>
         ) : (
-          <div className="bg-[#050608]/92 backdrop-blur-2xl border border-white/12 rounded-2xl p-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] text-neutral-300 min-w-[280px] max-w-[310px] transition-all">
+          <div className="bg-[#050608]/92 backdrop-blur-2xl border border-white/12 rounded-2xl p-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] text-neutral-300 min-w-[285px] max-w-[315px] transition-all">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-2">
               <div className="flex items-center gap-2">
@@ -98,7 +102,7 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
                   }`}
                 />
                 <span className="font-bold text-[11.5px] text-white tracking-wider font-qurova">
-                  ACT 2 GEOMETRY V6
+                  ACT 2 GEOMETRY LOCK
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -144,6 +148,13 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
                 </span>
               </div>
 
+              <div className="flex justify-between">
+                <span className="text-neutral-500">TOP BLADE ENTRY (Y=0)</span>
+                <span className={report.topBladeEntryErrorPx < 3 ? 'text-emerald-400' : 'text-rose-400'}>
+                  {report.topBladeEntryErrorPx.toFixed(3)} px
+                </span>
+              </div>
+
               {/* Primary Silhouettes */}
               <div className="pt-1.5 mt-1.5 border-t border-white/10 space-y-1">
                 <span className="text-[10px] text-neutral-400 uppercase font-semibold">
@@ -178,7 +189,7 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
               {/* Dev Inspection Tools */}
               <div className="pt-2 mt-2 border-t border-white/10 space-y-2">
                 <span className="text-[10px] text-neutral-400 uppercase font-semibold">
-                  Dev Inspection Tools
+                  Dev Inspection Suite
                 </span>
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {onToggleWireframe && (
@@ -205,6 +216,19 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
                       {isClayMode ? 'Clay: ON' : 'Clay'}
                     </button>
                   )}
+                  {onToggleCanonicalLetterbox && (
+                    <button
+                      onClick={onToggleCanonicalLetterbox}
+                      className={`px-2 py-1 rounded text-[10.5px] font-semibold transition-all cursor-pointer ${
+                        isCanonicalLetterbox
+                          ? 'bg-[#F5C200] text-[#001A24]'
+                          : 'bg-white/10 text-neutral-300 hover:bg-white/15'
+                      }`}
+                      title="1672x941 1:1 Pixel Review Box"
+                    >
+                      {isCanonicalLetterbox ? '1672:941' : 'Letterbox'}
+                    </button>
+                  )}
                   <button
                     onClick={() => setShowReferenceOverlay((prev) => !prev)}
                     className={`px-2 py-1 rounded text-[10.5px] font-semibold transition-all cursor-pointer ${
@@ -223,7 +247,7 @@ export const GeometryCalibrationOverlay: React.FC<GeometryCalibrationOverlayProp
                       onClick={() => setIsDifferenceMode((prev) => !prev)}
                       className="text-[10px] text-neutral-400 hover:text-white underline cursor-pointer"
                     >
-                      Mode: {isDifferenceMode ? 'Difference' : 'Overlay'}
+                      Mode: {isDifferenceMode ? 'Difference' : 'Screen'}
                     </button>
                     <input
                       type="range"

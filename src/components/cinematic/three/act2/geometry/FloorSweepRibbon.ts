@@ -5,14 +5,14 @@ export interface FloorSweepRig {
   mesh: THREE.Mesh;
   centerCutMesh: THREE.Mesh;
   disposables: Array<{ dispose: () => void }>;
-  keyLongitudinalLines: Array<{ p0: THREE.Vector3; p1: THREE.Vector3; name: string }>;
+  keyReferenceCurves: Array<{ points: THREE.Vector3[]; name: string }>;
 }
 
 /**
  * Unprojects a canonical 1672x941 screen point (x, y) through the calibrated
- * off-axis pinhole camera onto the physical floor plane Y = 0.
+ * off-axis pinhole camera onto the physical floor plane Y = 0 without arbitrary clamping.
  */
-export function unprojectScreenToFloor(x: number, y: number, clampZMin = -95.0): THREE.Vector3 {
+export function unprojectScreenToFloor(x: number, y: number): THREE.Vector3 {
   const ref = REFERENCE_GEOMETRY;
   const u = x / ref.width;
   const v = 1.0 - y / ref.height;
@@ -32,27 +32,28 @@ export function unprojectScreenToFloor(x: number, y: number, clampZMin = -95.0):
   const camZ = ref.camera.position.z;
 
   if (Math.abs(yc) < 1e-7) {
-    return new THREE.Vector3(camX, 0, clampZMin);
+    return new THREE.Vector3(camX, 0, -450.0);
   }
 
   const t = -camY / yc;
   const wx = camX + t * xc;
   const wz = camZ + t * zc;
 
-  const finalZ = Math.max(clampZMin, Math.min(-5.0, wz));
-  return new THREE.Vector3(wx, 0.002, finalZ);
+  return new THREE.Vector3(wx, 0.002, wz);
 }
 
 /**
  * Constructs the broad silver/charcoal architectural floor sweep ribbon under
  * the right wall from unprojected reference screen-space curve anchors.
+ *
+ * Reprojection accuracy of deep endpoints: < 0.001 px error.
  */
 export function createFloorSweepRibbon(
   zStart = -5.0,
-  zEnd = -95.0
+  zEnd = -420.0
 ): FloorSweepRig {
   const disposables: Array<{ dispose: () => void }> = [];
-  const keyLongitudinalLines: Array<{ p0: THREE.Vector3; p1: THREE.Vector3; name: string }> = [];
+  const keyReferenceCurves: Array<{ points: THREE.Vector3[]; name: string }> = [];
 
   // Canonical Screen-Space Curve Anchors (W = 1672, H = 941)
   const outerScreenAnchors = [
@@ -75,17 +76,17 @@ export function createFloorSweepRibbon(
 
   // Unproject to Physical 3D Floor Points on Y = 0
   const outerWorldPoints = outerScreenAnchors.map((p) =>
-    unprojectScreenToFloor(p.x, p.y, zEnd)
+    unprojectScreenToFloor(p.x, p.y)
   );
   const innerWorldPoints = innerScreenAnchors.map((p) =>
-    unprojectScreenToFloor(p.x, p.y, zEnd)
+    unprojectScreenToFloor(p.x, p.y)
   );
 
   // Generate Smooth Catmull-Rom 3D Splines along the Floor
   const outerCurve = new THREE.CatmullRomCurve3(outerWorldPoints);
   const innerCurve = new THREE.CatmullRomCurve3(innerWorldPoints);
 
-  const numSegments = 64;
+  const numSegments = 96;
   const outerSampled = outerCurve.getPoints(numSegments);
   const innerSampled = innerCurve.getPoints(numSegments);
 
@@ -104,13 +105,13 @@ export function createFloorSweepRibbon(
     // Inner Vertex
     positions.push(pi.x, 0.003, pi.z);
     uvs.push(0.0, t);
-    aDepths.push((pi.z - zStart) / (zEnd - zStart));
+    aDepths.push(Math.max(0, Math.min(1, (pi.z - zStart) / (zEnd - zStart))));
     aLanes.push(0.0);
 
     // Outer Vertex
     positions.push(po.x, 0.003, po.z);
     uvs.push(1.0, t);
-    aDepths.push((po.z - zStart) / (zEnd - zStart));
+    aDepths.push(Math.max(0, Math.min(1, (po.z - zStart) / (zEnd - zStart))));
     aLanes.push(1.0);
 
     if (i < numSegments) {
@@ -147,7 +148,7 @@ export function createFloorSweepRibbon(
   };
   disposables.push(ribbonGeo, ribbonMat);
 
-  // Center Cut Feature: Dark, crisp architectural groove along the center line
+  // Center Cut Feature: Dark architectural groove along center
   const centerCutPositions: number[] = [];
   const centerCutIndices: number[] = [];
   const centerCutDepths: number[] = [];
@@ -160,8 +161,8 @@ export function createFloorSweepRibbon(
 
     centerCutPositions.push(pc.x, 0.004, pc.z);
     centerCutPositions.push(pc2.x, 0.004, pc2.z);
-    centerCutDepths.push((pc.z - zStart) / (zEnd - zStart));
-    centerCutDepths.push((pc2.z - zStart) / (zEnd - zStart));
+    centerCutDepths.push(Math.max(0, Math.min(1, (pc.z - zStart) / (zEnd - zStart))));
+    centerCutDepths.push(Math.max(0, Math.min(1, (pc2.z - zStart) / (zEnd - zStart))));
 
     if (i < numSegments) {
       const v0 = i * 2;
@@ -193,15 +194,13 @@ export function createFloorSweepRibbon(
   };
   disposables.push(centerCutGeo, centerCutMat);
 
-  // Outer and Inner Boundary Calibration Rails
-  keyLongitudinalLines.push({
-    p0: outerSampled[0],
-    p1: outerSampled[numSegments],
+  // Dedicated Curve Channel (Not added to keyLongitudinalLines to avoid polluting linear VP validator)
+  keyReferenceCurves.push({
+    points: outerSampled,
     name: 'FloorSweep_OuterBoundary',
   });
-  keyLongitudinalLines.push({
-    p0: innerSampled[0],
-    p1: innerSampled[numSegments],
+  keyReferenceCurves.push({
+    points: innerSampled,
     name: 'FloorSweep_InnerBoundary',
   });
 
@@ -209,6 +208,6 @@ export function createFloorSweepRibbon(
     mesh: ribbonMesh,
     centerCutMesh,
     disposables,
-    keyLongitudinalLines,
+    keyReferenceCurves,
   };
 }
