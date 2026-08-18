@@ -96,8 +96,8 @@ export const Act1ArchitecturalColumns: React.FC = () => {
                   </linearGradient>
                 </defs>
 
-                {/* Subtle Horizon Base */}
-                <rect x="0" y="0" width="400" height="280" fill="#eeeae3" />
+                {/* Subtle Horizon Base (Tag with .act1-col-bg so it dissolves cleanly into #080909) */}
+                <rect className="act1-col-bg act1-run-base" x="0" y="0" width="400" height="280" fill="#eeeae3" />
 
                 {/* Non-Converging Softly Whispering Beams */}
                 <g mask="url(#soft-runway-mask)" opacity="0.9">
@@ -188,48 +188,51 @@ export const Act1ArchitecturalColumns: React.FC = () => {
             }}
           />
 
-          {/* Layer z1: Broad Warm Corona Haze */}
-          <div
-            className="act1-eclipse-glow act1-eclipse-glow-wide absolute rounded-full pointer-events-none"
-            style={{
-              width: '195%',
-              aspectRatio: '1',
-              left: '-105.5%',
-              top: '-3.1%',
-              background: '#b8873f',
-              transform: 'translate(2.5%, 1.8%) scale(1.018)',
-              filter: 'blur(34px)',
-              opacity: 0.28,
-            }}
-          />
+          {/* Optical Rig Parent: GSAP animates this parent, preserving child optical transforms */}
+          <div className="act1-eclipse-rig absolute inset-0 pointer-events-none">
+            {/* Layer z1: Broad Warm Corona Haze */}
+            <div
+              className="act1-eclipse-glow-wide absolute rounded-full pointer-events-none"
+              style={{
+                width: '195%',
+                aspectRatio: '1',
+                left: '-105.5%',
+                top: '-3.1%',
+                background: '#b8873f',
+                transform: 'translate(2.5%, 1.8%) scale(1.018)',
+                filter: 'blur(34px)',
+                opacity: 0.28,
+              }}
+            />
 
-          {/* Layer z2: Tight Brighter Corona Core */}
-          <div
-            className="act1-eclipse-glow act1-eclipse-glow-core absolute rounded-full pointer-events-none"
-            style={{
-              width: '195%',
-              aspectRatio: '1',
-              left: '-105.5%',
-              top: '-3.1%',
-              background: '#efce8e',
-              transform: 'translate(1.1%, 0.7%) scale(1.007)',
-              filter: 'blur(9px)',
-              opacity: 0.68,
-            }}
-          />
+            {/* Layer z2: Tight Brighter Corona Core */}
+            <div
+              className="act1-eclipse-glow-core absolute rounded-full pointer-events-none"
+              style={{
+                width: '195%',
+                aspectRatio: '1',
+                left: '-105.5%',
+                top: '-3.1%',
+                background: '#efce8e',
+                transform: 'translate(1.1%, 0.7%) scale(1.007)',
+                filter: 'blur(9px)',
+                opacity: 0.68,
+              }}
+            />
 
-          {/* Layer z3: Foreground Dark Occluding Disc */}
-          <div
-            className="act1-eclipse-disc absolute rounded-full pointer-events-none"
-            style={{
-              width: '195%',
-              aspectRatio: '1',
-              left: '-105.5%',
-              top: '-3.1%',
-              background: 'radial-gradient(circle at 72% 42%, #111112 0%, #0b0c0d 48%, #080809 100%)',
-              boxShadow: '1px 0 0 rgba(247, 222, 170, 0.26), 3px 2px 6px rgba(235, 193, 113, 0.12)',
-            }}
-          />
+            {/* Layer z3: Foreground Dark Occluding Disc */}
+            <div
+              className="act1-eclipse-disc absolute rounded-full pointer-events-none"
+              style={{
+                width: '195%',
+                aspectRatio: '1',
+                left: '-105.5%',
+                top: '-3.1%',
+                background: 'radial-gradient(circle at 72% 42%, #111112 0%, #0b0c0d 48%, #080809 100%)',
+                boxShadow: '1px 0 0 rgba(247, 222, 170, 0.26), 3px 2px 6px rgba(235, 193, 113, 0.12)',
+              }}
+            />
+          </div>
 
           {/* Layer z4: "ads." Typography with Champagne Bronze Shading & Punctuation Dot */}
           <div

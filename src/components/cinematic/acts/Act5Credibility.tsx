@@ -3,7 +3,10 @@ import React from 'react';
 export const Act5Credibility: React.FC = () => {
   return (
     <div className="act5-stage absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none select-none">
-      <div className="max-w-5xl flex flex-col items-center justify-center gap-6">
+      {/* Radial Warm Ivory/White Light Bloom (Smooth Handoff to Problem Section) */}
+      <div className="act5-white-bloom absolute inset-0 bg-[#FFFFFF] opacity-0 pointer-events-none z-30" />
+
+      <div className="relative max-w-5xl flex flex-col items-center justify-center gap-6 z-10">
         {/* Minimalist Champagne Eyebrow Badge */}
         <div className="inline-flex items-center gap-2 bg-white/5 border border-white/15 text-gray-300 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase backdrop-blur-md">
           <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
@@ -21,7 +24,7 @@ export const Act5Credibility: React.FC = () => {
         </div>
 
         {/* 3 High-End Proof Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-10 pt-2 border-t border-white/10 w-full max-w-3xl">
+        <div className="act5-proof-metrics grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-10 pt-2 border-t border-white/10 w-full max-w-3xl">
           <div className="flex flex-col items-center">
             <span className="text-2xl sm:text-3xl font-black text-white">4 Years</span>
             <span className="text-xs font-mono text-gray-400 uppercase tracking-widest mt-1">Market Dominance</span>
@@ -37,14 +40,14 @@ export const Act5Credibility: React.FC = () => {
         </div>
 
         {/* High-End Clean Gold CTA Button */}
-        <div className="pt-4 pointer-events-auto">
+        <div className="act5-cta pt-4 pointer-events-auto">
           <a
             href="#book-strategy-session"
             className="inline-flex items-center gap-3 bg-[#F5B800] hover:bg-[#E5AB00] text-gray-950 font-black text-sm sm:text-base px-8 py-4 rounded-2xl transition-all shadow-[0_0_30px_rgba(245,184,0,0.35)] active:scale-95"
           >
             <span>Book Your Project Sell-Out Strategy Session</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12" /><polyline points="19 12 12 19 5 12" />
+              <line x1="5" y1="12" x2="19" /><polyline points="19 12 12 19 5 12" />
             </svg>
           </a>
         </div>
