@@ -76,7 +76,7 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               {/* Distant Atmospheric Horizon Floor Shading */}
               <rect x="0" y="0" width="400" height="280" fill="#F0EDE7" />
 
-              {/* Group of 20% More Converging 3D Tracks */}
+              {/* Group of 3D Perspective Tracks */}
               <g mask="url(#runway-fog-mask)">
                 {/* Track -5 */}
                 <polygon points="160,25 165,25 -55,280 -35,280" fill="url(#track-surface)" />
@@ -164,15 +164,15 @@ export const Act1ArchitecturalColumns: React.FC = () => {
       {/* COLUMN 4: "ads." (Solar Eclipse Refraction with Physical Backlight)   */}
       {/* ===================================================================== */}
       <div className="act1-col-4 relative h-full bg-[#08080A] flex items-center justify-center overflow-hidden">
-        {/* Layer 1: Occluded Sun Radiant Backlight Behind the Rim */}
+        {/* Layer 1: Occluded Sun Radiant Backlight Concentrated on the Mid/Lower Rim */}
         <div
-          className="absolute -right-[12vw] w-[42vw] h-[95vh] rounded-full pointer-events-none blur-3xl opacity-95"
+          className="absolute -right-[8vw] bottom-[10vh] w-[38vw] h-[75vh] rounded-full pointer-events-none blur-3xl opacity-95"
           style={{
-            background: 'radial-gradient(ellipse at 75% 50%, rgba(255, 220, 120, 0.7) 0%, rgba(245, 184, 0, 0.45) 30%, rgba(180, 120, 20, 0.2) 55%, transparent 75%)',
+            background: 'radial-gradient(ellipse at 70% 60%, rgba(255, 220, 120, 0.75) 0%, rgba(245, 184, 0, 0.45) 30%, rgba(180, 120, 20, 0.18) 55%, transparent 75%)',
           }}
         />
 
-        {/* Layer 2: Real Atmospheric Corona Dispersion SVG */}
+        {/* Layer 2: Real Atmospheric Corona Dispersion & Calibrated Eclipse Arc */}
         <svg
           className="act1-gold-eclipse absolute inset-0 w-full h-full pointer-events-none"
           viewBox="0 0 300 600"
@@ -180,7 +180,7 @@ export const Act1ArchitecturalColumns: React.FC = () => {
         >
           <defs>
             {/* Incandescent Core Rim Gradient */}
-            <linearGradient id="true-eclipse-rim" x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient id="calibrated-eclipse-rim" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#FFF7D6" />
               <stop offset="25%" stopColor="#F9E28A" />
               <stop offset="50%" stopColor="#D4AF37" />
@@ -189,9 +189,9 @@ export const Act1ArchitecturalColumns: React.FC = () => {
             </linearGradient>
 
             {/* Gaussian Corona Filter */}
-            <filter id="true-corona-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <filter id="calibrated-corona-glow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="22" result="ambientGlow" />
-              <feGaussianBlur stdDeviation="7" result="innerCorona" />
+              <feGaussianBlur stdDeviation="6" result="innerCorona" />
               <feMerge>
                 <feMergeNode in="ambientGlow" />
                 <feMergeNode in="innerCorona" />
@@ -200,38 +200,38 @@ export const Act1ArchitecturalColumns: React.FC = () => {
             </filter>
           </defs>
 
-          {/* Broad Radiant Corona Arc */}
+          {/* Broad Radiant Corona Arc starting at Top-Center (84, 0) and curving to (0, 513) */}
           <path
-            d="M 100,-20 A 340,340 0 0,1 100,620"
+            d="M 84,0 A 269,269 0 0,1 0,513"
             fill="none"
             stroke="#F5B800"
             strokeWidth="32"
             opacity="0.35"
-            filter="url(#true-corona-glow)"
+            filter="url(#calibrated-corona-glow)"
           />
 
           {/* Intense Golden Corona Flame */}
           <path
-            d="M 100,-20 A 340,340 0 0,1 100,620"
+            d="M 84,0 A 269,269 0 0,1 0,513"
             fill="none"
             stroke="#D4AF37"
             strokeWidth="14"
             opacity="0.85"
-            filter="url(#true-corona-glow)"
+            filter="url(#calibrated-corona-glow)"
           />
 
           {/* Razor-Sharp Incandescent Solar Rim Core */}
           <path
-            d="M 100,-20 A 340,340 0 0,1 100,620"
+            d="M 84,0 A 269,269 0 0,1 0,513"
             fill="none"
-            stroke="url(#true-eclipse-rim)"
+            stroke="url(#calibrated-eclipse-rim)"
             strokeWidth="4.5"
             strokeLinecap="round"
           />
 
-          {/* Occluding Dark Celestial Body (The Moon) */}
+          {/* Occluding Dark Celestial Body (The Moon) covering upper-left */}
           <path
-            d="M 0,-20 L 100,-20 A 340,340 0 0,1 100,620 L 0,620 Z"
+            d="M 0,0 L 84,0 A 269,269 0 0,1 0,513 Z"
             fill="#08080A"
           />
         </svg>
