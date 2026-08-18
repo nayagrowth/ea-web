@@ -16,9 +16,11 @@ export const Act1ArchitecturalColumns: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-b from-[#f2f1ee] via-[#ecebe8] to-[#e6e5e0] opacity-60 pointer-events-none" />
           </div>
 
-          <h1 className="act1-most-word relative z-10 font-serif text-[clamp(4.6rem,8.6vw,9.8rem)] font-normal text-[#0c0c0d] tracking-[-0.04em] leading-none select-none">
-            Most
-          </h1>
+          <div className="most-pointer-rig">
+            <h1 className="act1-most-word relative z-10 font-serif text-[clamp(4.6rem,8.6vw,9.8rem)] font-normal text-[#0c0c0d] tracking-[-0.04em] leading-none select-none">
+              Most
+            </h1>
+          </div>
         </div>
 
         {/* =================================================================== */}
@@ -30,18 +32,20 @@ export const Act1ArchitecturalColumns: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-b from-[#111214] via-[#0b0c0d] to-[#080809] opacity-80 pointer-events-none" />
           </div>
 
-          {/* "agencies" with individual character spans for flow field deconstruction */}
-          <h2 className="act1-agencies-word relative z-10 font-sans text-[clamp(2.6rem,4.6vw,5.2rem)] font-extralight text-[#FFFFFF] tracking-[-0.03em] leading-none">
-            {'agencies'.split('').map((char, i) => (
-              <span key={i} className="act1-agencies-char inline-block">
-                {char}
-              </span>
-            ))}
-          </h2>
+          <div className="agencies-pointer-rig flex flex-col items-center">
+            {/* "agencies" with individual character spans for flow field deconstruction */}
+            <h2 className="act1-agencies-word relative z-10 font-sans text-[clamp(2.6rem,4.6vw,5.2rem)] font-extralight text-[#FFFFFF] tracking-[-0.03em] leading-none">
+              {'agencies'.split('').map((char, i) => (
+                <span key={i} className="act1-agencies-char inline-block">
+                  {char}
+                </span>
+              ))}
+            </h2>
 
-          {/* Compositional Axis / Plumb-Line Gesture with Travelling Highlight */}
-          <div className="act1-col2-axis relative w-[1.5px] bg-gradient-to-b from-white/45 via-white/20 to-transparent h-[52vh] mt-7 z-10 overflow-hidden">
-            <div className="act1-axis-pulse absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-transparent via-[#ecd08e] to-transparent opacity-0" />
+            {/* Compositional Axis / Plumb-Line Gesture with Travelling Highlight */}
+            <div className="act1-col2-axis relative w-[1.5px] bg-gradient-to-b from-white/45 via-white/20 to-transparent h-[52vh] mt-7 z-10 overflow-hidden">
+              <div className="act1-axis-pulse absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-transparent via-[#ecd08e] to-transparent opacity-0" />
+            </div>
           </div>
         </div>
 
@@ -59,102 +63,104 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               run
             </h2>
 
-            {/* Embossed Perspective Floor: Zero second white rectangle, 100% transparent SVG */}
-            <div className="act1-runway-wrap relative w-full h-[65%] mt-auto overflow-hidden">
-              <svg
-                className="w-full h-full block bg-transparent"
-                viewBox="0 0 400 280"
-                preserveAspectRatio="none"
-              >
-                <defs>
-                  {/* Atmospheric Dissolve Mask */}
-                  <mask id="soft-runway-mask">
-                    <linearGradient id="soft-fog-grad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#000000" stopOpacity="0" />
-                      <stop offset="30%" stopColor="#FFFFFF" stopOpacity="0.2" />
-                      <stop offset="70%" stopColor="#FFFFFF" stopOpacity="0.75" />
-                      <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+            {/* Embossed Perspective Floor: Nested Rigs (Story Rig vs Pointer Rig) */}
+            <div className="act1-runway-wrap runway-story-rig relative w-full h-[65%] mt-auto overflow-hidden">
+              <div className="runway-pointer-rig w-full h-full">
+                <svg
+                  className="w-full h-full block bg-transparent"
+                  viewBox="0 0 400 280"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    {/* Atmospheric Dissolve Mask */}
+                    <mask id="soft-runway-mask">
+                      <linearGradient id="soft-fog-grad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#000000" stopOpacity="0" />
+                        <stop offset="30%" stopColor="#FFFFFF" stopOpacity="0.2" />
+                        <stop offset="70%" stopColor="#FFFFFF" stopOpacity="0.75" />
+                        <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+                      </linearGradient>
+                      <rect x="0" y="0" width="400" height="280" fill="url(#soft-fog-grad)" />
+                    </mask>
+
+                    {/* Soft Track Shading */}
+                    <linearGradient id="soft-track-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#ede9e2" stopOpacity="0.1" />
+                      <stop offset="60%" stopColor="#ded9cf" stopOpacity="0.5" />
+                      <stop offset="100%" stopColor="#cec8bd" stopOpacity="0.85" />
                     </linearGradient>
-                    <rect x="0" y="0" width="400" height="280" fill="url(#soft-fog-grad)" />
-                  </mask>
 
-                  {/* Soft Track Shading */}
-                  <linearGradient id="soft-track-fill" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#ede9e2" stopOpacity="0.1" />
-                    <stop offset="60%" stopColor="#ded9cf" stopOpacity="0.5" />
-                    <stop offset="100%" stopColor="#cec8bd" stopOpacity="0.85" />
-                  </linearGradient>
+                    <linearGradient id="soft-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+                      <stop offset="40%" stopColor="#ffffff" stopOpacity="0.5" />
+                      <stop offset="100%" stopColor="#ffffff" stopOpacity="0.9" />
+                    </linearGradient>
 
-                  <linearGradient id="soft-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
-                    <stop offset="40%" stopColor="#ffffff" stopOpacity="0.5" />
-                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0.9" />
-                  </linearGradient>
+                    <linearGradient id="soft-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#b5afa5" stopOpacity="0" />
+                      <stop offset="40%" stopColor="#9e978c" stopOpacity="0.4" />
+                      <stop offset="100%" stopColor="#80796e" stopOpacity="0.7" />
+                    </linearGradient>
+                  </defs>
 
-                  <linearGradient id="soft-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#b5afa5" stopOpacity="0" />
-                    <stop offset="40%" stopColor="#9e978c" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#80796e" stopOpacity="0.7" />
-                  </linearGradient>
-                </defs>
+                  {/* Perspective Beams */}
+                  <g mask="url(#soft-runway-mask)" opacity="0.9">
+                    {/* Track -4 */}
+                    <polygon className="act1-run-track" points="166,35 171,35 10,280 26,280" fill="url(#soft-track-fill)" />
+                    <line className="act1-run-line" x1="166" y1="35" x2="10" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
+                    <line className="act1-run-line" x1="171" y1="35" x2="26" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.6" />
+                    <line className="act1-energy-rail act1-energy-rail-m4" x1="168" y1="35" x2="18" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
 
-                {/* Perspective Beams */}
-                <g mask="url(#soft-runway-mask)" opacity="0.9">
-                  {/* Track -4 */}
-                  <polygon className="act1-run-track" points="166,35 171,35 10,280 26,280" fill="url(#soft-track-fill)" />
-                  <line className="act1-run-line" x1="166" y1="35" x2="10" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
-                  <line className="act1-run-line" x1="171" y1="35" x2="26" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.6" />
-                  <line className="act1-energy-rail act1-energy-rail-m4" x1="168" y1="35" x2="18" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
+                    {/* Track -3 */}
+                    <polygon className="act1-run-track" points="175,35 179,35 62,280 77,280" fill="url(#soft-track-fill)" />
+                    <line className="act1-run-line" x1="175" y1="35" x2="62" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
+                    <line className="act1-run-line" x1="179" y1="35" x2="77" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.5" />
+                    <line className="act1-energy-rail act1-energy-rail-m3" x1="177" y1="35" x2="69" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
 
-                  {/* Track -3 */}
-                  <polygon className="act1-run-track" points="175,35 179,35 62,280 77,280" fill="url(#soft-track-fill)" />
-                  <line className="act1-run-line" x1="175" y1="35" x2="62" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
-                  <line className="act1-run-line" x1="179" y1="35" x2="77" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.5" />
-                  <line className="act1-energy-rail act1-energy-rail-m3" x1="177" y1="35" x2="69" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
+                    {/* Track -2 */}
+                    <polygon className="act1-run-track" points="183,35 186,35 116,280 129,280" fill="url(#soft-track-fill)" />
+                    <line className="act1-run-line" x1="183" y1="35" x2="116" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.1" />
+                    <line className="act1-run-line" x1="186" y1="35" x2="129" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.4" />
+                    <line className="act1-energy-rail act1-energy-rail-m2" x1="184.5" y1="35" x2="122.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
-                  {/* Track -2 */}
-                  <polygon className="act1-run-track" points="183,35 186,35 116,280 129,280" fill="url(#soft-track-fill)" />
-                  <line className="act1-run-line" x1="183" y1="35" x2="116" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.1" />
-                  <line className="act1-run-line" x1="186" y1="35" x2="129" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.4" />
-                  <line className="act1-energy-rail act1-energy-rail-m2" x1="184.5" y1="35" x2="122.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
+                    {/* Track -1 */}
+                    <polygon className="act1-run-track" points="191,35 194,35 168,280 179,280" fill="url(#soft-track-fill)" />
+                    <line className="act1-run-line" x1="191" y1="35" x2="168" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
+                    <line className="act1-run-line" x1="194" y1="35" x2="179" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+                    <line className="act1-energy-rail act1-energy-rail-m1" x1="192.5" y1="35" x2="173.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
-                  {/* Track -1 */}
-                  <polygon className="act1-run-track" points="191,35 194,35 168,280 179,280" fill="url(#soft-track-fill)" />
-                  <line className="act1-run-line" x1="191" y1="35" x2="168" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
-                  <line className="act1-run-line" x1="194" y1="35" x2="179" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
-                  <line className="act1-energy-rail act1-energy-rail-m1" x1="192.5" y1="35" x2="173.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
+                    {/* Center Track 0 (First to ignite on scroll) */}
+                    <polygon className="act1-run-track" points="198.5,35 201.5,35 195,280 205,280" fill="url(#soft-track-fill)" />
+                    <line className="act1-run-line" x1="198.5" y1="35" x2="195" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
+                    <line className="act1-run-line" x1="201.5" y1="25" x2="205" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+                    <line className="act1-energy-rail act1-energy-rail-0" x1="200" y1="35" x2="200" y2="280" stroke="#ecd08e" strokeWidth="2.4" strokeLinecap="round" opacity="0" />
 
-                  {/* Center Track 0 (First to ignite on scroll) */}
-                  <polygon className="act1-run-track" points="198.5,35 201.5,35 195,280 205,280" fill="url(#soft-track-fill)" />
-                  <line className="act1-run-line" x1="198.5" y1="35" x2="195" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
-                  <line className="act1-run-line" x1="201.5" y1="25" x2="205" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
-                  <line className="act1-energy-rail act1-energy-rail-0" x1="200" y1="35" x2="200" y2="280" stroke="#ecd08e" strokeWidth="2.4" strokeLinecap="round" opacity="0" />
+                    {/* Track +1 */}
+                    <polygon className="act1-run-track" points="206,35 209,35 221,280 232,280" fill="url(#soft-track-fill)" />
+                    <line className="act1-run-line" x1="206" y1="35" x2="221" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
+                    <line className="act1-run-line" x1="209" y1="35" x2="232" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
+                    <line className="act1-energy-rail act1-energy-rail-p1" x1="207.5" y1="35" x2="226.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
-                  {/* Track +1 */}
-                  <polygon className="act1-run-track" points="206,35 209,35 221,280 232,280" fill="url(#soft-track-fill)" />
-                  <line className="act1-run-line" x1="206" y1="35" x2="221" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.0" />
-                  <line className="act1-run-line" x1="209" y1="35" x2="232" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.3" />
-                  <line className="act1-energy-rail act1-energy-rail-p1" x1="207.5" y1="35" x2="226.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
+                    {/* Track +2 */}
+                    <polygon className="act1-run-track" points="214,35 217,35 271,280 284,280" fill="url(#soft-track-fill)" />
+                    <line className="act1-run-line" x1="214" y1="35" x2="271" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.1" />
+                    <line className="act1-run-line" x1="217" y1="35" x2="284" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.4" />
+                    <line className="act1-energy-rail act1-energy-rail-p2" x1="215.5" y1="35" x2="277.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
-                  {/* Track +2 */}
-                  <polygon className="act1-run-track" points="214,35 217,35 271,280 284,280" fill="url(#soft-track-fill)" />
-                  <line className="act1-run-line" x1="214" y1="35" x2="271" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.1" />
-                  <line className="act1-run-line" x1="217" y1="35" x2="284" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.4" />
-                  <line className="act1-energy-rail act1-energy-rail-p2" x1="215.5" y1="35" x2="277.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
+                    {/* Track +3 */}
+                    <polygon className="act1-run-track" points="221,35 225,35 323,280 338,280" fill="url(#soft-track-fill)" />
+                    <line className="act1-run-line" x1="221" y1="35" x2="323" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
+                    <line className="act1-run-line" x1="225" y1="35" x2="338" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.5" />
+                    <line className="act1-energy-rail act1-energy-rail-p3" x1="223" y1="35" x2="330.5" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
 
-                  {/* Track +3 */}
-                  <polygon className="act1-run-track" points="221,35 225,35 323,280 338,280" fill="url(#soft-track-fill)" />
-                  <line className="act1-run-line" x1="221" y1="35" x2="323" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
-                  <line className="act1-run-line" x1="225" y1="35" x2="338" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.5" />
-                  <line className="act1-energy-rail act1-energy-rail-p3" x1="223" y1="35" x2="330.5" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
-
-                  {/* Track +4 */}
-                  <polygon className="act1-run-track" points="229,35 234,35 374,280 390,280" fill="url(#soft-track-fill)" />
-                  <line className="act1-run-line" x1="229" y1="35" x2="374" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
-                  <line className="act1-run-line" x1="234" y1="35" x2="390" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.6" />
-                  <line className="act1-energy-rail act1-energy-rail-p4" x1="231.5" y1="35" x2="382" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
-                </g>
-              </svg>
+                    {/* Track +4 */}
+                    <polygon className="act1-run-track" points="229,35 234,35 374,280 390,280" fill="url(#soft-track-fill)" />
+                    <line className="act1-run-line" x1="229" y1="35" x2="374" y2="280" stroke="url(#soft-highlight)" strokeWidth="1.2" />
+                    <line className="act1-run-line" x1="234" y1="35" x2="390" y2="280" stroke="url(#soft-shadow)" strokeWidth="1.6" />
+                    <line className="act1-energy-rail act1-energy-rail-p4" x1="231.5" y1="35" x2="382" y2="280" stroke="#ecd08e" strokeWidth="2.2" strokeLinecap="round" opacity="0" />
+                  </g>
+                </svg>
+              </div>
             </div>
           </div>
 
@@ -199,49 +205,51 @@ export const Act1ArchitecturalColumns: React.FC = () => {
           />
 
           {/* Optical Rig Parent: GSAP animates this parent, preserving child optical transforms */}
-          <div className="act1-eclipse-rig absolute inset-0 pointer-events-none">
-            {/* Layer z1: Broad Warm Corona Haze */}
-            <div
-              className="act1-eclipse-glow-wide absolute rounded-full pointer-events-none"
-              style={{
-                width: '195%',
-                aspectRatio: '1',
-                left: '-105.5%',
-                top: '-3.1%',
-                background: '#b8873f',
-                transform: 'translate(2.5%, 1.8%) scale(1.018)',
-                filter: 'blur(34px)',
-                opacity: 0.28,
-              }}
-            />
+          <div className="act1-eclipse-rig eclipse-story-rig absolute inset-0 pointer-events-none">
+            <div className="eclipse-pointer-rig w-full h-full relative">
+              {/* Layer z1: Broad Warm Corona Haze */}
+              <div
+                className="act1-eclipse-glow-wide absolute rounded-full pointer-events-none"
+                style={{
+                  width: '195%',
+                  aspectRatio: '1',
+                  left: '-105.5%',
+                  top: '-3.1%',
+                  background: '#b8873f',
+                  transform: 'translate(2.5%, 1.8%) scale(1.018)',
+                  filter: 'blur(34px)',
+                  opacity: 0.28,
+                }}
+              />
 
-            {/* Layer z2: Tight Brighter Corona Core */}
-            <div
-              className="act1-eclipse-glow-core absolute rounded-full pointer-events-none"
-              style={{
-                width: '195%',
-                aspectRatio: '1',
-                left: '-105.5%',
-                top: '-3.1%',
-                background: '#efce8e',
-                transform: 'translate(1.1%, 0.7%) scale(1.007)',
-                filter: 'blur(9px)',
-                opacity: 0.68,
-              }}
-            />
+              {/* Layer z2: Tight Brighter Corona Core */}
+              <div
+                className="act1-eclipse-glow-core absolute rounded-full pointer-events-none"
+                style={{
+                  width: '195%',
+                  aspectRatio: '1',
+                  left: '-105.5%',
+                  top: '-3.1%',
+                  background: '#efce8e',
+                  transform: 'translate(1.1%, 0.7%) scale(1.007)',
+                  filter: 'blur(9px)',
+                  opacity: 0.68,
+                }}
+              />
 
-            {/* Layer z3: Foreground Dark Occluding Disc */}
-            <div
-              className="act1-eclipse-disc absolute rounded-full pointer-events-none"
-              style={{
-                width: '195%',
-                aspectRatio: '1',
-                left: '-105.5%',
-                top: '-3.1%',
-                background: 'radial-gradient(circle at 72% 42%, #111112 0%, #0b0c0d 48%, #080809 100%)',
-                boxShadow: '1px 0 0 rgba(247, 222, 170, 0.26), 3px 2px 6px rgba(235, 193, 113, 0.12)',
-              }}
-            />
+              {/* Layer z3: Foreground Dark Occluding Disc */}
+              <div
+                className="act1-eclipse-disc absolute rounded-full pointer-events-none"
+                style={{
+                  width: '195%',
+                  aspectRatio: '1',
+                  left: '-105.5%',
+                  top: '-3.1%',
+                  background: 'radial-gradient(circle at 72% 42%, #111112 0%, #0b0c0d 48%, #080809 100%)',
+                  boxShadow: '1px 0 0 rgba(247, 222, 170, 0.26), 3px 2px 6px rgba(235, 193, 113, 0.12)',
+                }}
+              />
+            </div>
           </div>
 
           {/* Layer z4: "ads." Typography with Champagne Bronze Shading & Punctuation Dot */}
