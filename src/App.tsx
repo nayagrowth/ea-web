@@ -8,7 +8,7 @@ import type { Act1Variant } from './components/cinematic/CinematicHero';
 
 /**
  * TOGGLE MODE & ACT 1 HERO VARIATION:
- * 'act2-still' -> Direct Frozen Static 3D Act 2 True Renderer (Default for 1:1 Design Review)
+ * 'act2-still' -> Direct Frozen Static 3D Act 2 True Renderer (Default for 1:1 Geometry Review)
  * 'cinematic' -> Advanced GSAP ScrollTrigger kinetic storytelling experience
  * 'classic'   -> Pristine original responsive 2-section layout with standard Navbar
  */
@@ -26,7 +26,7 @@ export const App: React.FC = () => {
         mode === 'classic' ? 'bg-white text-[#001A24]' : 'bg-[#050608] text-white'
       }`}
     >
-      {/* Classic Navbar rendered in Classic Mode and can be toggled */}
+      {/* Classic Navbar rendered in Classic Mode */}
       {mode === 'classic' && <Navbar isDarkVariant={false} />}
 
       <main className="w-full flex flex-col">
@@ -40,88 +40,83 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      {/* Floating Mode & Hero Variation Controller (Collapsible for Design Review) */}
-      <div className="fixed bottom-4 right-4 z-50 flex items-center select-none font-qurova">
+      {/* Ultra-Minimalist Floating Navigation Capsule */}
+      <aside className="fixed bottom-5 right-5 z-50 flex items-center select-none font-qurova" aria-label="Mode Switcher">
         {isUiCollapsed ? (
           <button
             onClick={() => setIsUiCollapsed(false)}
-            className="px-3.5 py-2 rounded-full bg-[#001A24]/90 backdrop-blur-md border border-[#F5C200]/30 text-[12px] font-bold text-[#F5C200] hover:bg-[#001A24] shadow-xl transition-all"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#050608]/85 backdrop-blur-xl border border-white/15 text-[11px] font-semibold text-neutral-300 hover:text-white shadow-2xl hover:border-[#F5C200]/50 transition-all cursor-pointer"
             title="Expand Controls"
           >
-            ⚙ Controls
+            <span className="w-1.5 h-1.5 rounded-full bg-[#F5C200]" />
+            <span>{mode === 'act2-still' ? 'Act 2 (3D)' : mode === 'cinematic' ? 'Cinematic' : 'Classic'}</span>
           </button>
         ) : (
-          <div className="flex items-center gap-2 bg-[#001A24]/95 backdrop-blur-xl border border-[#F5C200]/30 rounded-2xl p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.8)] text-xs">
-            {/* Main Experience Mode Toggle */}
-            <div className="flex items-center bg-white/10 rounded-xl p-0.5">
-              <button
-                onClick={() => setMode('act2-still')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
-                  mode === 'act2-still'
-                    ? 'bg-[#F5C200] text-[#001A24] shadow-md'
-                    : 'text-gray-300 hover:text-white'
-                }`}
-                title="Direct Frozen Static Act 2 3D Frame"
-              >
-                Act 2 (3D Still)
-              </button>
-              <button
-                onClick={() => setMode('cinematic')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
-                  mode === 'cinematic'
-                    ? 'bg-[#F5C200] text-[#001A24] shadow-md'
-                    : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                Cinematic
-              </button>
-              <button
-                onClick={() => setMode('classic')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
-                  mode === 'classic'
-                    ? 'bg-white text-[#001A24] shadow-md'
-                    : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                Classic
-              </button>
-            </div>
+          <div className="flex items-center gap-1.5 bg-[#050608]/90 backdrop-blur-2xl border border-white/12 rounded-full p-1 shadow-[0_16px_40px_rgba(0,0,0,0.85)] text-xs">
+            {/* Mode Selectors */}
+            <button
+              onClick={() => setMode('act2-still')}
+              className={`px-3 py-1.5 rounded-full font-bold text-[12px] transition-all cursor-pointer ${
+                mode === 'act2-still'
+                  ? 'bg-[#F5C200] text-[#001A24] shadow-sm'
+                  : 'text-neutral-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              Act 2 (3D)
+            </button>
+            <button
+              onClick={() => setMode('cinematic')}
+              className={`px-3 py-1.5 rounded-full font-bold text-[12px] transition-all cursor-pointer ${
+                mode === 'cinematic'
+                  ? 'bg-[#F5C200] text-[#001A24] shadow-sm'
+                  : 'text-neutral-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              Cinematic
+            </button>
+            <button
+              onClick={() => setMode('classic')}
+              className={`px-3 py-1.5 rounded-full font-bold text-[12px] transition-all cursor-pointer ${
+                mode === 'classic'
+                  ? 'bg-white text-[#001A24] shadow-sm'
+                  : 'text-neutral-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              Classic
+            </button>
 
-            {/* Act 1 Hero Variation Switcher */}
+            {/* Act 1 Hero Switcher in Cinematic Mode */}
             {mode === 'cinematic' && (
-              <div className="flex items-center gap-1 pl-1 border-l border-white/15">
-                <span className="text-[10px] uppercase font-mono tracking-wider text-gray-400 px-1">
-                  Hero:
-                </span>
+              <div className="flex items-center gap-1 pl-1 border-l border-white/10">
                 <button
                   onClick={() => setHeroVariant('columns')}
-                  title="4-Column Architectural Eclipse"
-                  className={`px-2.5 py-1.5 rounded-lg font-bold transition-all ${
+                  title="4-Column Eclipse"
+                  className={`px-2 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer ${
                     heroVariant === 'columns'
-                      ? 'bg-white/20 text-[#F5C200] border border-[#F5C200]/40'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      ? 'bg-white/20 text-[#F5C200]'
+                      : 'text-neutral-400 hover:text-white'
                   }`}
                 >
-                  4-Col Eclipse
+                  4-Col
                 </button>
                 <button
                   onClick={() => setHeroVariant('artboard')}
-                  title="Editorial Slabs Poster"
-                  className={`px-2.5 py-1.5 rounded-lg font-bold transition-all ${
+                  title="Slab Poster"
+                  className={`px-2 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer ${
                     heroVariant === 'artboard'
-                      ? 'bg-white/20 text-[#F5C200] border border-[#F5C200]/40'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      ? 'bg-white/20 text-[#F5C200]'
+                      : 'text-neutral-400 hover:text-white'
                   }`}
                 >
-                  Slab Poster
+                  Slab
                 </button>
                 <button
                   onClick={() => setHeroVariant('poster')}
-                  title="Original 3-Row Frame"
-                  className={`px-2.5 py-1.5 rounded-lg font-bold transition-all ${
+                  title="Poster Frame"
+                  className={`px-2 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer ${
                     heroVariant === 'poster'
-                      ? 'bg-white/20 text-[#F5C200] border border-[#F5C200]/40'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      ? 'bg-white/20 text-[#F5C200]'
+                      : 'text-neutral-400 hover:text-white'
                   }`}
                 >
                   Frame
@@ -129,17 +124,17 @@ export const App: React.FC = () => {
               </div>
             )}
 
-            {/* Minimize button */}
+            {/* Minimize Pill */}
             <button
               onClick={() => setIsUiCollapsed(true)}
-              className="px-2 py-1 text-gray-400 hover:text-white text-[11px] rounded-lg hover:bg-white/10 ml-0.5"
-              title="Hide UI"
+              className="w-6 h-6 flex items-center justify-center text-neutral-400 hover:text-white text-[11px] rounded-full hover:bg-white/10 ml-0.5 cursor-pointer"
+              title="Minimize Controls"
             >
-              ✕
+              −
             </button>
           </div>
         )}
-      </div>
+      </aside>
     </div>
   );
 };
