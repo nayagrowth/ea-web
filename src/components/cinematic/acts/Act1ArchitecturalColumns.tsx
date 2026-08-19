@@ -16,6 +16,17 @@ export const Act1ArchitecturalColumns: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-b from-[#f2f1ee] via-[#ecebe8] to-[#e6e5e0] opacity-60 pointer-events-none" />
           </div>
 
+          {/* Top-Left Official Brand Logo */}
+          <div className="act1-brand-logo absolute top-8 left-8 sm:top-10 sm:left-10 z-20 flex items-center select-none pointer-events-auto">
+            <a href="/" className="flex items-center group" aria-label="Estate Autopilots Home">
+              <img
+                src="/brand/logo-dark.png"
+                alt="Estate Autopilots"
+                className="h-[36px] sm:h-[42px] w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+              />
+            </a>
+          </div>
+
           <div className="most-pointer-rig relative z-10">
             <h1 className="act1-most-word font-serif text-[clamp(4.6rem,8.6vw,9.8rem)] font-normal text-[#0c0c0d] tracking-[-0.04em] leading-none select-none flex items-center">
               <span className="act1-most-char act1-most-char-1 inline-block">M</span>

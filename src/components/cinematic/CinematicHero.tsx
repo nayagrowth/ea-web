@@ -46,6 +46,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act1-run-panel', { xPercent: 0, yPercent: 0, opacity: 1, scale: 1 });
       gsap.set('.act1-your-panel', { xPercent: 0, yPercent: 0, opacity: 1, scale: 1 });
       gsap.set('.act1-col-4', { xPercent: 0, yPercent: 0, opacity: 1, scale: 1 });
+      gsap.set('.act1-brand-logo', { opacity: 1, y: 0 });
       gsap.set('.act1-scroll-cue', { opacity: 1, y: 0 });
 
       // Letter-level elements in Act 1
@@ -225,6 +226,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           duration: 0.95,
           ease: 'power3.inOut',
         }, 'DECONSTRUCT')
+          .to('.act1-brand-logo', { yPercent: -35, opacity: 0, duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT')
           .to('.act1-most-char-1', { yPercent: -45, scale: 1.08, opacity: 0, filter: 'blur(6px)', duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT')
           .to('.act1-most-char-2', { yPercent: -50, scale: 1.08, opacity: 0, filter: 'blur(6px)', duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT+=0.02')
           .to('.act1-most-char-3', { yPercent: -55, scale: 1.08, opacity: 0, filter: 'blur(6px)', duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT+=0.04')
