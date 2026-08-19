@@ -216,26 +216,41 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       tl.addLabel('DECONSTRUCT', 0.8);
 
       if (act1Variant === 'columns') {
-        // "agencies" multi-letter dynamic kinetic dispersion
-        tl.to('.act1-agency-char-1', { x: -80, y: -60, rotation: -24, opacity: 0, duration: 0.7, ease: 'power3.in' }, 'DECONSTRUCT')
-          .to('.act1-agency-char-2', { x: -40, y: 90, rotation: 18, opacity: 0, duration: 0.7, ease: 'power3.in' }, 'DECONSTRUCT+=0.02')
-          .to('.act1-agency-char-3', { x: -15, y: -105, rotation: -12, opacity: 0, duration: 0.7, ease: 'power3.in' }, 'DECONSTRUCT+=0.04')
-          .to('.act1-agency-char-4', { x: -10, y: 75, rotation: 16, opacity: 0, duration: 0.7, ease: 'power3.in' }, 'DECONSTRUCT+=0.06')
-          .to('.act1-agency-char-5', { x: 35, y: -90, rotation: 22, opacity: 0, duration: 0.7, ease: 'power3.in' }, 'DECONSTRUCT+=0.08')
-          .to('.act1-agency-char-6', { x: 0, y: 130, scaleY: 1.4, opacity: 0, duration: 0.7, ease: 'power3.in' }, 'DECONSTRUCT+=0.10')
-          .to('.act1-agency-char-7', { x: 60, y: -50, rotation: -18, opacity: 0, duration: 0.7, ease: 'power3.in' }, 'DECONSTRUCT+=0.12')
-          .to('.act1-agency-char-8', { x: 90, y: -80, rotation: 30, opacity: 0, duration: 0.7, ease: 'power3.in' }, 'DECONSTRUCT+=0.14')
-          .to('.act1-col-bg-2', { opacity: 0, duration: 0.7, ease: 'power2.inOut' }, 'DECONSTRUCT+=0.1')
+        // All column backgrounds and borders dissolve seamlessly in-place (ZERO panel clipping or hard box sliding!)
+        tl.to(['.act1-col-bg-1', '.act1-col-bg-2', '.act1-col-bg-3-top', '.act1-col-bg-3-bottom', '.act1-col-bg-4'], {
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power2.inOut',
+        }, 'DECONSTRUCT')
+          .to('.act1-panel-wrap', {
+            borderColor: 'transparent',
+            duration: 0.6,
+            ease: 'power2.inOut',
+          }, 'DECONSTRUCT');
+
+        // "Most" (Panel 1) ➔ In-place optical lift & depth blur (prepares for "We")
+        tl.to('.act1-most-char-1', { yPercent: -45, scale: 1.08, opacity: 0, filter: 'blur(8px)', duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
+          .to('.act1-most-char-2', { yPercent: -50, scale: 1.08, opacity: 0, filter: 'blur(8px)', duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.02')
+          .to('.act1-most-char-3', { yPercent: -55, scale: 1.08, opacity: 0, filter: 'blur(8px)', duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.04')
+          .to('.act1-most-char-4', { yPercent: -60, scale: 1.08, opacity: 0, filter: 'blur(8px)', duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06');
+
+        // "agencies" (Panel 2) multi-character kinetic vertical dispersion along plumb line
+        tl.to('.act1-agency-char-1', { x: -50, y: -60, rotation: -16, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
+          .to('.act1-agency-char-2', { x: -25, y: 75, rotation: 12, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.02')
+          .to('.act1-agency-char-3', { x: -10, y: -80, rotation: -8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.04')
+          .to('.act1-agency-char-4', { x: -5, y: 65, rotation: 10, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06')
+          .to('.act1-agency-char-5', { x: 25, y: -75, rotation: 14, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.08')
+          .to('.act1-agency-char-6', { x: 0, y: 90, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.10')
+          .to('.act1-agency-char-7', { x: 40, y: -45, rotation: -12, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.12')
+          .to('.act1-agency-char-8', { x: 60, y: -60, rotation: 18, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.14')
           .to('.act1-col2-axis', { scaleY: 0, opacity: 0, duration: 0.6, ease: 'power3.in' }, 'DECONSTRUCT+=0.1');
 
-        // "run" perspective propulsion & letter reactivity
+        // "run" (Panel 3 Top) letter lift & perspective floor blend (NO box clipping!)
         tl.to('.act1-run-char-1', { xPercent: -25, yPercent: -50, rotation: -8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
           .to('.act1-run-char-2', { yPercent: -70, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.03')
           .to('.act1-run-char-3', { xPercent: 25, yPercent: -50, rotation: 8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06')
           .to('.act1-energy-rail', { opacity: 1, strokeDashoffset: 0, duration: 0.45, stagger: 0.02, ease: 'power2.out' }, 'DECONSTRUCT')
-          .to('.act1-runway-wrap', { rotateX: 65, scaleX: 3.2, yPercent: 35, opacity: 0, duration: 0.85, ease: 'power3.inOut' }, 'DECONSTRUCT')
-          .to('.act1-col-bg-3-top', { yPercent: -100, duration: 0.8, ease: 'power3.inOut' }, 'DECONSTRUCT')
-          .to('.act1-col-bg-3-bottom', { yPercent: 100, duration: 0.8, ease: 'power3.inOut' }, 'DECONSTRUCT');
+          .to('.act1-runway-wrap', { opacity: 0, duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT+=0.2');
 
         // Golden glow rings & halo instantly extinguish to 0 at the start of swipe (no golden ring during shrink)
         tl.to(['.act1-eclipse-glow-wide', '.act1-eclipse-glow-core', '.act1-gold-halo'], {
@@ -245,7 +260,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         }, 'DECONSTRUCT')
           .to('.act1-bridge-gold-dot', { scale: 0.3, opacity: 0, duration: 0.18, ease: 'power2.in' }, 'DECONSTRUCT');
 
-        // "your" reactive italic drift & baseline laser pulse
+        // "your" (Panel 3 Bottom) ➔ Direct Italic Morphing Resonance with Act 2
         tl.to('.act1-your-char-1', { xPercent: 10, yPercent: -50, rotation: -5, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
           .to('.act1-your-char-2', { xPercent: 12, yPercent: -55, rotation: -4, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.03')
           .to('.act1-your-char-3', { xPercent: 14, yPercent: -60, rotation: -3, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06')
@@ -259,7 +274,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           .to('.act1-ads-char-3', { xPercent: 25, yPercent: -50, rotation: 8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06')
           .to('.act1-ads-char-4', { yPercent: -35, opacity: 0, scale: 0.3, duration: 0.4, ease: 'power2.in' }, 'DECONSTRUCT')
 
-          // Semicircle optical eclipse shrinks into Act 2 vanishing point (85.72vw, 62.32vh) with mystical boundary blurring into the abyss
+          // Semicircle optical eclipse collapses into Act 2 vanishing point (85.72vw, 62.32vh) with mystical boundary blur
           .to('.act1-eclipse-rig', {
             scale: 0,
             opacity: 0,
@@ -268,11 +283,6 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             transformOrigin: '46.106% 62.320%',
             ease: 'power3.in',
           }, 'DECONSTRUCT')
-          .to('.act1-col-bg-4', {
-            opacity: 0,
-            duration: 0.8,
-            ease: 'power2.inOut',
-          }, 'DECONSTRUCT+=0.05')
 
           // Focal horizon light ray shoots across from shrinking circle towards right vanishing point
           .to('.act1-focal-light-ray', {
@@ -305,11 +315,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power2.in',
           }, 'DECONSTRUCT+=0.35');
 
-        // "Most"
-        tl.to('.act1-most-char', { xPercent: -120, opacity: 0, stagger: 0.03, duration: 0.75, ease: 'power3.in' }, 'DECONSTRUCT')
-          .to('.act1-col-1', { xPercent: -100, duration: 0.85, ease: 'power3.inOut' }, 'DECONSTRUCT');
-
-        // Terminate Act 1
+        // Terminate Act 1 smoothly
         tl.to('.act1-stage', { autoAlpha: 0, duration: 0.2 }, 'DECONSTRUCT+=0.75');
       } else {
         tl.to('.act1-stage', { autoAlpha: 0, duration: 0.8, ease: 'power2.inOut' }, 'DECONSTRUCT');

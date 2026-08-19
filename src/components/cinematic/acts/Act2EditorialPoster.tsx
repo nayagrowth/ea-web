@@ -38,10 +38,10 @@ export const Act2EditorialPoster: React.FC = () => {
       {/* Main Canonical Responsive Poster Layout */}
       <div className="act2-poster-frame relative w-full max-w-[1440px] h-[86vh] max-h-[860px] px-6 sm:px-12 md:px-16 flex flex-col justify-between z-10">
         
-        {/* ROW 1: "We" (Left Grotesk) + "sell-out" (Right Gold Italic) */}
+        {/* ROW 1: "We" (Left Serif) + "sell-out" (Right Gold Italic) */}
         <div className="act2-row-1 w-full flex items-baseline justify-between pt-2">
           <div className="act2-mask-wrap overflow-hidden">
-            <h2 className="act2-word-we font-sans text-[clamp(4.6rem,11.2vw,12rem)] font-black text-[#f4f4f2] tracking-[-0.055em] leading-[0.84]">
+            <h2 className="act2-word-we font-serif text-[clamp(4.6rem,11.2vw,12rem)] font-normal text-[#f4f4f2] tracking-[-0.045em] leading-[0.84]">
               We
             </h2>
           </div>
@@ -68,17 +68,17 @@ export const Act2EditorialPoster: React.FC = () => {
           </div>
         </div>
 
-        {/* ROW 3: "project." (Right Light Sans with Golden Period + Ground Reflection) */}
+        {/* ROW 3: "project." (Right Serif with Golden Period + Ground Reflection) */}
         <div className="act2-row-3 w-full flex flex-col items-end justify-start pb-2">
           <div className="act2-mask-wrap overflow-hidden">
-            <h2 className="act2-word-project font-sans text-[clamp(4.4rem,10.4vw,11.4rem)] font-extralight text-[#f4f4f2]/95 tracking-[-0.045em] leading-[0.86]">
+            <h2 className="act2-word-project font-serif text-[clamp(4.4rem,10.4vw,11.4rem)] font-normal text-[#f4f4f2]/95 tracking-[-0.04em] leading-[0.86]">
               project<span className="text-[#F5C200]">.</span>
             </h2>
           </div>
 
           {/* Subtle Reflective Floor Echo */}
           <div className="act2-project-reflection-wrap act2-mask-wrap overflow-hidden mt-0.5 opacity-20 scale-y-[-0.55] origin-top filter blur-[0.5px] pointer-events-none select-none">
-            <h2 className="act2-word-project-reflection font-sans text-[clamp(4.4rem,10.4vw,11.4rem)] font-extralight text-[#f4f4f2] tracking-[-0.045em] leading-[0.86] act2-project-reflection">
+            <h2 className="act2-word-project-reflection font-serif text-[clamp(4.4rem,10.4vw,11.4rem)] font-normal text-[#f4f4f2] tracking-[-0.04em] leading-[0.86] act2-project-reflection">
               project<span className="text-[#F5C200]">.</span>
             </h2>
           </div>
