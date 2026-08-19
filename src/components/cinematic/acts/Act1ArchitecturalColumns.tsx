@@ -55,9 +55,9 @@ export const Act1ArchitecturalColumns: React.FC = () => {
         </div>
 
         {/* =================================================================== */}
-        {/* PANEL 3: "run / your" (Sculpted Center Stack)                       */}
+        {/* PANEL 3: "run / your" (Sculpted Center Stack - Elevated in Front)   */}
         {/* =================================================================== */}
-        <div className="act1-col-3 act1-panel-wrap relative h-full flex flex-col border-r border-white/[0.06] overflow-hidden">
+        <div className="act1-col-3 act1-panel-wrap relative z-20 h-full flex flex-col border-r border-white/[0.06] overflow-hidden shadow-[12px_0_35px_rgba(0,0,0,0.55)]">
           {/* Top 54%: "run" with Perspective Runway Geometry */}
           <div className="act1-run-panel relative h-[54%] flex flex-col items-center justify-between pt-[6.5vh] overflow-hidden border-b border-black/[0.12]">
             <div className="act1-col-bg act1-col-bg-3-top absolute inset-0 bg-[#f2efea]" />
@@ -202,9 +202,9 @@ export const Act1ArchitecturalColumns: React.FC = () => {
         </div>
 
         {/* =================================================================== */}
-        {/* PANEL 4: "ads." (Optical Eclipse + Rich Gold Shimmer)               */}
+        {/* PANEL 4: "ads." (Recesses & Morphs into Semicircle behind Panel 3)   */}
         {/* =================================================================== */}
-        <div className="act1-col-4 act1-panel-wrap relative h-full w-full flex items-center justify-center overflow-hidden">
+        <div className="act1-col-4 act1-panel-wrap relative z-10 h-full w-full flex items-center justify-center overflow-visible">
           <div
             className="act1-col-bg act1-col-bg-4 absolute inset-0"
             style={{

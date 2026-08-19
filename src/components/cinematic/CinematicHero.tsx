@@ -58,7 +58,8 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act1-bridge-gold-dot', { x: 0, y: 0, scale: 1, opacity: 1 });
       gsap.set('.act1-ads-text', { scale: 1, opacity: 1 });
       gsap.set('.act1-ads-dot', { scale: 1, opacity: 1 });
-      gsap.set('.act1-eclipse-rig', { scale: 1, xPercent: 0, yPercent: 0, opacity: 1 });
+      gsap.set('.act1-col-bg-4', { borderRadius: '0%', scale: 1, opacity: 1, transformOrigin: '0% 45%' });
+      gsap.set('.act1-eclipse-rig', { scale: 1, xPercent: 0, yPercent: 0, opacity: 1, transformOrigin: '0% 45%' });
       gsap.set('.act1-eclipse-glow-wide', { scale: 1, opacity: 0.28 });
       gsap.set('.act1-eclipse-glow-core', { scale: 1, opacity: 0.68 });
 
@@ -231,11 +232,24 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           .to('.act1-your-rule', { scaleX: 0, duration: 0.5, ease: 'power2.in' }, 'DECONSTRUCT')
           .to('.act1-bridge-gold-dot', { x: '35vw', y: '10vh', scale: 2.8, opacity: 0, duration: 0.75, ease: 'power3.out' }, 'DECONSTRUCT');
 
-        // "ads" optical eclipse flare
-        tl.to('.act1-ads-text', { scale: 1.25, opacity: 0, duration: 0.7, ease: 'power2.in' }, 'DECONSTRUCT')
-          .to('.act1-ads-dot', { scale: 2.5, opacity: 0, duration: 0.5, ease: 'power2.in' }, 'DECONSTRUCT')
-          .to('.act1-eclipse-rig', { scale: 1.7, opacity: 0, duration: 0.85, ease: 'power3.in' }, 'DECONSTRUCT')
-          .to('.act1-col-4', { xPercent: 100, duration: 0.85, ease: 'power3.inOut' }, 'DECONSTRUCT+=0.05');
+        // "ads" text dissolves
+        tl.to('.act1-ads-text', { scale: 0.7, opacity: 0, duration: 0.5, ease: 'power2.in' }, 'DECONSTRUCT')
+          .to('.act1-ads-dot', { scale: 0.4, opacity: 0, duration: 0.4, ease: 'power2.in' }, 'DECONSTRUCT')
+          // Panel 4 background morphs into the circle of the semicircle and shrinks away behind Panel 3
+          .to('.act1-col-bg-4', {
+            borderRadius: '50%',
+            scale: 0.05,
+            opacity: 0,
+            duration: 0.95,
+            ease: 'power2.inOut',
+          }, 'DECONSTRUCT')
+          // Semicircle optical eclipse shrinks away behind "run" & "your" panel
+          .to('.act1-eclipse-rig', {
+            scale: 0.04,
+            opacity: 0,
+            duration: 0.95,
+            ease: 'power2.inOut',
+          }, 'DECONSTRUCT');
 
         // "Most"
         tl.to('.act1-most-char', { xPercent: -120, opacity: 0, stagger: 0.03, duration: 0.75, ease: 'power3.in' }, 'DECONSTRUCT')
