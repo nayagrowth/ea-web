@@ -1,4 +1,5 @@
 import React from 'react';
+import './act1Enhanced.css';
 
 export const Act1ArchitecturalColumns: React.FC = () => {
   return (
@@ -11,36 +12,44 @@ export const Act1ArchitecturalColumns: React.FC = () => {
         {/* PANEL 1: "Most" (Solid Gallery Porcelain Plane)                     */}
         {/* =================================================================== */}
         <div className="act1-col-1 act1-panel-wrap relative h-full flex flex-col items-center justify-start pt-[50vh] border-r border-black/[0.08] overflow-hidden">
-          {/* Solid Material Background Plane (Clips/slides out cleanly without muddy gray alpha) */}
           <div className="act1-col-bg act1-col-bg-1 absolute inset-0 bg-[#ecebe8]">
             <div className="absolute inset-0 bg-gradient-to-b from-[#f2f1ee] via-[#ecebe8] to-[#e6e5e0] opacity-60 pointer-events-none" />
           </div>
 
           <div className="most-pointer-rig relative z-10">
-            <h1 className="act1-most-word font-serif text-[clamp(4.6rem,8.6vw,9.8rem)] font-normal text-[#0c0c0d] tracking-[-0.04em] leading-none select-none">
-              Most
+            <h1 className="act1-most-word font-serif text-[clamp(4.6rem,8.6vw,9.8rem)] font-normal text-[#0c0c0d] tracking-[-0.04em] leading-none select-none flex items-center">
+              <span className="act1-most-char act1-most-char-1 inline-block">M</span>
+              <span className="act1-most-char act1-most-char-2 inline-block">o</span>
+              <span className="act1-most-char act1-most-char-3 inline-block">s</span>
+              <span className="act1-most-char act1-most-char-4 inline-block">t</span>
             </h1>
           </div>
         </div>
 
         {/* =================================================================== */}
-        {/* PANEL 2: "agencies" (Matte Charcoal + Ultra-Light Whole Sans + Axis)*/}
+        {/* PANEL 2: "agencies" (Matte Charcoal + Multi-Char Kinetic Sans + Axis)*/}
         {/* =================================================================== */}
         <div className="act1-col-2 act1-panel-wrap relative h-full flex flex-col items-center justify-start pt-[21vh] border-r border-white/[0.06] overflow-hidden">
-          {/* Solid Charcoal Background Plane */}
           <div className="act1-col-bg act1-col-bg-2 absolute inset-0 bg-[#0b0c0d]">
             <div className="absolute inset-0 bg-gradient-to-b from-[#111214] via-[#0b0c0d] to-[#080809] opacity-80 pointer-events-none" />
           </div>
 
           <div className="agencies-pointer-rig relative z-10 flex flex-col items-center">
-            {/* Intact Whole Word: Zero character explosion/fragmentation */}
-            <h2 className="act1-agencies-word font-sans text-[clamp(2.6rem,4.6vw,5.2rem)] font-extralight text-[#FFFFFF] tracking-[-0.03em] leading-none">
-              agencies
+            {/* Multi-Character Kinetic Typography */}
+            <h2 className="act1-agencies-word font-sans text-[clamp(2.6rem,4.6vw,5.2rem)] font-extralight text-[#FFFFFF] tracking-[-0.03em] leading-none flex items-center justify-center">
+              <span className="act1-agency-char act1-agency-char-1">a</span>
+              <span className="act1-agency-char act1-agency-char-2">g</span>
+              <span className="act1-agency-char act1-agency-char-3">e</span>
+              <span className="act1-agency-char act1-agency-char-4">n</span>
+              <span className="act1-agency-char act1-agency-char-5">c</span>
+              <span className="act1-agency-char act1-agency-char-6">i</span>
+              <span className="act1-agency-char act1-agency-char-7">e</span>
+              <span className="act1-agency-char act1-agency-char-8">s</span>
             </h2>
 
             {/* Compositional Axis / Plumb-Line Gesture with Travelling Highlight */}
             <div className="act1-col2-axis relative w-[1.5px] bg-gradient-to-b from-white/45 via-white/20 to-transparent h-[52vh] mt-7 z-10 overflow-hidden">
-              <div className="act1-axis-pulse absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-transparent via-[#ecd08e] to-transparent opacity-0" />
+              <div className="act1-axis-pulse absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-transparent via-[#ecd08e] to-transparent opacity-0" />
             </div>
           </div>
         </div>
@@ -51,12 +60,13 @@ export const Act1ArchitecturalColumns: React.FC = () => {
         <div className="act1-col-3 act1-panel-wrap relative h-full flex flex-col border-r border-white/[0.06] overflow-hidden">
           {/* Top 54%: "run" with Perspective Runway Geometry */}
           <div className="act1-run-panel relative h-[54%] flex flex-col items-center justify-between pt-[6.5vh] overflow-hidden border-b border-black/[0.12]">
-            {/* Top Column Background: Solid #f2efea material plane */}
             <div className="act1-col-bg act1-col-bg-3-top absolute inset-0 bg-[#f2efea]" />
 
             {/* Bold Assertive Modern Grotesk Sans */}
-            <h2 className="act1-run-word relative z-10 font-sans text-[clamp(4.2rem,8.2vw,9.0rem)] font-black text-[#0c0c0d] tracking-[-0.045em] leading-none">
-              run
+            <h2 className="act1-run-word relative z-10 font-sans text-[clamp(4.2rem,8.2vw,9.0rem)] font-black text-[#0c0c0d] tracking-[-0.045em] leading-none flex items-center justify-center">
+              <span className="act1-run-char act1-run-char-1">r</span>
+              <span className="act1-run-char act1-run-char-2">u</span>
+              <span className="act1-run-char act1-run-char-3">n</span>
             </h2>
 
             {/* Runway Area in Act 1: Runway grooves with soft highlight lines and energy rails */}
@@ -123,7 +133,7 @@ export const Act1ArchitecturalColumns: React.FC = () => {
                     <line className="act1-run-line" x1="194" y1="35" x2="179" y2="280" stroke="url(#act1-shadow)" strokeWidth="1.3" />
                     <line className="act1-energy-rail act1-energy-rail-m1" x1="192.5" y1="35" x2="173.5" y2="280" stroke="#ecd08e" strokeWidth="2.0" strokeLinecap="round" opacity="0" />
 
-                    {/* Center Track 0 (First to ignite on scroll) */}
+                    {/* Center Track 0 */}
                     <polygon className="act1-run-track" points="198.5,35 201.5,35 195,280 205,280" fill="url(#act1-track-fill)" />
                     <line className="act1-run-line" x1="198.5" y1="35" x2="195" y2="280" stroke="url(#act1-highlight)" strokeWidth="1.0" />
                     <line className="act1-run-line" x1="201.5" y1="25" x2="205" y2="280" stroke="url(#act1-shadow)" strokeWidth="1.3" />
@@ -160,14 +170,16 @@ export const Act1ArchitecturalColumns: React.FC = () => {
 
           {/* Bottom 46%: "your." (Warm Editorial Paper Tone + Italic Serif + Dot) */}
           <div className="act1-your-panel relative h-[46%] flex flex-col items-center justify-center px-7 overflow-hidden">
-            {/* Bottom Column Background: Solid #e8e3d9 plane */}
             <div className="act1-col-bg act1-col-bg-3-bottom absolute inset-0 bg-[#e8e3d9]">
               <div className="absolute inset-0 bg-gradient-to-b from-[#eae5db] to-[#e4ded3] opacity-50 pointer-events-none" />
             </div>
 
             <div className="relative flex flex-col items-start w-full max-w-[280px]">
-              <h2 className="act1-your-word font-serif italic text-[clamp(4.4rem,8.4vw,9.2rem)] font-normal text-[#0c0c0d] tracking-[-0.035em] leading-[0.88] select-none">
-                your
+              <h2 className="act1-your-word font-serif italic text-[clamp(4.4rem,8.4vw,9.2rem)] font-normal text-[#0c0c0d] tracking-[-0.035em] leading-[0.88] select-none flex items-baseline">
+                <span className="act1-your-char act1-your-char-1">y</span>
+                <span className="act1-your-char act1-your-char-2">o</span>
+                <span className="act1-your-char act1-your-char-3">u</span>
+                <span className="act1-your-char act1-your-char-4">r</span>
               </h2>
 
               {/* Refined Signature Baseline Rule with Small Gold Dot */}
@@ -175,22 +187,24 @@ export const Act1ArchitecturalColumns: React.FC = () => {
                 <div className="act1-your-rule w-full h-[1px] bg-[#0c0c0d]/25 origin-right relative overflow-hidden">
                   <div className="act1-your-pulse absolute inset-0 bg-gradient-to-r from-transparent via-[#ecd08e] to-transparent opacity-0" />
                 </div>
-                <div
-                  className="act1-your-dot act1-bridge-gold-dot ml-2 w-3.5 h-3.5 rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.18)] shrink-0 z-20"
-                  style={{
-                    background: 'radial-gradient(circle at 35% 35%, #ecd08e 0%, #c79846 55%, #8b6228 100%)',
-                  }}
-                />
+                <div className="relative flex items-center justify-center ml-2">
+                  <div className="act1-gold-halo" />
+                  <div
+                    className="act1-your-dot act1-bridge-gold-dot w-3.5 h-3.5 rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.18)] shrink-0 z-20"
+                    style={{
+                      background: 'radial-gradient(circle at 35% 35%, #ecd08e 0%, #c79846 55%, #8b6228 100%)',
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* =================================================================== */}
-        {/* PANEL 4: "ads." (4-Layer Optical Eclipse + Champagne Bronze Shading)*/}
+        {/* PANEL 4: "ads." (Optical Eclipse + Rich Gold Shimmer)               */}
         {/* =================================================================== */}
         <div className="act1-col-4 act1-panel-wrap relative h-full w-full flex items-center justify-center overflow-hidden">
-          {/* Solid Dark Background Plane (Seamless with stage) */}
           <div
             className="act1-col-bg act1-col-bg-4 absolute inset-0"
             style={{
@@ -246,7 +260,7 @@ export const Act1ArchitecturalColumns: React.FC = () => {
             </div>
           </div>
 
-          {/* Layer z4: "ads." Typography with Champagne Bronze Shading & Punctuation Dot */}
+          {/* Layer z4: "ads." Typography with Continuous Champagne Gold Shimmer */}
           <div
             className="act1-ads-word absolute z-10 flex items-baseline select-none"
             style={{
@@ -259,15 +273,7 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               letterSpacing: '-0.055em',
             }}
           >
-            <span className="act1-ads-text"
-              style={{
-                background: 'linear-gradient(105deg, #9d702c 0%, #c99d50 22%, #deb96f 42%, #bc8b3d 63%, #dfbd79 80%, #a8752e 100%)',
-                color: 'transparent',
-                WebkitBackgroundClip: 'text',
-                backgroundClip: 'text',
-                textShadow: '0 1px 1px rgba(255, 238, 198, 0.04), 0 4px 12px rgba(89, 54, 15, 0.08)',
-              }}
-            >
+            <span className="act1-ads-text">
               ads
             </span>
             <span
@@ -279,7 +285,8 @@ export const Act1ArchitecturalColumns: React.FC = () => {
                 marginLeft: '0.075em',
                 borderRadius: '999px',
                 transform: 'translateY(-0.03em)',
-                background: 'radial-gradient(circle at 38% 35%, #dfbd78, #b98539 70%, #956928 100%)',
+                background: 'radial-gradient(circle at 38% 35%, #fff2cc, #dfbd78 40%, #b98539 70%, #956928 100%)',
+                boxShadow: '0 0 16px rgba(245, 194, 0, 0.6)',
               }}
             />
           </div>
