@@ -73,17 +73,17 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       // Act 2 Background Ambient Corridor
       gsap.set('.act2-true-stage', { autoAlpha: 1, scale: 1, x: 0, y: 0 });
 
-      // Act 2 Editorial Poster Elements - HIDDEN DURING ACT 1 (Reveals strictly in Act 2!)
+      // Act 2 Editorial Poster Elements - HIDDEN DURING ACT 1 (Vector-aligned with Act 1 Panels)
       gsap.set('.act2-poster-stage', { autoAlpha: 0 });
       gsap.set('.act2-ambient-atmosphere', { opacity: 0 });
       gsap.set('.act2-horizon-glow', { scaleX: 0, opacity: 0, transformOrigin: 'center center' });
       gsap.set('.act2-horizon-ray-right', { scaleX: 0, opacity: 0, transformOrigin: 'left center' });
       gsap.set('.act2-vp-flare', { scale: 0.2, opacity: 0 });
-      gsap.set('.act2-word-we', { yPercent: 110, opacity: 0 });
-      gsap.set('.act2-word-sellout', { yPercent: 110, opacity: 0 });
-      gsap.set('.act2-word-your', { yPercent: 110, opacity: 0 });
-      gsap.set('.act2-word-realestate', { yPercent: 110, opacity: 0 });
-      gsap.set('.act2-word-project', { yPercent: 110, opacity: 0 });
+      gsap.set('.act2-word-we', { yPercent: 80, opacity: 0 });
+      gsap.set('.act2-word-sellout', { xPercent: -50, yPercent: 50, opacity: 0 });
+      gsap.set('.act2-word-your', { xPercent: 70, yPercent: 15, opacity: 0 });
+      gsap.set('.act2-word-realestate', { xPercent: -40, yPercent: -35, opacity: 0 });
+      gsap.set('.act2-word-project', { scale: 0.85, xPercent: 30, opacity: 0 });
       gsap.set('.act2-project-reflection-wrap', { opacity: 0 });
 
       // Acts 3 - 5 Initial States
@@ -331,9 +331,10 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       );
 
       // ---------------------------------------------------------------------
-      // BEAT 3: ACT 2 EDITORIAL POSTER REVEAL (Time 1.4 - 2.8)
+      // BEAT 3: ACT 2 EDITORIAL POSTER REVEAL (Time 1.15 - 2.8)
+      // (Words emerge directly along the vector trajectory of each displaced panel)
       // ---------------------------------------------------------------------
-      tl.addLabel('TYPE_REVEAL', 1.4);
+      tl.addLabel('TYPE_REVEAL', 1.15);
 
       // Reveal Act 2 Poster Stage and the luxury chiaroscuro atmosphere
       tl.to('.act2-poster-stage', { autoAlpha: 1, duration: 0.4 }, 'TYPE_REVEAL')
@@ -371,56 +372,64 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           'TYPE_REVEAL'
         );
 
-      // Staggered Monumental Editorial Typography
+      // 1. "We" emerges from Panel 1's upward momentum (↑)
       tl.to(
         '.act2-word-we',
         {
           yPercent: 0,
           opacity: 1,
-          duration: 0.65,
+          duration: 0.8,
           ease: 'power3.out',
         },
         'TYPE_REVEAL'
       )
+        // 2. "sell-out" emerges from Panel 2's diagonal up-right momentum (↗)
         .to(
           '.act2-word-sellout',
           {
+            xPercent: 0,
             yPercent: 0,
             opacity: 1,
-            duration: 0.7,
+            duration: 0.85,
+            ease: 'power3.out',
+          },
+          'TYPE_REVEAL+=0.06'
+        )
+        // 3. "your" emerges from Panel 3 Bottom's leftward glide (↖)
+        .to(
+          '.act2-word-your',
+          {
+            xPercent: 0,
+            yPercent: 0,
+            opacity: 1,
+            duration: 0.8,
             ease: 'power3.out',
           },
           'TYPE_REVEAL+=0.12'
         )
-        .to(
-          '.act2-word-your',
-          {
-            yPercent: 0,
-            opacity: 1,
-            duration: 0.65,
-            ease: 'power3.out',
-          },
-          'TYPE_REVEAL+=0.24'
-        )
+        // 4. "real estate" emerges from Panel 3 Top's downward-right perspective trajectory (↘)
         .to(
           '.act2-word-realestate',
           {
+            xPercent: 0,
             yPercent: 0,
             opacity: 1,
-            duration: 0.75,
+            duration: 0.85,
             ease: 'power3.out',
           },
-          'TYPE_REVEAL+=0.36'
+          'TYPE_REVEAL+=0.18'
         )
+        // 5. "project." emerges from Panel 4's focal horizon laser beam (⊙ ➔ ──)
         .to(
           '.act2-word-project',
           {
-            yPercent: 0,
+            scale: 1,
+            xPercent: 0,
             opacity: 1,
-            duration: 0.75,
+            duration: 0.85,
             ease: 'power3.out',
           },
-          'TYPE_REVEAL+=0.48'
+          'TYPE_REVEAL+=0.24'
         )
         .to(
           '.act2-project-reflection-wrap',
@@ -429,7 +438,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             duration: 0.5,
             ease: 'power2.out',
           },
-          'TYPE_REVEAL+=0.60'
+          'TYPE_REVEAL+=0.35'
         );
 
       // ---------------------------------------------------------------------
