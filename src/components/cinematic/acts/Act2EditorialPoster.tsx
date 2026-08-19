@@ -4,9 +4,15 @@ import './act2EditorialPoster.css';
 export const Act2EditorialPoster: React.FC = () => {
   return (
     <div className="act2-poster-stage absolute inset-0 z-20 w-full h-full flex flex-col items-center justify-center pointer-events-none select-none overflow-hidden">
-      {/* Horizon Laser & Vanishing Flare Motif */}
-      <div className="act2-horizon-glow absolute left-0 right-0 top-[60%] h-[1.5px] bg-gradient-to-r from-transparent via-[#F5C200] to-transparent opacity-0 pointer-events-none z-0" />
-      <div className="act2-vp-flare absolute left-[85%] top-[60%] -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-radial from-[#F5C200]/25 via-[#F5C200]/5 to-transparent blur-3xl opacity-0 pointer-events-none z-0" />
+      {/* Horizon Laser & Vanishing Flare Motif (Calibrated to Exact Act 2 VP: 85.72%, 62.32%) */}
+      <div
+        className="act2-horizon-glow absolute left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#F5C200] to-transparent opacity-0 pointer-events-none z-0"
+        style={{ top: '62.32%' }}
+      />
+      <div
+        className="act2-vp-flare absolute -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-radial from-[#F5C200]/25 via-[#F5C200]/5 to-transparent blur-3xl opacity-0 pointer-events-none z-0"
+        style={{ left: '85.72%', top: '62.32%' }}
+      />
 
       {/* Main Canonical Responsive Poster Layout */}
       <div className="act2-poster-frame relative w-full max-w-[1440px] h-[86vh] max-h-[860px] px-6 sm:px-12 md:px-16 flex flex-col justify-between z-10">

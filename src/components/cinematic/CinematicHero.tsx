@@ -56,11 +56,13 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act1-your-pulse', { opacity: 0 });
       gsap.set('.act1-gold-halo', { scale: 1, opacity: 0 });
       gsap.set('.act1-bridge-gold-dot', { x: 0, y: 0, scale: 1, opacity: 1 });
-      gsap.set('.act1-ads-word', { scale: 1, opacity: 1, transformOrigin: '35% 46%' });
+      // Panel 4 / Eclipse Rig calibrated to exact Act 2 Vanishing Point:
+      // Viewport VP = (85.718vw, 62.320vh). Panel 4 starts at 73.5vw with width 26.5vw -> local VP = (46.106%, 62.320%)
+      gsap.set('.act1-ads-word', { scale: 1, opacity: 1, transformOrigin: '46.106% 62.320%' });
       gsap.set('.act1-ads-text', { scale: 1, opacity: 1 });
       gsap.set('.act1-ads-dot', { scale: 1, opacity: 1 });
-      gsap.set('.act1-col-bg-4', { opacity: 1 });
-      gsap.set('.act1-eclipse-rig', { scale: 1, xPercent: 0, yPercent: 0, opacity: 1, transformOrigin: '35% 46%' });
+      gsap.set('.act1-col-bg-4', { opacity: 1, transformOrigin: '46.106% 62.320%' });
+      gsap.set('.act1-eclipse-rig', { scale: 1, xPercent: 0, yPercent: 0, opacity: 1, transformOrigin: '46.106% 62.320%' });
       gsap.set('.act1-eclipse-glow-wide', { scale: 1, opacity: 0.28 });
       gsap.set('.act1-eclipse-glow-core', { scale: 1, opacity: 0.68 });
 
@@ -231,19 +233,19 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           .to('.act1-your-rule', { scaleX: 0, duration: 0.5, ease: 'power2.in' }, 'DECONSTRUCT')
           .to('.act1-bridge-gold-dot', { x: '35vw', y: '10vh', scale: 2.8, opacity: 0, duration: 0.75, ease: 'power3.out' }, 'DECONSTRUCT');
 
-        // "ads" word and optical eclipse semicircle shrink inward directly into the center of "ads"
+        // "ads" word and optical eclipse semicircle shrink inward directly into the exact Act 2 Vanishing Point (85.72vw, 62.32vh)
         tl.to('.act1-ads-word', {
           scale: 0,
           opacity: 0,
           duration: 0.8,
-          transformOrigin: '35% 46%',
+          transformOrigin: '46.106% 62.320%',
           ease: 'power3.in',
         }, 'DECONSTRUCT')
           .to('.act1-eclipse-rig', {
             scale: 0,
             opacity: 0,
             duration: 0.85,
-            transformOrigin: '35% 46%',
+            transformOrigin: '46.106% 62.320%',
             ease: 'power3.in',
           }, 'DECONSTRUCT')
           .to('.act1-col-bg-4', {
