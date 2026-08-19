@@ -308,16 +308,35 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power3.out',
           }, 'PERSPECTIVE_EXPAND+=0.1');
 
-        // Imperative Act 2 Spatial Animation scrubbing across Beats A through I
+        // Imperative Act 2 Spatial Animation:
+        // Phase 1 (1.6 -> 2.7): Assemble environment & typography (progress 0.0 -> 0.70)
+        // Phase 2 (2.7 -> 4.9): True static hold locked at hero frame (progress = 0.70)
+        // Phase 3 (4.9 -> 5.6): Restrained exit transition (progress 0.70 -> 1.00)
         const act2State = { progress: 0.0 };
         tl.to(act2State, {
-          progress: 1.0,
-          duration: 4.0,
+          progress: 0.70,
+          duration: 1.1,
           ease: 'none',
           onUpdate: () => {
             act2ControllerRef.current?.setProgress(act2State.progress);
           },
-        }, 'PERSPECTIVE_EXPAND');
+        }, 'PERSPECTIVE_EXPAND')
+          .to(act2State, {
+            progress: 0.70,
+            duration: 2.2,
+            ease: 'none',
+            onUpdate: () => {
+              act2ControllerRef.current?.setProgress(act2State.progress);
+            },
+          }, 'PERSPECTIVE_EXPAND+=1.1')
+          .to(act2State, {
+            progress: 1.0,
+            duration: 0.7,
+            ease: 'none',
+            onUpdate: () => {
+              act2ControllerRef.current?.setProgress(act2State.progress);
+            },
+          }, 'PERSPECTIVE_EXPAND+=3.3');
       } else {
         tl.to('.act1-stage', { autoAlpha: 0, duration: 1.0, ease: 'power2.inOut' }, 'IGNITION+=0.4')
           .to('.act2-true-stage', { autoAlpha: 1, scale: 1, duration: 1.0, ease: 'power2.out' }, 'IGNITION+=0.6');

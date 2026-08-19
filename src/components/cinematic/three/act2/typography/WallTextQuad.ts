@@ -47,12 +47,13 @@ export class WallTextQuad {
       transparent: true,
       opacity: data.screenBox.opacity,
       depthWrite: false,
-      depthTest: true,
+      depthTest: false,
       side: THREE.DoubleSide,
       blending: THREE.NormalBlending,
     });
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh.renderOrder = 100;
     this.mesh.name = `Act2_Text_${data.name}`;
     this.mesh.position.copy(data.centroid);
     this.mesh.userData = {

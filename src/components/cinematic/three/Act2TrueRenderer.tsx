@@ -155,7 +155,10 @@ export const Act2TrueRenderer = forwardRef<Act2RendererHandle, Act2TrueRendererP
         alpha: false,
       });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(width, height, false);
+      renderer.setSize(width, height, true);
+      renderer.domElement.style.width = '100%';
+      renderer.domElement.style.height = '100%';
+      renderer.domElement.style.display = 'block';
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.10;
@@ -252,7 +255,9 @@ export const Act2TrueRenderer = forwardRef<Act2RendererHandle, Act2TrueRendererP
 
         setViewportDims({ width: w, height: h });
         configureOffAxisCamera(camera, w, h);
-        renderer.setSize(w, h, false);
+        renderer.setSize(w, h, true);
+        renderer.domElement.style.width = '100%';
+        renderer.domElement.style.height = '100%';
         runCalibration(w, h);
       });
 
