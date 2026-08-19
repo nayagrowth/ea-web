@@ -185,19 +185,20 @@ export const Act2TrueRenderer = forwardRef<Act2RendererHandle, Act2TrueRendererP
       );
 
       // 4. LIGHTING RIG
-      const ambientLight = new THREE.AmbientLight('#080a0e', 0.32);
+      const ambientLight = new THREE.AmbientLight('#0f131a', 0.55);
       scene.add(ambientLight);
 
       const rightWallKey = new THREE.DirectionalLight('#eef1f5', 4.4);
       rightWallKey.position.set(11, 17, 3);
       scene.add(rightWallKey);
 
-      const leftHeroFill = new THREE.DirectionalLight('#b6bac2', 0.85);
-      leftHeroFill.position.set(-1, 9, 5);
+      // Dedicated illumination on the Left Architectural Concrete Wedge Wall
+      const leftHeroFill = new THREE.DirectionalLight('#cbd5e1', 1.8);
+      leftHeroFill.position.set(-3, 11, 6);
       scene.add(leftHeroFill);
 
-      const wallModelLight = new THREE.PointLight('#aeb2ba', 2.2, 58, 2);
-      wallModelLight.position.set(-2.5, 7.2, -17);
+      const wallModelLight = new THREE.PointLight('#e2e8f0', 3.2, 70, 1.8);
+      wallModelLight.position.set(-3.0, 8.5, -14);
       scene.add(wallModelLight);
 
       const warmRailLight = new THREE.PointLight('#c39443', 1.4, 42, 2);

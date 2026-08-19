@@ -190,13 +190,17 @@ export function createAct2Geometry(): Act2GeometryRig {
   });
 
   // -------------------------------------------------------------------------
-  // 2. LEFT HERO WALL (Obsidian Gallery Architecture + Recessed Plinth & Seams)
+  // 2. LEFT HERO WALL (Textured Architectural Concrete Wedge + Top Rim Highlight)
   // -------------------------------------------------------------------------
+  const concreteTexture = createConcreteTexture();
+  disposables.push(concreteTexture);
+
   const leftWallGeo = new THREE.PlaneGeometry(corridorLength, ceilingY, 64, 16);
   const leftWallMat = new THREE.MeshStandardMaterial({
-    color: '#0a0c10',
-    roughness: 0.55,
-    metalness: 0.35,
+    map: concreteTexture,
+    color: '#282d38',
+    roughness: 0.68,
+    metalness: 0.18,
   });
   const leftWallMesh = new THREE.Mesh(leftWallGeo, leftWallMat);
   leftWallMesh.name = 'Act2_LeftHeroWall';
@@ -207,13 +211,29 @@ export function createAct2Geometry(): Act2GeometryRig {
   group.add(leftWallMesh);
   disposables.push(leftWallGeo, leftWallMat);
 
+  // Illuminated Top-Edge Rim Highlight (Cleanly defines the diagonal concrete wedge slope)
+  const topEdgeGeo = new THREE.BoxGeometry(0.04, 0.08, corridorLength);
+  const topEdgeMat = new THREE.MeshStandardMaterial({
+    color: '#9ca3af',
+    emissive: '#4b5563',
+    emissiveIntensity: 0.45,
+    roughness: 0.25,
+    metalness: 0.65,
+  });
+  const topEdgeMesh = new THREE.Mesh(topEdgeGeo, topEdgeMat);
+  topEdgeMesh.name = 'Act2_LeftWall_TopEdge';
+  topEdgeMesh.position.set(wallLeftX + 0.02, ceilingY, midZ);
+  applyWorldDepthAttributes(topEdgeMesh, zStart, zEnd);
+  group.add(topEdgeMesh);
+  disposables.push(topEdgeGeo, topEdgeMat);
+
   // Lower Architectural Plinth / Dark Graphite Wainscot Panel
   const plinthHeight = 3.6;
   const plinthGeo = new THREE.BoxGeometry(0.04, plinthHeight, corridorLength);
   const plinthMat = new THREE.MeshStandardMaterial({
-    color: '#020304',
-    roughness: 0.16,
-    metalness: 0.75,
+    color: '#1a1d24',
+    roughness: 0.35,
+    metalness: 0.55,
   });
   const plinthMesh = new THREE.Mesh(plinthGeo, plinthMat);
   plinthMesh.name = 'Act2_LeftWall_Plinth';
@@ -232,10 +252,10 @@ export function createAct2Geometry(): Act2GeometryRig {
   group.add(baseboardMesh);
   disposables.push(baseboardGeo, baseboardMat);
 
-  // Vertical Architectural Gallery Reveal Seams (spaced every 14m along corridor)
-  for (let z = zStart - 7; z > zEnd; z -= 14) {
-    const seamGeo = new THREE.BoxGeometry(0.05, ceilingY, 0.04);
-    const seamMat = new THREE.MeshBasicMaterial({ color: '#010102' });
+  // Vertical Architectural Gallery Reveal Seams (spaced every 12m along corridor with shadow depth)
+  for (let z = zStart - 6; z > zEnd; z -= 12) {
+    const seamGeo = new THREE.BoxGeometry(0.05, ceilingY, 0.06);
+    const seamMat = new THREE.MeshBasicMaterial({ color: '#111318' });
     const seamMesh = new THREE.Mesh(seamGeo, seamMat);
     seamMesh.name = `Act2_LeftWall_Seam_${Math.abs(Math.round(z))}`;
     seamMesh.position.set(wallLeftX + 0.025, ceilingY / 2, z);
@@ -470,4 +490,60 @@ export function createAct2Geometry(): Act2GeometryRig {
     floorSweepRig,
     slatMetrics,
   };
+}
+
+/**
+ * Procedural Architectural Concrete Texture Generator
+ * Produces authentic high-resolution concrete grain, formwork streaks, and aggregate micro-surface.
+ */
+function createConcreteTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1024;
+  canvas.height = 1024;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    return new THREE.CanvasTexture(canvas);
+  }
+
+  // Base raw concrete tone
+  ctx.fillStyle = '#2a2f3a';
+  ctx.fillRect(0, 0, 1024, 1024);
+
+  // Layer 1: High-frequency mineral noise grain
+  const imgData = ctx.getImageData(0, 0, 1024, 1024);
+  const data = imgData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const noise = (Math.random() - 0.5) * 36;
+    data[i] = Math.min(255, Math.max(0, data[i] + noise));
+    data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + noise));
+    data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + noise));
+  }
+  ctx.putImageData(imgData, 0, 0);
+
+  // Layer 2: Subtle horizontal formwork trowel streaks
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+  for (let i = 0; i < 48; i++) {
+    const x = Math.random() * 1024;
+    const y = Math.random() * 1024;
+    const w = 60 + Math.random() * 260;
+    const h = 2 + Math.random() * 6;
+    ctx.fillRect(x, y, w, h);
+  }
+
+  // Layer 3: Subtle darker aggregate pore patches
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+  for (let i = 0; i < 70; i++) {
+    const x = Math.random() * 1024;
+    const y = Math.random() * 1024;
+    const radius = 2 + Math.random() * 10;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(10, 3);
+  return texture;
 }

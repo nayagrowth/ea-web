@@ -7,9 +7,8 @@ export const Act2EditorialPoster: React.FC = () => {
       
       {/* Background Architectural Atmosphere */}
       <div className="act2-ambient-atmosphere absolute inset-0 pointer-events-none z-0">
-        {/* Left Pitch Shadow to Right Atmospheric Space */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#000000]/70 via-transparent to-[#000000]/40 pointer-events-none z-0" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#000000]/80 via-transparent via-25% to-[#000000]/80 pointer-events-none z-0" />
+        {/* Subtle Edge Vignette */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#000000]/40 via-transparent via-25% to-[#000000]/60 pointer-events-none z-0" />
       </div>
 
       {/* Vanishing Point Radiating Golden Light Rays (Anchored at 85.72%, 61.5%) */}
