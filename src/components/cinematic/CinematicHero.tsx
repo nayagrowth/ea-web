@@ -41,6 +41,11 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act1-col-bg-3-top', { yPercent: 0, opacity: 1 });
       gsap.set('.act1-col-bg-3-bottom', { yPercent: 0, opacity: 1 });
       gsap.set('.act1-col-bg-4', { opacity: 1 });
+      gsap.set('.act1-col-1', { xPercent: 0, yPercent: 0, opacity: 1, scale: 1 });
+      gsap.set('.act1-col-2', { xPercent: 0, yPercent: 0, opacity: 1, scale: 1 });
+      gsap.set('.act1-run-panel', { xPercent: 0, yPercent: 0, opacity: 1, scale: 1 });
+      gsap.set('.act1-your-panel', { xPercent: 0, yPercent: 0, opacity: 1, scale: 1 });
+      gsap.set('.act1-col-4', { xPercent: 0, yPercent: 0, opacity: 1, scale: 1 });
       gsap.set('.act1-scroll-cue', { opacity: 1, y: 0 });
 
       // Letter-level elements in Act 1
@@ -211,93 +216,84 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       }
 
       // ---------------------------------------------------------------------
-      // BEAT 2: KINETIC CHARACTER EXPLOSION & DECONSTRUCTION (Time 0.8 - 1.8)
+      // BEAT 2: PARALLEL GEOMETRIC PANEL VECTOR TRANSLATIONS (Time 0.8 - 1.8)
       // ---------------------------------------------------------------------
       tl.addLabel('DECONSTRUCT', 0.8);
 
       if (act1Variant === 'columns') {
-        // All column backgrounds and borders dissolve seamlessly in-place (ZERO panel clipping or hard box sliding!)
-        tl.to(['.act1-col-bg-1', '.act1-col-bg-2', '.act1-col-bg-3-top', '.act1-col-bg-3-bottom', '.act1-col-bg-4'], {
+        // 1. PANEL 1 (Porcelain Column) ➔ Translates UP into Row 1 Left to Construct "We"
+        tl.to('.act1-col-1', {
+          yPercent: -60,
           opacity: 0,
-          duration: 0.8,
-          ease: 'power2.inOut',
+          duration: 0.95,
+          ease: 'power3.inOut',
         }, 'DECONSTRUCT')
-          .to('.act1-panel-wrap', {
-            borderColor: 'transparent',
-            duration: 0.6,
-            ease: 'power2.inOut',
-          }, 'DECONSTRUCT');
+          .to('.act1-most-char-1', { yPercent: -45, scale: 1.08, opacity: 0, filter: 'blur(6px)', duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT')
+          .to('.act1-most-char-2', { yPercent: -50, scale: 1.08, opacity: 0, filter: 'blur(6px)', duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT+=0.02')
+          .to('.act1-most-char-3', { yPercent: -55, scale: 1.08, opacity: 0, filter: 'blur(6px)', duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT+=0.04')
+          .to('.act1-most-char-4', { yPercent: -60, scale: 1.08, opacity: 0, filter: 'blur(6px)', duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT+=0.06');
 
-        // "Most" (Panel 1) ➔ In-place optical lift & depth blur (prepares for "We")
-        tl.to('.act1-most-char-1', { yPercent: -45, scale: 1.08, opacity: 0, filter: 'blur(8px)', duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
-          .to('.act1-most-char-2', { yPercent: -50, scale: 1.08, opacity: 0, filter: 'blur(8px)', duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.02')
-          .to('.act1-most-char-3', { yPercent: -55, scale: 1.08, opacity: 0, filter: 'blur(8px)', duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.04')
-          .to('.act1-most-char-4', { yPercent: -60, scale: 1.08, opacity: 0, filter: 'blur(8px)', duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06');
-
-        // "agencies" (Panel 2) multi-character kinetic vertical dispersion along plumb line
-        tl.to('.act1-agency-char-1', { x: -50, y: -60, rotation: -16, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
-          .to('.act1-agency-char-2', { x: -25, y: 75, rotation: 12, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.02')
-          .to('.act1-agency-char-3', { x: -10, y: -80, rotation: -8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.04')
-          .to('.act1-agency-char-4', { x: -5, y: 65, rotation: 10, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06')
-          .to('.act1-agency-char-5', { x: 25, y: -75, rotation: 14, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.08')
-          .to('.act1-agency-char-6', { x: 0, y: 90, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.10')
-          .to('.act1-agency-char-7', { x: 40, y: -45, rotation: -12, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.12')
-          .to('.act1-agency-char-8', { x: 60, y: -60, rotation: 18, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.14')
+        // 2. PANEL 2 (Charcoal Column) ➔ Translates DIAGONALLY UP-RIGHT to Construct "sell-out"
+        tl.to('.act1-col-2', {
+          xPercent: 45,
+          yPercent: -45,
+          opacity: 0,
+          duration: 0.95,
+          ease: 'power3.inOut',
+        }, 'DECONSTRUCT')
+          .to('.act1-agency-char', { opacity: 0, stagger: 0.02, duration: 0.5, ease: 'power2.in' }, 'DECONSTRUCT')
           .to('.act1-col2-axis', { scaleY: 0, opacity: 0, duration: 0.6, ease: 'power3.in' }, 'DECONSTRUCT+=0.1');
 
-        // "run" (Panel 3 Top) letter lift & perspective floor blend (NO box clipping!)
-        tl.to('.act1-run-char-1', { xPercent: -25, yPercent: -50, rotation: -8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
-          .to('.act1-run-char-2', { yPercent: -70, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.03')
-          .to('.act1-run-char-3', { xPercent: 25, yPercent: -50, rotation: 8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06')
-          .to('.act1-energy-rail', { opacity: 1, strokeDashoffset: 0, duration: 0.45, stagger: 0.02, ease: 'power2.out' }, 'DECONSTRUCT')
-          .to('.act1-runway-wrap', { opacity: 0, duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT+=0.2');
+        // 3. PANEL 3 TOP (Upper Run Runway) ➔ Translates DOWN-RIGHT into 3D Floor to Construct "REAL ESTATE"
+        tl.to('.act1-run-panel', {
+          xPercent: 35,
+          yPercent: 40,
+          opacity: 0,
+          duration: 0.95,
+          ease: 'power3.inOut',
+        }, 'DECONSTRUCT')
+          .to('.act1-run-char', { yPercent: -60, opacity: 0, stagger: 0.03, duration: 0.55, ease: 'power2.in' }, 'DECONSTRUCT')
+          .to('.act1-energy-rail', { opacity: 1, strokeDashoffset: 0, duration: 0.45, stagger: 0.02, ease: 'power2.out' }, 'DECONSTRUCT');
 
-        // Golden glow rings & halo instantly extinguish to 0 at the start of swipe (no golden ring during shrink)
+        // 4. PANEL 3 BOTTOM (Lower Your Panel) ➔ Translates LEFT into Row 2 to Construct "your"
+        tl.to('.act1-your-panel', {
+          xPercent: -90,
+          yPercent: -15,
+          opacity: 0,
+          duration: 0.95,
+          ease: 'power3.inOut',
+        }, 'DECONSTRUCT')
+          .to('.act1-your-char', { yPercent: -50, opacity: 0, stagger: 0.03, duration: 0.55, ease: 'power2.in' }, 'DECONSTRUCT')
+          .to('.act1-your-rule', { scaleX: 0, duration: 0.5, ease: 'power2.in' }, 'DECONSTRUCT')
+          .to('.act1-your-pulse', { opacity: 1, duration: 0.35, ease: 'power2.out' }, 'DECONSTRUCT');
+
+        // 5. PANEL 4 (Optical Eclipse Semicircle) ➔ Radial Contraction into VP (85.72vw, 62.32vh) to Laser-Cut "project."
         tl.to(['.act1-eclipse-glow-wide', '.act1-eclipse-glow-core', '.act1-gold-halo'], {
           opacity: 0,
           duration: 0.12,
           ease: 'power2.in',
         }, 'DECONSTRUCT')
-          .to('.act1-bridge-gold-dot', { scale: 0.3, opacity: 0, duration: 0.18, ease: 'power2.in' }, 'DECONSTRUCT');
-
-        // "your" (Panel 3 Bottom) ➔ Direct Italic Morphing Resonance with Act 2
-        tl.to('.act1-your-char-1', { xPercent: 10, yPercent: -50, rotation: -5, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
-          .to('.act1-your-char-2', { xPercent: 12, yPercent: -55, rotation: -4, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.03')
-          .to('.act1-your-char-3', { xPercent: 14, yPercent: -60, rotation: -3, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06')
-          .to('.act1-your-char-4', { xPercent: 16, yPercent: -65, rotation: -2, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.09')
-          .to('.act1-your-rule', { scaleX: 0, duration: 0.5, ease: 'power2.in' }, 'DECONSTRUCT')
-          .to('.act1-your-pulse', { opacity: 1, duration: 0.35, ease: 'power2.out' }, 'DECONSTRUCT');
-
-        // "ads" kinetic editorial letter lift & dispersion (does NOT shrink into middle!)
-        tl.to('.act1-ads-char-1', { xPercent: -25, yPercent: -50, rotation: -8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
-          .to('.act1-ads-char-2', { yPercent: -65, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.03')
-          .to('.act1-ads-char-3', { xPercent: 25, yPercent: -50, rotation: 8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06')
-          .to('.act1-ads-char-4', { yPercent: -35, opacity: 0, scale: 0.3, duration: 0.4, ease: 'power2.in' }, 'DECONSTRUCT')
-
-          // Semicircle optical eclipse collapses into Act 2 vanishing point (85.72vw, 62.32vh) with mystical boundary blur
+          .to('.act1-bridge-gold-dot', { scale: 0.3, opacity: 0, duration: 0.18, ease: 'power2.in' }, 'DECONSTRUCT')
+          .to('.act1-ads-char', { yPercent: -55, opacity: 0, stagger: 0.03, duration: 0.55, ease: 'power2.in' }, 'DECONSTRUCT')
           .to('.act1-eclipse-rig', {
             scale: 0,
             opacity: 0,
             filter: 'blur(24px)',
-            duration: 0.85,
+            duration: 0.95,
             transformOrigin: '46.106% 62.320%',
-            ease: 'power3.in',
+            ease: 'power3.inOut',
           }, 'DECONSTRUCT')
-
-          // Focal horizon light ray shoots across from shrinking circle towards right vanishing point
+          .to('.act1-col-4', {
+            opacity: 0,
+            duration: 0.9,
+            ease: 'power2.inOut',
+          }, 'DECONSTRUCT+=0.05')
           .to('.act1-focal-light-ray', {
             scaleX: 1,
             opacity: 1,
             duration: 0.55,
             ease: 'power2.out',
           }, 'DECONSTRUCT+=0.1')
-          .to('.act1-focal-light-ray', {
-            opacity: 0.85,
-            duration: 0.35,
-            ease: 'power1.out',
-          }, 'DECONSTRUCT+=0.65')
-
-          // Mystical celestial particles scatter outward as the circle dissolves
           .to('.act1-mystic-particle', {
             opacity: (i) => 0.75 + (i % 3) * 0.12,
             scale: (i) => 1.2 + (i % 3) * 0.4,
@@ -316,7 +312,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           }, 'DECONSTRUCT+=0.35');
 
         // Terminate Act 1 smoothly
-        tl.to('.act1-stage', { autoAlpha: 0, duration: 0.2 }, 'DECONSTRUCT+=0.75');
+        tl.to('.act1-stage', { autoAlpha: 0, duration: 0.2 }, 'DECONSTRUCT+=0.85');
       } else {
         tl.to('.act1-stage', { autoAlpha: 0, duration: 0.8, ease: 'power2.inOut' }, 'DECONSTRUCT');
       }
@@ -335,9 +331,9 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       );
 
       // ---------------------------------------------------------------------
-      // BEAT 3: ACT 2 EDITORIAL POSTER REVEAL (Time 1.8 - 3.2)
+      // BEAT 3: ACT 2 EDITORIAL POSTER REVEAL (Time 1.4 - 2.8)
       // ---------------------------------------------------------------------
-      tl.addLabel('TYPE_REVEAL', 1.8);
+      tl.addLabel('TYPE_REVEAL', 1.4);
 
       // Reveal Act 2 Poster Stage and the luxury chiaroscuro atmosphere
       tl.to('.act2-poster-stage', { autoAlpha: 1, duration: 0.4 }, 'TYPE_REVEAL')
