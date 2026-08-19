@@ -65,13 +65,15 @@ export class WallTextQuad {
   }
 
   /**
-   * Sets opacity and animated local spatial transform offset around the word's own centroid.
+   * Sets opacity, animated 3D position offset, 3D perspective rotation (X, Y, Z), and scale.
    */
   public setSpatialState(
     opacity: number,
     localOffset: THREE.Vector3,
     rotDeg = 0,
-    scale = 1.0
+    scale = 1.0,
+    rotYDeg = 0,
+    rotXDeg = 0
   ): void {
     this.material.opacity = Math.max(0, Math.min(1, opacity));
     this.mesh.position.set(
@@ -79,7 +81,11 @@ export class WallTextQuad {
       this.data.centroid.y + localOffset.y,
       this.data.centroid.z + localOffset.z
     );
-    this.mesh.rotation.z = THREE.MathUtils.degToRad(rotDeg);
+    this.mesh.rotation.set(
+      THREE.MathUtils.degToRad(rotXDeg),
+      THREE.MathUtils.degToRad(rotYDeg),
+      THREE.MathUtils.degToRad(rotDeg)
+    );
     this.mesh.scale.setScalar(scale);
     this.mesh.visible = this.material.opacity > 0.001;
   }
