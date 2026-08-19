@@ -309,48 +309,48 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           }, 'PERSPECTIVE_EXPAND+=0.1');
 
         // Imperative Act 2 Spatial Animation:
-        // Phase 1 (1.6 -> 2.7): Assemble environment & typography (progress 0.0 -> 0.70)
-        // Phase 2 (2.7 -> 4.9): True static hold locked at hero frame (progress = 0.70)
-        // Phase 3 (4.9 -> 5.6): Restrained exit transition (progress 0.70 -> 1.00)
+        // Phase 1 (1.6 -> 3.4): Vanishing point void flight sequence (progress 0.0 -> 0.75)
+        // Phase 2 (3.4 -> 5.2): Rock-solid static readable hold (progress = 0.75)
+        // Phase 3 (5.2 -> 5.8): Restrained exit transition into Act 3 (progress 0.75 -> 1.00)
         const act2State = { progress: 0.0 };
         tl.to(act2State, {
-          progress: 0.70,
-          duration: 1.1,
+          progress: 0.75,
+          duration: 1.8,
           ease: 'none',
           onUpdate: () => {
             act2ControllerRef.current?.setProgress(act2State.progress);
           },
         }, 'PERSPECTIVE_EXPAND')
           .to(act2State, {
-            progress: 0.70,
-            duration: 2.2,
+            progress: 0.75,
+            duration: 1.8,
             ease: 'none',
             onUpdate: () => {
               act2ControllerRef.current?.setProgress(act2State.progress);
             },
-          }, 'PERSPECTIVE_EXPAND+=1.1')
+          }, 'PERSPECTIVE_EXPAND+=1.8')
           .to(act2State, {
             progress: 1.0,
-            duration: 0.7,
+            duration: 0.6,
             ease: 'none',
             onUpdate: () => {
               act2ControllerRef.current?.setProgress(act2State.progress);
             },
-          }, 'PERSPECTIVE_EXPAND+=3.3');
+          }, 'PERSPECTIVE_EXPAND+=3.6');
       } else {
         tl.to('.act1-stage', { autoAlpha: 0, duration: 1.0, ease: 'power2.inOut' }, 'IGNITION+=0.4')
           .to('.act2-true-stage', { autoAlpha: 1, scale: 1, duration: 1.0, ease: 'power2.out' }, 'IGNITION+=0.6');
       }
 
       // ---------------------------------------------------------------------
-      // BEAT 4: ACT 2 STATIC READABLE HOLD (Time 2.8 - 5.6)
+      // BEAT 4: ACT 2 STATIC READABLE HOLD (Time 3.4 - 5.2)
       // ---------------------------------------------------------------------
-      tl.addLabel('ACT2_HOLD', 2.8);
+      tl.addLabel('ACT2_HOLD', 3.4);
 
       // ---------------------------------------------------------------------
-      // ACT 2 ➔ ACT 3 MOTIF MORPH (Time 5.6 - 7.2)
+      // ACT 2 ➔ ACT 3 MOTIF MORPH (Time 5.8 - 7.4)
       // ---------------------------------------------------------------------
-      tl.addLabel('ACT2_TO_ACT3', 5.6);
+      tl.addLabel('ACT2_TO_ACT3', 5.8);
 
       tl.to('.act2-true-stage', {
         autoAlpha: 0,

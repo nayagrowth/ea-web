@@ -12,7 +12,7 @@ import type { Act1Variant } from './components/cinematic/CinematicHero';
  * 'cinematic' -> Advanced GSAP ScrollTrigger kinetic storytelling experience
  * 'classic'   -> Pristine original responsive 2-section layout with standard Navbar
  */
-const DEFAULT_MODE: 'cinematic' | 'act2-still' | 'classic' = 'act2-still';
+const DEFAULT_MODE: 'cinematic' | 'act2-still' | 'classic' = 'cinematic';
 const DEFAULT_HERO_VARIANT: Act1Variant = 'columns';
 
 export const App: React.FC = () => {

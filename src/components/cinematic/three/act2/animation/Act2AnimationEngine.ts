@@ -51,6 +51,9 @@ export function createAct2AnimationEngine(
   const baseWarm = 1.4;
   const baseVP = 1.25;
 
+  // Vanishing point origin deep in the corridor void
+  const vpOrigin = new THREE.Vector3(2.8, 1.8, -65.0);
+
   const setProgress = (progress: number) => {
     const p = clamp(progress, 0, 1);
 
@@ -65,113 +68,50 @@ export function createAct2AnimationEngine(
     lightingRig.warmRailLight.intensity = baseWarm * lightP;
     lightingRig.vpLight.intensity = baseVP * (0.6 + 0.4 * lightP);
 
-    // =========================================================================
-    // 2. 'We' (p in [0.12, 0.28]) - Lateral Settle (X: -20px equivalent to 0)
-    // =========================================================================
-    const weQuad = typeRig.quads.we;
-    if (weQuad) {
-      if (p < 0.12) {
-        weQuad.setSpatialState(0, tmpVec.set(-0.35, 0, 0), 0, 0.99);
-      } else if (p <= 0.28) {
-        const t = minimumJerk((p - 0.12) / 0.16);
-        const op = t;
-        const xOffset = (1.0 - t) * -0.35;
-        const scale = 0.99 + 0.01 * t;
-        weQuad.setSpatialState(op, tmpVec.set(xOffset, 0, 0), 0, scale);
-      } else if (p <= 0.86) {
-        // Hero frame lock: exact reference position
-        weQuad.setSpatialState(1.0, tmpVec.set(0, 0, 0), 0, 1.0);
-      } else {
-        // Quiet exit
-        const exitT = minimumJerk((p - 0.86) / 0.14);
-        weQuad.setSpatialState(1.0 - exitT, tmpVec.set(0, 0, 0), 0, 1.0);
-      }
-    }
+    // Helper: Animate a word flying from the VP void into its final locked centroid
+    const animateFlight = (
+      quad: typeof typeRig.quads.we,
+      pStart: number,
+      pEnd: number,
+      targetOpacity = 1.0
+    ) => {
+      if (!quad) return;
 
-    // =========================================================================
-    // 3. 'sell-out' (p in [0.18, 0.34]) - Champagne Gold Draw-on & Subtle Scale
-    // =========================================================================
-    const sellOutQuad = typeRig.quads.sellOut;
-    if (sellOutQuad) {
-      if (p < 0.18) {
-        sellOutQuad.setSpatialState(0, tmpVec.set(0, 0.10, 0), 0, 0.99);
-      } else if (p <= 0.34) {
-        const t = minimumJerk((p - 0.18) / 0.16);
-        const op = t * 0.95;
-        const yOffset = (1.0 - t) * 0.10;
-        const scale = 0.99 + 0.01 * t;
-        sellOutQuad.setSpatialState(op, tmpVec.set(0, yOffset, 0), 0, scale);
-      } else if (p <= 0.86) {
-        sellOutQuad.setSpatialState(0.95, tmpVec.set(0, 0, 0), 0, 1.0);
-      } else {
-        const exitT = minimumJerk((p - 0.86) / 0.14);
-        sellOutQuad.setSpatialState(0.95 * (1.0 - exitT), tmpVec.set(0, 0, 0), 0, 1.0);
-      }
-    }
+      const c = quad.data.centroid;
+      const dx = vpOrigin.x - c.x;
+      const dy = vpOrigin.y - c.y;
+      const dz = vpOrigin.z - c.z;
 
-    // =========================================================================
-    // 4. 'your' (p in [0.22, 0.38]) - Act 1 Continuity Handoff & Settle
-    // =========================================================================
-    const yourQuad = typeRig.quads.your;
-    if (yourQuad) {
-      if (p < 0.22) {
-        yourQuad.setSpatialState(0, tmpVec.set(0, 0.15, 0), 0, 0.99);
-      } else if (p <= 0.38) {
-        const t = minimumJerk((p - 0.22) / 0.16);
-        const op = t;
-        const yOffset = (1.0 - t) * 0.15;
-        const scale = 0.99 + 0.01 * t;
-        yourQuad.setSpatialState(op, tmpVec.set(0, yOffset, 0), 0, scale);
+      if (p < pStart) {
+        // Invisible, waiting at the vanishing point
+        quad.setSpatialState(0, tmpVec.set(dx, dy, dz), 0, 0.15);
+      } else if (p <= pEnd) {
+        // Flying forward in 3D perspective from VP void to locked position
+        const t = minimumJerk((p - pStart) / (pEnd - pStart));
+        const op = t * targetOpacity;
+        const scale = 0.20 + 0.80 * t;
+        const xOff = (1.0 - t) * dx;
+        const yOff = (1.0 - t) * dy;
+        const zOff = (1.0 - t) * dz;
+        quad.setSpatialState(op, tmpVec.set(xOff, yOff, zOff), 0, scale);
       } else if (p <= 0.86) {
-        yourQuad.setSpatialState(1.0, tmpVec.set(0, 0, 0), 0, 1.0);
+        // True static readable hold: rock-solid locked in place
+        quad.setSpatialState(targetOpacity, tmpVec.set(0, 0, 0), 0, 1.0);
       } else {
+        // Smooth transition handoff into Act 3
         const exitT = minimumJerk((p - 0.86) / 0.14);
-        yourQuad.setSpatialState(1.0 - exitT, tmpVec.set(0, 0, 0), 0, 1.0);
+        const op = targetOpacity * (1.0 - exitT);
+        const zForward = exitT * 4.0; // Gently drifts toward viewer as it dissolves
+        quad.setSpatialState(op, tmpVec.set(0, 0, zForward), 0, 1.0 + 0.05 * exitT);
       }
-    }
+    };
 
-    // =========================================================================
-    // 5. 'real estate' (p in [0.28, 0.44]) - Settle from Right (+24px to 0)
-    // =========================================================================
-    const realEstateQuad = typeRig.quads.realEstate;
-    if (realEstateQuad) {
-      if (p < 0.28) {
-        realEstateQuad.setSpatialState(0, tmpVec.set(0.40, 0, 0), 0, 0.99);
-      } else if (p <= 0.44) {
-        const t = minimumJerk((p - 0.28) / 0.16);
-        const op = t;
-        const xOffset = (1.0 - t) * 0.40;
-        const scale = 0.99 + 0.01 * t;
-        realEstateQuad.setSpatialState(op, tmpVec.set(xOffset, 0, 0), 0, scale);
-      } else if (p <= 0.86) {
-        realEstateQuad.setSpatialState(1.0, tmpVec.set(0, 0, 0), 0, 1.0);
-      } else {
-        const exitT = minimumJerk((p - 0.86) / 0.14);
-        realEstateQuad.setSpatialState(1.0 - exitT, tmpVec.set(0, 0, 0), 0, 1.0);
-      }
-    }
-
-    // =========================================================================
-    // 6. 'project' (p in [0.34, 0.50]) - Vertical Rise from Floor Reflection (+18px to 0)
-    // =========================================================================
-    const projectQuad = typeRig.quads.project;
-    if (projectQuad) {
-      if (p < 0.34) {
-        projectQuad.setSpatialState(0, tmpVec.set(0, -0.30, 0), 0, 0.99);
-      } else if (p <= 0.50) {
-        const t = minimumJerk((p - 0.34) / 0.16);
-        const op = t * 0.88;
-        const yOffset = (1.0 - t) * -0.30;
-        const scale = 0.99 + 0.01 * t;
-        projectQuad.setSpatialState(op, tmpVec.set(0, yOffset, 0), 0, scale);
-      } else if (p <= 0.86) {
-        // Hero frame lock
-        projectQuad.setSpatialState(0.88, tmpVec.set(0, 0, 0), 0, 1.0);
-      } else {
-        const exitT = minimumJerk((p - 0.86) / 0.14);
-        projectQuad.setSpatialState(0.88 * (1.0 - exitT), tmpVec.set(0, 0, 0), 0, 1.0);
-      }
-    }
+    // Staggered sequence: words emerge one-by-one from the vanishing point void
+    animateFlight(typeRig.quads.we, 0.06, 0.28, 1.0);
+    animateFlight(typeRig.quads.sellOut, 0.16, 0.38, 0.95);
+    animateFlight(typeRig.quads.your, 0.26, 0.48, 1.0);
+    animateFlight(typeRig.quads.realEstate, 0.38, 0.60, 1.0);
+    animateFlight(typeRig.quads.project, 0.48, 0.70, 0.88);
   };
 
   return {
