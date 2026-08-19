@@ -233,7 +233,21 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           duration: 0.95,
           ease: 'power3.inOut',
         }, 'DECONSTRUCT')
-          .to('.act1-brand-logo', { yPercent: -35, opacity: 0, duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT')
+          // Exact Mathematical Logo Continuity: Top logo ascends out of viewport (50% gone at t=1.10s)
+          .to('.act1-brand-logo', {
+            y: -120,
+            opacity: 0,
+            duration: 0.60,
+            ease: 'power2.in',
+          }, 'DECONSTRUCT')
+          // Exact Mathematical Logo Continuity: Bottom logo emerges from bottom viewport (50% in at t=1.10s)
+          .to('.act2-poster-stage', { autoAlpha: 1, duration: 0.2 }, 'DECONSTRUCT+=0.1')
+          .to('.act2-brand-logo', {
+            yPercent: 0,
+            opacity: 1,
+            duration: 0.60,
+            ease: 'power2.out',
+          }, 'DECONSTRUCT')
           .to('.act1-most-char-1', { yPercent: -45, scale: 1.08, opacity: 0, filter: 'blur(6px)', duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT')
           .to('.act1-most-char-2', { yPercent: -50, scale: 1.08, opacity: 0, filter: 'blur(6px)', duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT+=0.02')
           .to('.act1-most-char-3', { yPercent: -55, scale: 1.08, opacity: 0, filter: 'blur(6px)', duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT+=0.04')
@@ -347,8 +361,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         .to('.act2-ambient-atmosphere', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 'TYPE_REVEAL')
         .to('.act2-radiant-rays', { opacity: 0.9, scale: 1, duration: 0.95, ease: 'power3.out' }, 'TYPE_REVEAL')
         .to('.act2-horizon-laser', { scaleX: 1, opacity: 1, duration: 0.85, ease: 'power3.out' }, 'TYPE_REVEAL')
-        .to('.act2-vp-starburst', { scale: 1, opacity: 1, duration: 0.85, ease: 'power2.out' }, 'TYPE_REVEAL')
-        .to('.act2-brand-logo', { yPercent: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 'TYPE_REVEAL+=0.2');
+        .to('.act2-vp-starburst', { scale: 1, opacity: 1, duration: 0.85, ease: 'power2.out' }, 'TYPE_REVEAL');
 
       // 1. "We" emerges from Panel 1's upward momentum (↑)
       tl.to(
