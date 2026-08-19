@@ -76,9 +76,6 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       // Act 2 Editorial Poster Elements - HIDDEN DURING ACT 1 (Vector-aligned with Act 1 Panels)
       gsap.set('.act2-poster-stage', { autoAlpha: 0 });
       gsap.set('.act2-ambient-atmosphere', { opacity: 0 });
-      gsap.set('.act2-horizon-glow', { scaleX: 0, opacity: 0, transformOrigin: 'center center' });
-      gsap.set('.act2-horizon-ray-right', { scaleX: 0, opacity: 0, transformOrigin: 'left center' });
-      gsap.set('.act2-vp-flare', { scale: 0.2, opacity: 0 });
       gsap.set('.act2-word-we', { yPercent: 80, opacity: 0 });
       gsap.set('.act2-word-sellout', { xPercent: -50, yPercent: 50, opacity: 0 });
       gsap.set('.act2-word-your', { xPercent: 70, yPercent: 15, opacity: 0 });
@@ -338,39 +335,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
 
       // Reveal Act 2 Poster Stage and the luxury chiaroscuro atmosphere
       tl.to('.act2-poster-stage', { autoAlpha: 1, duration: 0.4 }, 'TYPE_REVEAL')
-        .to('.act2-ambient-atmosphere', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 'TYPE_REVEAL')
-
-        // Horizon Laser & Sustained Right-Side Golden Ray
-        .to(
-          '.act2-horizon-glow',
-          {
-            scaleX: 1,
-            opacity: 0.85,
-            duration: 0.9,
-            ease: 'power3.out',
-          },
-          'TYPE_REVEAL'
-        )
-        .to(
-          '.act2-horizon-ray-right',
-          {
-            scaleX: 1,
-            opacity: 0.95,
-            duration: 0.8,
-            ease: 'power3.out',
-          },
-          'TYPE_REVEAL'
-        )
-        .to(
-          '.act2-vp-flare',
-          {
-            scale: 1,
-            opacity: 0.7,
-            duration: 1.0,
-            ease: 'power2.out',
-          },
-          'TYPE_REVEAL'
-        );
+        .to('.act2-ambient-atmosphere', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 'TYPE_REVEAL');
 
       // 1. "We" emerges from Panel 1's upward momentum (↑)
       tl.to(
@@ -419,7 +384,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           },
           'TYPE_REVEAL+=0.18'
         )
-        // 5. "project." emerges from Panel 4's focal horizon laser beam (⊙ ➔ ──)
+        // 5. "project." emerges from Panel 4's focal momentum
         .to(
           '.act2-word-project',
           {
@@ -446,17 +411,6 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       // ---------------------------------------------------------------------
       tl.addLabel('ACT2', 3.2);
       tl.addLabel('ACT2_HOLD', 3.2);
-
-      // Sustained, slow-fading right golden ray during hold
-      tl.to(
-        '.act2-horizon-ray-right',
-        {
-          opacity: 0.45,
-          duration: 2.2,
-          ease: 'power1.out',
-        },
-        'ACT2_HOLD'
-      );
 
       const envHold = { p: 0 };
       tl.to(

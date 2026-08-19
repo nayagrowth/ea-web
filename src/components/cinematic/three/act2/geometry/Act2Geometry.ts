@@ -154,15 +154,15 @@ export function createAct2Geometry(): Act2GeometryRig {
   group.add(floorSweepRig.centerCutMesh);
   disposables.push(...floorSweepRig.disposables);
 
-  // Pure longitudinal rails (D = (0,0,-1))
+  // Sleek neutral graphite longitudinal rails (Zero distracting yellow lines)
   const floorRails = [
-    { x: -7.0, width: 0.025, color: '#3c414b', emissive: 0.10 },
-    { x: -4.55, width: 0.032, color: '#c7ccd3', emissive: 0.24 },
-    { x: -2.05, width: 0.055, color: '#d8b665', emissive: 1.55 },
-    { x: -0.72, width: 0.024, color: '#4b505a', emissive: 0.14 },
-    { x: 0.95, width: 0.035, color: '#aa8946', emissive: 0.42 },
-    { x: 2.95, width: 0.030, color: '#555b64', emissive: 0.18 },
-    { x: 4.55, width: 0.045, color: '#e8ebef', emissive: 0.55 },
+    { x: -7.0, width: 0.025, color: '#3c414b', emissive: 0.08 },
+    { x: -4.55, width: 0.032, color: '#c7ccd3', emissive: 0.20 },
+    { x: -2.05, width: 0.035, color: '#686f7c', emissive: 0.18 },
+    { x: -0.72, width: 0.024, color: '#4b505a', emissive: 0.12 },
+    { x: 0.95, width: 0.028, color: '#555b64', emissive: 0.14 },
+    { x: 2.95, width: 0.030, color: '#4a5059', emissive: 0.15 },
+    { x: 4.55, width: 0.045, color: '#c5cad2', emissive: 0.35 },
   ];
 
   floorRails.forEach((r, idx) => {
@@ -171,7 +171,7 @@ export function createAct2Geometry(): Act2GeometryRig {
       color: r.color,
       emissive: r.color,
       emissiveIntensity: r.emissive,
-      roughness: 0.08,
+      roughness: 0.12,
       metalness: 0.90,
     });
     const mesh = new THREE.Mesh(geo, mat);
@@ -243,20 +243,20 @@ export function createAct2Geometry(): Act2GeometryRig {
     disposables.push(seamGeo, seamMat);
   }
 
-  // Main champagne horizon
+  // Neutral Architectural Horizon Trim (Sleek dark graphite, zero yellow line)
   const mainGoldY = worldYForReferenceRay(
     wallLeftX + 0.03,
     REFERENCE_GEOMETRY.targetLines.mainGoldHorizon.p0.x,
     REFERENCE_GEOMETRY.targetLines.mainGoldHorizon.p0.y
   );
 
-  const mainGoldCoreGeo = new THREE.BoxGeometry(0.030, 0.032, corridorLength);
+  const mainGoldCoreGeo = new THREE.BoxGeometry(0.020, 0.020, corridorLength);
   const mainGoldCoreMat = new THREE.MeshStandardMaterial({
-    color: '#f1dfad',
-    emissive: '#d6ab55',
-    emissiveIntensity: 2.35,
-    roughness: 0.08,
-    metalness: 0.88,
+    color: '#181b22',
+    emissive: '#0e1015',
+    emissiveIntensity: 0.1,
+    roughness: 0.25,
+    metalness: 0.85,
   });
   const mainGoldCore = new THREE.Mesh(mainGoldCoreGeo, mainGoldCoreMat);
   mainGoldCore.name = 'Act2_MainGoldHorizon_Core';
@@ -266,41 +266,25 @@ export function createAct2Geometry(): Act2GeometryRig {
   group.add(mainGoldCore);
   disposables.push(mainGoldCoreGeo, mainGoldCoreMat);
 
-  const mainGoldGlowGeo = new THREE.BoxGeometry(0.022, 0.16, corridorLength);
-  const mainGoldGlowMat = new THREE.MeshBasicMaterial({
-    color: '#b9852d',
-    transparent: true,
-    opacity: 0.12,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-  });
-  const mainGoldGlow = new THREE.Mesh(mainGoldGlowGeo, mainGoldGlowMat);
-  mainGoldGlow.name = 'Act2_MainGoldHorizon_Glow';
-  mainGoldGlow.userData = { act2Role: 'horizon', part: 'glow' };
-  mainGoldGlow.position.set(wallLeftX + 0.05, mainGoldY, midZ);
-  applyWorldDepthAttributes(mainGoldGlow, zStart, zEnd);
-  group.add(mainGoldGlow);
-  disposables.push(mainGoldGlowGeo, mainGoldGlowMat);
-
   keyLongitudinalLines.push({
     p0: new THREE.Vector3(wallLeftX + 0.03, mainGoldY, zStart),
     p1: new THREE.Vector3(wallLeftX + 0.03, mainGoldY, zEnd),
     name: 'MainGoldHorizon',
   });
 
-  // Upper champagne depth rail
+  // Upper neutral depth rail
   const upperGoldY = worldYForReferenceRay(
     wallLeftX + 0.035,
     REFERENCE_GEOMETRY.targetLines.upperGoldDepthRail.p0.x,
     REFERENCE_GEOMETRY.targetLines.upperGoldDepthRail.p0.y
   );
 
-  const upperGoldGeo = new THREE.BoxGeometry(0.022, 0.018, corridorLength);
+  const upperGoldGeo = new THREE.BoxGeometry(0.018, 0.015, corridorLength);
   const upperGoldMat = new THREE.MeshStandardMaterial({
-    color: '#9e762f',
-    emissive: '#b98a35',
-    emissiveIntensity: 0.42,
-    roughness: 0.18,
+    color: '#1a1d24',
+    emissive: '#0e1015',
+    emissiveIntensity: 0.1,
+    roughness: 0.25,
     metalness: 0.80,
   });
   const upperGoldMesh = new THREE.Mesh(upperGoldGeo, upperGoldMat);

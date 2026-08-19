@@ -29,8 +29,10 @@
 
 .act2-mask-wrap {
   display: inline-block;
-  overflow: hidden;
+  overflow: visible; /* Prevent any descender/ascender clipping on y, p, j, W! */
   vertical-align: bottom;
+  padding: 0.15em 0.25em 0.35em 0.15em;
+  margin: -0.15em -0.25em -0.35em -0.15em;
 }
 
 .act2-word-we,

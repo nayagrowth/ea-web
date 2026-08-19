@@ -21,64 +21,50 @@ export const Act2EditorialPoster: React.FC = () => {
         />
       </div>
 
-      {/* Horizon Laser & Vanishing Flare Motif (Calibrated to Exact Act 2 VP: 85.72%, 62.32%) */}
-      <div
-        className="act2-horizon-glow absolute left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-50% via-[#F5C200]/40 to-[#F5C200] opacity-0 pointer-events-none z-0"
-        style={{ top: '62.32%' }}
-      />
-      <div
-        className="act2-horizon-ray-right absolute right-0 h-[2.5px] bg-gradient-to-r from-transparent via-[#FFF2CC] to-[#F5C200] opacity-0 pointer-events-none z-0"
-        style={{ top: '62.32%', width: '55%', boxShadow: '0 0 14px rgba(245, 194, 0, 0.75)' }}
-      />
-      <div
-        className="act2-vp-flare absolute -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-radial from-[#F5C200]/25 via-[#F5C200]/5 to-transparent blur-2xl opacity-0 pointer-events-none z-0"
-        style={{ left: '85.72%', top: '62.32%' }}
-      />
-
       {/* Main Canonical Responsive Poster Layout */}
-      <div className="act2-poster-frame relative w-full max-w-[1440px] h-[86vh] max-h-[860px] px-6 sm:px-12 md:px-16 flex flex-col justify-between z-10">
+      <div className="act2-poster-frame relative w-full max-w-[1480px] h-[84vh] max-h-[860px] px-8 sm:px-14 md:px-20 flex flex-col justify-between z-10 py-4 md:py-6">
         
         {/* ROW 1: "We" (Left Serif) + "sell-out" (Right Gold Italic) */}
-        <div className="act2-row-1 w-full flex items-baseline justify-between pt-2">
-          <div className="act2-mask-wrap overflow-hidden">
-            <h2 className="act2-word-we font-serif text-[clamp(4.6rem,11.2vw,12rem)] font-normal text-[#f4f4f2] tracking-[-0.045em] leading-[0.84]">
+        <div className="act2-row-1 w-full flex items-baseline justify-between pt-2 pb-1">
+          <div className="act2-mask-wrap">
+            <h2 className="act2-word-we font-serif text-[clamp(4.2rem,10.2vw,11.2rem)] font-normal text-[#f4f4f2] tracking-[-0.035em] leading-[1.05] pl-1">
               We
             </h2>
           </div>
 
-          <div className="act2-mask-wrap overflow-hidden">
-            <span className="act2-word-sellout font-serif italic text-[clamp(4.2rem,10.2vw,11.2rem)] font-normal text-[#F5C200] leading-[0.86] pr-2 select-none">
+          <div className="act2-mask-wrap">
+            <span className="act2-word-sellout font-serif italic text-[clamp(3.8rem,9.4vw,10.4rem)] font-normal text-[#F5C200] leading-[1.05] pr-6 select-none">
               sell-out
             </span>
           </div>
         </div>
 
         {/* ROW 2: "your" (Left White Italic) + "REAL ESTATE" (Right Monumental Sans) */}
-        <div className="act2-row-2 w-full flex items-baseline justify-between py-1">
-          <div className="act2-mask-wrap overflow-hidden">
-            <span className="act2-word-your font-serif italic text-[clamp(4.5rem,10.8vw,11.8rem)] font-normal text-[#f4f4f2] leading-[0.86] select-none">
+        <div className="act2-row-2 w-full flex items-baseline justify-between py-2">
+          <div className="act2-mask-wrap">
+            <span className="act2-word-your font-serif italic text-[clamp(4.0rem,9.8vw,10.8rem)] font-normal text-[#f4f4f2] leading-[1.05] pl-2 pr-4 select-none">
               your
             </span>
           </div>
 
-          <div className="act2-mask-wrap overflow-hidden">
-            <h2 className="act2-word-realestate font-sans text-[clamp(4.2rem,9.8vw,10.8rem)] font-black text-[#f4f4f2] tracking-[-0.05em] leading-[0.84] uppercase">
+          <div className="act2-mask-wrap">
+            <h2 className="act2-word-realestate font-sans text-[clamp(3.8rem,9.0vw,10.0rem)] font-black text-[#f4f4f2] tracking-[-0.04em] leading-[1.0] uppercase pr-2">
               real estate
             </h2>
           </div>
         </div>
 
         {/* ROW 3: "project." (Right Serif with Golden Period + Ground Reflection) */}
-        <div className="act2-row-3 w-full flex flex-col items-end justify-start pb-2">
-          <div className="act2-mask-wrap overflow-hidden">
-            <h2 className="act2-word-project font-serif text-[clamp(4.4rem,10.4vw,11.4rem)] font-normal text-[#f4f4f2]/95 tracking-[-0.04em] leading-[0.86]">
+        <div className="act2-row-3 w-full flex flex-col items-end justify-start pt-1 pb-4 pr-4">
+          <div className="act2-mask-wrap">
+            <h2 className="act2-word-project font-serif text-[clamp(4.0rem,9.6vw,10.6rem)] font-normal text-[#f4f4f2]/95 tracking-[-0.035em] leading-[1.05] pb-2">
               project<span className="text-[#F5C200]">.</span>
             </h2>
           </div>
 
           {/* Subtle Reflective Floor Echo */}
-          <div className="act2-project-reflection-wrap act2-mask-wrap overflow-hidden mt-0.5 opacity-20 scale-y-[-0.55] origin-top filter blur-[0.5px] pointer-events-none select-none">
-            <h2 className="act2-word-project-reflection font-serif text-[clamp(4.4rem,10.4vw,11.4rem)] font-normal text-[#f4f4f2] tracking-[-0.04em] leading-[0.86] act2-project-reflection">
+          <div className="act2-project-reflection-wrap act2-mask-wrap mt-1 opacity-20 scale-y-[-0.5] origin-top filter blur-[0.5px] pointer-events-none select-none">
+            <h2 className="act2-word-project-reflection font-serif text-[clamp(4.0rem,9.6vw,10.6rem)] font-normal text-[#f4f4f2] tracking-[-0.035em] leading-[1.05] act2-project-reflection">
               project<span className="text-[#F5C200]">.</span>
             </h2>
           </div>
