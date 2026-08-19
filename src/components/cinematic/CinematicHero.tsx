@@ -84,14 +84,14 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act2-word-project', { scale: 0.85, xPercent: 30, opacity: 0 });
       gsap.set('.act2-project-reflection-wrap', { opacity: 0 });
 
-      // Acts 3 - 5 Initial States
+      // Acts 3 - 5 Initial States (Vector-aligned with Act 2)
       gsap.set('.act3-stage', { autoAlpha: 0 });
-      gsap.set('.act3-sheet-frame', { scale: 0.98, opacity: 0, y: 20 });
-      gsap.set('.act3-telemetry-top', { opacity: 0, y: -10 });
-      gsap.set('.act3-line-1', { xPercent: -30, opacity: 0 });
-      gsap.set('.act3-line-2', { xPercent: -40, opacity: 0 });
-      gsap.set('.act3-horizon-wrap', { scaleX: 0, transformOrigin: 'left center', opacity: 1 });
-      gsap.set('.act3-milestone-card', { yPercent: 30, opacity: 0 });
+      gsap.set('.act3-sim-canvas', { opacity: 0 });
+      gsap.set('.act3-word-withinyour', { xPercent: -50, yPercent: 20, opacity: 0 });
+      gsap.set('.act3-word-planned', { xPercent: 50, yPercent: -20, opacity: 0 });
+      gsap.set('.act3-word-timeline', { scale: 0.85, xPercent: 30, opacity: 0 });
+      gsap.set('.act3-horizon-wrap', { scaleX: 0, transformOrigin: 'right center', opacity: 0 });
+      gsap.set('.act3-timeline-reflection-wrap', { opacity: 0 });
       gsap.set('.act4-tri-stage', { autoAlpha: 0 });
       gsap.set('.act4-panel-1', { yPercent: 100, opacity: 0 });
       gsap.set('.act4-panel-2', { yPercent: 100, opacity: 0 });
@@ -430,30 +430,80 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       );
 
       // ---------------------------------------------------------------------
-      // BEAT 5: EXIT MOTIF & ACT 3 IN-PLACE CONTINUITY (Time 5.4 - 6.8)
+      // BEAT 5: ACT 2 ➔ ACT 3 GEOMETRIC VECTOR METAMORPHOSIS (Time 5.4 - 6.8)
+      // (Act 2 elements deconstruct along vectors that directly birth Act 3 words)
       // ---------------------------------------------------------------------
       tl.addLabel('ACT2_TO_ACT3', 5.4);
 
+      // 1. Left Vectors: "We" (Top-Left) and "your" (Mid-Left) converge across left axis to unmask "Within your"
       tl.to(
-        ['.act2-word-we', '.act2-word-sellout', '.act2-word-your', '.act2-word-realestate', '.act2-word-project'],
+        '.act2-word-we',
         {
-          yPercent: -35,
+          xPercent: -35,
+          yPercent: 35,
           opacity: 0,
-          stagger: 0.03,
-          duration: 0.55,
-          ease: 'power2.in',
+          duration: 0.8,
+          ease: 'power3.inOut',
         },
         'ACT2_TO_ACT3'
       )
-        .to('.act2-project-reflection-wrap', { opacity: 0, duration: 0.3 }, 'ACT2_TO_ACT3')
-        .to('.act2-poster-stage', { autoAlpha: 0, duration: 0.3 }, 'ACT2_TO_ACT3+=0.6');
+        .to(
+          '.act2-word-your',
+          {
+            xPercent: -45,
+            yPercent: -30,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power3.inOut',
+          },
+          'ACT2_TO_ACT3'
+        )
+
+        // 2. Right Vectors: "sell-out" (Top-Right) and "REAL ESTATE" (Mid-Right) converge to unmask "PLANNED"
+        .to(
+          '.act2-word-sellout',
+          {
+            xPercent: 40,
+            yPercent: 35,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power3.inOut',
+          },
+          'ACT2_TO_ACT3'
+        )
+        .to(
+          '.act2-word-realestate',
+          {
+            xPercent: 45,
+            yPercent: -30,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power3.inOut',
+          },
+          'ACT2_TO_ACT3'
+        )
+
+        // 3. Focal Radial Deconstruction: "project." collapses into vanishing point
+        .to(
+          '.act2-word-project',
+          {
+            scale: 0.75,
+            xPercent: 30,
+            opacity: 0,
+            duration: 0.75,
+            ease: 'power2.in',
+          },
+          'ACT2_TO_ACT3'
+        )
+        .to('.act2-project-reflection-wrap', { opacity: 0, duration: 0.4 }, 'ACT2_TO_ACT3')
+        .to('.act2-poster-stage', { autoAlpha: 0, duration: 0.3 }, 'ACT2_TO_ACT3+=0.75');
 
       const envExit = { p: 0 };
       tl.to(
         envExit,
         {
           p: 1,
-          duration: 0.8,
+          duration: 0.85,
           ease: 'power2.in',
           onUpdate: () => act2ControllerRef.current?.setExitProgress(envExit.p),
         },
@@ -461,50 +511,65 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       );
 
       // =====================================================================
-      // ACT 3: ARCHITECTURAL TIMELINE SHEET ("Within Your Planned Timeline")
+      // ACT 3: MONUMENTAL ASYMMETRIC POSTER ("Within Your Planned Timeline")
       // =====================================================================
-      tl.addLabel('ACT3_START', 6.2);
+      tl.addLabel('ACT3_START', 5.85);
 
       tl.to('.act3-stage', { autoAlpha: 1, duration: 0.4 }, 'ACT3_START')
-        .to('.act3-sheet-frame', { scale: 1, opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 'ACT3_START')
-        .to('.act3-telemetry-top', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 'ACT3_START+=0.1')
+        .to('.act3-sim-canvas', { opacity: 0.6, duration: 1.0, ease: 'power2.out' }, 'ACT3_START')
+        
+        // 1. "Within your" emerges along the left convergence vector (Row 1 Left)
         .to(
-          '.act3-line-1',
+          '.act3-word-withinyour',
           {
             xPercent: 0,
+            yPercent: 0,
             opacity: 1,
-            duration: 0.9,
+            duration: 0.85,
             ease: 'power3.out',
           },
-          'ACT3_START+=0.15'
+          'ACT3_START+=0.1'
         )
+        // 2. "PLANNED" emerges along the right convergence vector (Row 2 Right)
         .to(
-          '.act3-line-2',
+          '.act3-word-planned',
           {
             xPercent: 0,
+            yPercent: 0,
             opacity: 1,
-            duration: 0.95,
+            duration: 0.85,
             ease: 'power3.out',
           },
-          'ACT3_START+=0.25'
+          'ACT3_START+=0.2'
+        )
+        // 3. "timeline." ignites from the focal momentum (Row 3 Right)
+        .to(
+          '.act3-word-timeline',
+          {
+            scale: 1,
+            xPercent: 0,
+            opacity: 1,
+            duration: 0.85,
+            ease: 'power3.out',
+          },
+          'ACT3_START+=0.3'
         )
         .to(
           '.act3-horizon-wrap',
           {
             scaleX: 1,
-            duration: 1.0,
-            ease: 'power2.out',
+            opacity: 1,
+            duration: 0.9,
+            ease: 'power3.out',
           },
           'ACT3_START+=0.35'
         )
         .to(
-          '.act3-milestone-card',
+          '.act3-timeline-reflection-wrap',
           {
-            yPercent: 0,
-            opacity: 1,
-            stagger: 0.08,
-            duration: 0.7,
-            ease: 'power3.out',
+            opacity: 0.2,
+            duration: 0.5,
+            ease: 'power2.out',
           },
           'ACT3_START+=0.45'
         )
@@ -512,14 +577,19 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
 
       // Hold for Act 3
       tl.addLabel('ACT3', 7.4);
-      tl.to('.act3-sheet-frame', { scale: 1.008, duration: 1.8, ease: 'none' });
+      tl.to('.act3-stage', { scale: 1.012, duration: 1.8, ease: 'none' });
 
       // =====================================================================
       // ACT 3 ➔ ACT 4 MOTIF SPLIT
       // =====================================================================
       tl.addLabel('ACT3_TO_ACT4', '+=0.1');
 
-      tl.to('.act3-sheet-frame', { scale: 0.97, y: -20, opacity: 0, duration: 0.75, ease: 'power2.in' }, 'ACT3_TO_ACT4')
+      tl.to('.act3-word-withinyour', { xPercent: -40, opacity: 0, duration: 0.75, ease: 'power2.in' }, 'ACT3_TO_ACT4')
+        .to('.act3-word-planned', { xPercent: 40, opacity: 0, duration: 0.75, ease: 'power2.in' }, 'ACT3_TO_ACT4')
+        .to('.act3-word-timeline', { scale: 0.8, opacity: 0, duration: 0.75, ease: 'power2.in' }, 'ACT3_TO_ACT4')
+        .to('.act3-horizon-wrap', { scaleX: 0, opacity: 0, duration: 0.6, ease: 'power2.in' }, 'ACT3_TO_ACT4')
+        .to('.act3-timeline-reflection-wrap', { opacity: 0, duration: 0.4 }, 'ACT3_TO_ACT4')
+        .to('.act3-sim-canvas', { opacity: 0, duration: 0.6 }, 'ACT3_TO_ACT4')
         .to('.act3-stage', { autoAlpha: 0, duration: 0.2 }, 'ACT3_TO_ACT4+=0.7')
         .to('.act4-tri-stage', { autoAlpha: 1, duration: 0.2 }, 'ACT3_TO_ACT4+=0.7')
         .to(
