@@ -47,9 +47,15 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               <span className="act1-agency-char act1-agency-char-8">s</span>
             </h2>
 
-            {/* Compositional Axis / Plumb-Line Gesture with Travelling Highlight */}
-            <div className="act1-col2-axis relative w-[1.5px] bg-gradient-to-b from-white/45 via-white/20 to-transparent h-[52vh] mt-7 z-10 overflow-hidden">
-              <div className="act1-axis-pulse absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-transparent via-[#ecd08e] to-transparent opacity-0" />
+            {/* Compositional Axis / Plumb-Line Gesture with Prominent Travelling Gold Laser */}
+            <div className="act1-col2-axis relative w-[2.5px] bg-gradient-to-b from-white/70 via-[#F5C200]/50 to-transparent h-[54vh] mt-7 z-10 overflow-hidden shadow-[0_0_10px_rgba(245,194,0,0.45)]">
+              <div
+                className="act1-axis-pulse absolute top-0 left-0 w-full h-32 opacity-0"
+                style={{
+                  background: 'linear-gradient(to bottom, transparent, #FFFFFF 30%, #F5C200 70%, transparent 100%)',
+                  boxShadow: '0 0 14px rgba(245, 194, 0, 0.95), 0 0 4px #FFFFFF',
+                }}
+              />
             </div>
           </div>
         </div>

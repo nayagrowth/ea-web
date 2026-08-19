@@ -101,16 +101,23 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=850%',
+          end: '+=750%',
           pin: stageRef.current,
-          scrub: 0.42,
+          scrub: 0.35,
           anticipatePin: 1,
+          snap: {
+            snapTo: 'labelsDirectional',
+            duration: { min: 0.25, max: 0.55 },
+            delay: 0.02,
+            ease: 'power2.out',
+          },
         },
       });
 
       // ---------------------------------------------------------------------
       // BEAT 1: SIGNAL IGNITION (Time 0.0 - 0.8)
       // ---------------------------------------------------------------------
+      tl.addLabel('ACT1', 0);
       tl.addLabel('IGNITION', 0);
 
       if (act1Variant === 'columns') {
@@ -426,6 +433,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       // ---------------------------------------------------------------------
       // BEAT 4: TRUE STATIC READABLE HOLD (Time 3.2 - 5.4, 2.2s dedicated budget)
       // ---------------------------------------------------------------------
+      tl.addLabel('ACT2', 3.2);
       tl.addLabel('ACT2_HOLD', 3.2);
 
       // Sustained, slow-fading right golden ray during hold
@@ -520,6 +528,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         .to('.act2-true-stage', { autoAlpha: 0, duration: 0.4 }, 'ACT3_START+=0.6');
 
       // Hold for Act 3
+      tl.addLabel('ACT3', 7.4);
       tl.to('.act3-stage', { scale: 1.008, duration: 1.8, ease: 'none' });
 
       // =====================================================================
@@ -561,12 +570,15 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power3.out',
           },
           'ACT3_TO_ACT4+=1.0'
-        )
-        .to(['.act4-img-1', '.act4-img-2', '.act4-img-3'], {
-          scale: 1.05,
-          duration: 2.2,
-          ease: 'none',
-        });
+        );
+
+      tl.addLabel('ACT4', '+=0.1');
+
+      tl.to(['.act4-img-1', '.act4-img-2', '.act4-img-3'], {
+        scale: 1.05,
+        duration: 2.2,
+        ease: 'none',
+      });
 
       // =====================================================================
       // ACT 4 ➔ ACT 5
@@ -612,8 +624,11 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           { scale: 1, opacity: 1, duration: 0.8, ease: 'power3.out' },
           'ACT4_TO_ACT5+=1.1'
         )
-        .to('.act5-white-bloom', { opacity: 0.18, duration: 1.6, ease: 'power2.inOut' }, 'ACT4_TO_ACT5+=0.7')
-        .to('.act5-stage', { scale: 1.015, duration: 2.2, ease: 'none' });
+        .to('.act5-white-bloom', { opacity: 0.18, duration: 1.6, ease: 'power2.inOut' }, 'ACT4_TO_ACT5+=0.7');
+
+      tl.addLabel('ACT5', '+=0.1');
+
+      tl.to('.act5-stage', { scale: 1.015, duration: 2.2, ease: 'none' });
     }, stageRef);
 
     return () => ctx.revert();
