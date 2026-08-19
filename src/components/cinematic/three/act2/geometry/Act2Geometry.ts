@@ -190,13 +190,13 @@ export function createAct2Geometry(): Act2GeometryRig {
   });
 
   // -------------------------------------------------------------------------
-  // 2. LEFT HERO WALL
+  // 2. LEFT HERO WALL (Obsidian Gallery Architecture + Recessed Plinth & Seams)
   // -------------------------------------------------------------------------
   const leftWallGeo = new THREE.PlaneGeometry(corridorLength, ceilingY, 64, 16);
   const leftWallMat = new THREE.MeshStandardMaterial({
-    color: '#090a0d',
-    roughness: 0.78,
-    metalness: 0.07,
+    color: '#030406',
+    roughness: 0.28,
+    metalness: 0.55,
   });
   const leftWallMesh = new THREE.Mesh(leftWallGeo, leftWallMat);
   leftWallMesh.name = 'Act2_LeftHeroWall';
@@ -206,6 +206,42 @@ export function createAct2Geometry(): Act2GeometryRig {
   applyWorldDepthAttributes(leftWallMesh, zStart, zEnd);
   group.add(leftWallMesh);
   disposables.push(leftWallGeo, leftWallMat);
+
+  // Lower Architectural Plinth / Dark Graphite Wainscot Panel
+  const plinthHeight = 3.6;
+  const plinthGeo = new THREE.BoxGeometry(0.04, plinthHeight, corridorLength);
+  const plinthMat = new THREE.MeshStandardMaterial({
+    color: '#020304',
+    roughness: 0.16,
+    metalness: 0.75,
+  });
+  const plinthMesh = new THREE.Mesh(plinthGeo, plinthMat);
+  plinthMesh.name = 'Act2_LeftWall_Plinth';
+  plinthMesh.userData = { act2Role: 'hero-wall', part: 'plinth' };
+  plinthMesh.position.set(wallLeftX + 0.02, plinthHeight / 2, midZ);
+  applyWorldDepthAttributes(plinthMesh, zStart, zEnd);
+  group.add(plinthMesh);
+  disposables.push(plinthGeo, plinthMat);
+
+  // Recessed Baseboard Shadow Cavity at Floor Seam
+  const baseboardGeo = new THREE.BoxGeometry(0.06, 0.08, corridorLength);
+  const baseboardMat = new THREE.MeshBasicMaterial({ color: '#000000' });
+  const baseboardMesh = new THREE.Mesh(baseboardGeo, baseboardMat);
+  baseboardMesh.name = 'Act2_LeftWall_BaseboardShadow';
+  baseboardMesh.position.set(wallLeftX + 0.03, 0.04, midZ);
+  group.add(baseboardMesh);
+  disposables.push(baseboardGeo, baseboardMat);
+
+  // Vertical Architectural Gallery Reveal Seams (spaced every 14m along corridor)
+  for (let z = zStart - 7; z > zEnd; z -= 14) {
+    const seamGeo = new THREE.BoxGeometry(0.05, ceilingY, 0.04);
+    const seamMat = new THREE.MeshBasicMaterial({ color: '#010102' });
+    const seamMesh = new THREE.Mesh(seamGeo, seamMat);
+    seamMesh.name = `Act2_LeftWall_Seam_${Math.abs(Math.round(z))}`;
+    seamMesh.position.set(wallLeftX + 0.025, ceilingY / 2, z);
+    group.add(seamMesh);
+    disposables.push(seamGeo, seamMat);
+  }
 
   // Main champagne horizon
   const mainGoldY = worldYForReferenceRay(
