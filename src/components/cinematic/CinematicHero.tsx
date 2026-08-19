@@ -77,6 +77,10 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       // Act 2 Editorial Poster Elements - HIDDEN DURING ACT 1 (Vector-aligned with Act 1 Panels)
       gsap.set('.act2-poster-stage', { autoAlpha: 0 });
       gsap.set('.act2-ambient-atmosphere', { opacity: 0 });
+      gsap.set('.act2-radiant-rays', { opacity: 0, scale: 0.85, transformOrigin: '85.72% 61.5%' });
+      gsap.set('.act2-horizon-laser', { scaleX: 0, opacity: 0, transformOrigin: 'left center' });
+      gsap.set('.act2-vp-starburst', { scale: 0.2, opacity: 0 });
+      gsap.set('.act2-brand-logo', { yPercent: 40, opacity: 0 });
       gsap.set('.act2-word-we', { yPercent: 80, opacity: 0 });
       gsap.set('.act2-word-sellout', { xPercent: -50, yPercent: 50, opacity: 0 });
       gsap.set('.act2-word-your', { xPercent: 70, yPercent: 15, opacity: 0 });
@@ -340,7 +344,11 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
 
       // Reveal Act 2 Poster Stage and the luxury chiaroscuro atmosphere
       tl.to('.act2-poster-stage', { autoAlpha: 1, duration: 0.4 }, 'TYPE_REVEAL')
-        .to('.act2-ambient-atmosphere', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 'TYPE_REVEAL');
+        .to('.act2-ambient-atmosphere', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 'TYPE_REVEAL')
+        .to('.act2-radiant-rays', { opacity: 0.9, scale: 1, duration: 0.95, ease: 'power3.out' }, 'TYPE_REVEAL')
+        .to('.act2-horizon-laser', { scaleX: 1, opacity: 1, duration: 0.85, ease: 'power3.out' }, 'TYPE_REVEAL')
+        .to('.act2-vp-starburst', { scale: 1, opacity: 1, duration: 0.85, ease: 'power2.out' }, 'TYPE_REVEAL')
+        .to('.act2-brand-logo', { yPercent: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 'TYPE_REVEAL+=0.2');
 
       // 1. "We" emerges from Panel 1's upward momentum (↑)
       tl.to(
@@ -400,15 +408,6 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power3.out',
           },
           'TYPE_REVEAL+=0.24'
-        )
-        .to(
-          '.act2-project-reflection-wrap',
-          {
-            opacity: 0.2,
-            duration: 0.5,
-            ease: 'power2.out',
-          },
-          'TYPE_REVEAL+=0.35'
         );
 
       // ---------------------------------------------------------------------
@@ -458,6 +457,10 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           },
           'ACT2_TO_ACT3'
         )
+        .to('.act2-brand-logo', { yPercent: 30, opacity: 0, duration: 0.5, ease: 'power2.in' }, 'ACT2_TO_ACT3')
+        .to('.act2-radiant-rays', { opacity: 0, duration: 0.6 }, 'ACT2_TO_ACT3')
+        .to('.act2-horizon-laser', { scaleX: 0, opacity: 0, duration: 0.6 }, 'ACT2_TO_ACT3')
+        .to('.act2-vp-starburst', { scale: 0.2, opacity: 0, duration: 0.6 }, 'ACT2_TO_ACT3')
 
         // 2. Right Vectors: "sell-out" (Top-Right) and "REAL ESTATE" (Mid-Right) converge to unmask "PLANNED"
         .to(
@@ -495,7 +498,6 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           },
           'ACT2_TO_ACT3'
         )
-        .to('.act2-project-reflection-wrap', { opacity: 0, duration: 0.4 }, 'ACT2_TO_ACT3')
         .to('.act2-poster-stage', { autoAlpha: 0, duration: 0.3 }, 'ACT2_TO_ACT3+=0.75');
 
       const envExit = { p: 0 };

@@ -194,9 +194,9 @@ export function createAct2Geometry(): Act2GeometryRig {
   // -------------------------------------------------------------------------
   const leftWallGeo = new THREE.PlaneGeometry(corridorLength, ceilingY, 64, 16);
   const leftWallMat = new THREE.MeshStandardMaterial({
-    color: '#030406',
-    roughness: 0.28,
-    metalness: 0.55,
+    color: '#0a0c10',
+    roughness: 0.55,
+    metalness: 0.35,
   });
   const leftWallMesh = new THREE.Mesh(leftWallGeo, leftWallMat);
   leftWallMesh.name = 'Act2_LeftHeroWall';
