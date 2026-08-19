@@ -1,0 +1,81 @@
+.act2-type-overlay {
+  z-index: 40;
+  overflow: hidden;
+}
+
+.act2-type-box {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  contain: layout style;
+}
+
+.act2-type-word {
+  display: inline-block;
+  position: relative;
+  white-space: nowrap;
+  transform: translate3d(0, 0, 0);
+  transform-origin: center center;
+  will-change: clip-path, opacity, transform;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.act2-word-we {
+  font-family: 'Qurova', 'Plus Jakarta Sans', Arial, sans-serif;
+  font-size: var(--act2-font-size);
+  font-weight: 700;
+  line-height: .86;
+  letter-spacing: -0.045em;
+  color: #fff;
+}
+
+.act2-word-sellout,
+.act2-word-your {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: var(--act2-font-size);
+  font-weight: 400;
+  font-style: italic;
+  line-height: .94;
+  letter-spacing: -0.025em;
+}
+
+.act2-word-sellout { color: #f5c200; }
+.act2-word-your { color: #fff; }
+
+.act2-word-realestate {
+  font-family: 'Qurova', 'Plus Jakarta Sans', Arial, sans-serif;
+  font-size: var(--act2-font-size);
+  font-weight: 700;
+  line-height: .88;
+  letter-spacing: -0.045em;
+  color: #fff;
+}
+
+.act2-word-project,
+.act2-word-project-reflection {
+  font-family: 'Qurova', 'Plus Jakarta Sans', Arial, sans-serif;
+  font-size: var(--act2-font-size);
+  font-weight: 300;
+  line-height: .92;
+  letter-spacing: .045em;
+  color: #e5e8ec;
+}
+
+.act2-word-project-reflection {
+  position: absolute;
+  left: 0;
+  top: 58%;
+  transform: scaleY(-1);
+  transform-origin: top center;
+  opacity: 0;
+  filter: blur(.7px);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.45), transparent 72%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.45), transparent 72%);
+}
+
+/* Debug mode: proves wrappers never change geometry during the timeline. */
+[data-act2-debug='boxes'] .act2-type-box {
+  outline: 1px solid rgba(245, 194, 0, .5);
+}

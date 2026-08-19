@@ -3,7 +3,12 @@ import * as THREE from 'three';
 import { configureOffAxisCamera } from './act2/camera/projection';
 import { createAct2Geometry, type Act2GeometryRig } from './act2/geometry/Act2Geometry';
 import { createAct2TypeRig, type Act2TypeRig } from './act2/typography/Act2TypeRig';
-import { createAct2AnimationEngine, type Act2SceneController, type Act2LightingRig } from './act2/animation/Act2AnimationEngine';
+import {
+  createAct2EnvironmentController,
+  type Act2EnvironmentController,
+  type Act2EnvironmentRig,
+} from './act2/animation/Act2EnvironmentController';
+import { resizeCalibratedRenderer } from './act2/Act2CanvasSizing';
 import { validateVanishingPoint, type CalibrationReport } from './act2/debug/VanishingPointValidator';
 import { GeometryCalibrationOverlay } from './act2/debug/GeometryCalibrationOverlay';
 import { REFERENCE_GEOMETRY } from './act2/constants/referenceGeometry';
@@ -12,19 +17,24 @@ export interface Act2TrueRendererProps {
   className?: string;
   showCalibrationOverlay?: boolean;
   viewportMode?: 'presentation' | 'calibration';
-  initialProgress?: number;
+  mountDebugTextQuads?: boolean;
 }
 
-export type Act2RendererHandle = Act2SceneController;
+export interface Act2RendererHandle {
+  setIgnitionProgress(p: number): void;
+  setHoldProgress(p: number): void;
+  setExitProgress(p: number): void;
+  setProgress(p: number): void;
+  dispose(): void;
+}
 
 /**
- * Act 2 True 3D Renderer (V6.3 Viewport Modes & V7 Spatial Typography + Cinematic Assembly)
+ * Act 2 True 3D Renderer (V8 Architecture: Calibrated Corridor + Environment Lighting)
  *
  * Invariants:
- * - Presentation Mode (Default): Canonical Cover Scaling without perspective distortion.
- * - Calibration Mode: Exact 1672:941 Contained Frame with HUD outside the artwork.
- * - 5 Spatial Wall Text Quads unprojected from canonical screen ray intersections onto left hero wall.
- * - Imperative GSAP controller for scroll-linked Beats A through I.
+ * - Calibrated off-axis camera intrinsics and 1672x941 geometry.
+ * - Environment lighting and emissive materials controlled via Act2EnvironmentController.
+ * - Production typography is handled in-situ by Act2TypographyOverlay (zero Z-travel).
  */
 export const Act2TrueRenderer = forwardRef<Act2RendererHandle, Act2TrueRendererProps>(
   (
@@ -32,7 +42,7 @@ export const Act2TrueRenderer = forwardRef<Act2RendererHandle, Act2TrueRendererP
       className = '',
       showCalibrationOverlay = true,
       viewportMode: initialViewportMode = 'presentation',
-      initialProgress = 0.70, // Default to hero frame lock in still mode
+      mountDebugTextQuads = false,
     },
     ref
   ) => {
@@ -41,7 +51,7 @@ export const Act2TrueRenderer = forwardRef<Act2RendererHandle, Act2TrueRendererP
     const sceneRef = useRef<THREE.Scene | null>(null);
     const geometryRigRef = useRef<Act2GeometryRig | null>(null);
     const typeRigRef = useRef<Act2TypeRig | null>(null);
-    const animationEngineRef = useRef<Act2SceneController | null>(null);
+    const envControllerRef = useRef<Act2EnvironmentController | null>(null);
     const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
 
     const [calibrationReport, setCalibrationReport] = useState<CalibrationReport | null>(null);
@@ -92,15 +102,23 @@ export const Act2TrueRenderer = forwardRef<Act2RendererHandle, Act2TrueRendererP
       return () => window.removeEventListener('resize', updateStageDimensions);
     }, [updateStageDimensions]);
 
-    // Forward Imperative Animation Handle
+    // Forward Imperative Environment Handle
     useImperativeHandle(
       ref,
       () => ({
-        setProgress: (p: number) => animationEngineRef.current?.setProgress(p),
-        setTransitionProgress: (p: number) => animationEngineRef.current?.setTransitionProgress(p),
-        setTextProgress: (p: number) => animationEngineRef.current?.setTextProgress(p),
-        setExitProgress: (p: number) => animationEngineRef.current?.setExitProgress(p),
-        dispose: () => animationEngineRef.current?.dispose(),
+        setIgnitionProgress: (p: number) => envControllerRef.current?.setIgnitionProgress(p),
+        setHoldProgress: (p: number) => envControllerRef.current?.setHoldProgress(p),
+        setExitProgress: (p: number) => envControllerRef.current?.setExitProgress(p),
+        setProgress: (p: number) => {
+          if (p <= 0.35) {
+            envControllerRef.current?.setIgnitionProgress(p / 0.35);
+          } else if (p <= 0.8) {
+            envControllerRef.current?.setHoldProgress((p - 0.35) / 0.45);
+          } else {
+            envControllerRef.current?.setExitProgress((p - 0.8) / 0.2);
+          }
+        },
+        dispose: () => {},
       }),
       []
     );
@@ -154,15 +172,17 @@ export const Act2TrueRenderer = forwardRef<Act2RendererHandle, Act2TrueRendererP
         powerPreference: 'high-performance',
         alpha: false,
       });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(width, height, true);
-      renderer.domElement.style.width = '100%';
-      renderer.domElement.style.height = '100%';
-      renderer.domElement.style.display = 'block';
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.10;
+      renderer.toneMappingExposure = 1.1;
       container.appendChild(renderer.domElement);
+
+      // Initial explicit canvas sizing
+      resizeCalibratedRenderer(
+        renderer,
+        container,
+        (w, h) => configureOffAxisCamera(camera, w, h)
+      );
 
       // 4. LIGHTING RIG
       const ambientLight = new THREE.AmbientLight('#080a0e', 0.32);
@@ -188,42 +208,62 @@ export const Act2TrueRenderer = forwardRef<Act2RendererHandle, Act2TrueRendererP
       vpLight.position.set(2.8, 1.8, -78);
       scene.add(vpLight);
 
-      const lightingRig: Act2LightingRig = {
-        ambientLight,
-        rightWallKey,
-        leftHeroFill,
-        wallModelLight,
-        warmRailLight,
-        vpLight,
-      };
-
       // 5. GEOMETRY RIG
       const geometryRig = createAct2Geometry();
       geometryRigRef.current = geometryRig;
       scene.add(geometryRig.group);
       disposables.push(...geometryRig.disposables);
 
-      // 6. SPATIAL TYPOGRAPHY RIG (V7)
-      const typeRig = createAct2TypeRig();
-      typeRigRef.current = typeRig;
-      scene.add(typeRig.group);
-      disposables.push(...typeRig.disposables);
-
-      // 7. ANIMATION ENGINE (V7)
-      const animationEngine = createAct2AnimationEngine(geometryRig, typeRig, lightingRig);
-      animationEngineRef.current = animationEngine;
-      animationEngine.setProgress(initialProgress);
+      // 6. OPTIONAL DEBUG TEXT QUADS (Calibration mode only)
+      if (mountDebugTextQuads) {
+        const typeRig = createAct2TypeRig();
+        typeRigRef.current = typeRig;
+        scene.add(typeRig.group);
+        disposables.push(...typeRig.disposables);
+      }
 
       // Collect materials
       const mats: THREE.Material[] = [];
+      const horizonMats: THREE.MeshStandardMaterial[] = [];
+      const railMats: THREE.MeshStandardMaterial[] = [];
+      const louverMats: THREE.MeshStandardMaterial[] = [];
+
       scene.traverse((child) => {
         if ((child as THREE.Mesh).isMesh && (child as THREE.Mesh).material) {
           const m = (child as THREE.Mesh).material;
           if (Array.isArray(m)) mats.push(...m);
           else mats.push(m);
+
+          if (child.name.includes('Horizon') && m instanceof THREE.MeshStandardMaterial) {
+            horizonMats.push(m);
+          }
+          if (child.name.includes('Rail') && m instanceof THREE.MeshStandardMaterial) {
+            railMats.push(m);
+          }
+          if (child.name.includes('Louver') && m instanceof THREE.MeshStandardMaterial) {
+            louverMats.push(m);
+          }
         }
       });
       materialsRef.current = mats;
+
+      // 7. ENVIRONMENT CONTROLLER
+      const envRig: Act2EnvironmentRig = {
+        ambientLight,
+        rightWallKey,
+        leftHeroFill,
+        wallModelLight,
+        warmRailLight,
+        vpLight,
+        horizonMaterials: horizonMats,
+        railMaterials: railMats,
+        louverMaterials: louverMats,
+      };
+      const envController = createAct2EnvironmentController(envRig);
+      envControllerRef.current = envController;
+
+      // Initialize ignition to full for static hold
+      envController.setIgnitionProgress(1.0);
 
       const runCalibration = (w: number, h: number) => {
         const report = validateVanishingPoint(
@@ -254,10 +294,11 @@ export const Act2TrueRenderer = forwardRef<Act2RendererHandle, Act2TrueRendererP
         const h = Math.round(entry.contentRect.height) || container.clientHeight || window.innerHeight;
 
         setViewportDims({ width: w, height: h });
-        configureOffAxisCamera(camera, w, h);
-        renderer.setSize(w, h, true);
-        renderer.domElement.style.width = '100%';
-        renderer.domElement.style.height = '100%';
+        resizeCalibratedRenderer(
+          renderer,
+          container,
+          (cw, ch) => configureOffAxisCamera(camera, cw, ch)
+        );
         runCalibration(w, h);
       });
 
@@ -282,7 +323,7 @@ export const Act2TrueRenderer = forwardRef<Act2RendererHandle, Act2TrueRendererP
           container.removeChild(renderer.domElement);
         }
       };
-    }, []);
+    }, [mountDebugTextQuads]);
 
     // Update wireframe / clay mode dynamically
     useEffect(() => {
