@@ -58,6 +58,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act1-bridge-gold-dot', { x: 0, y: 0, scale: 1, opacity: 1 });
       gsap.set('.act1-ads-word', { opacity: 1 });
       gsap.set('.act1-ads-char', { xPercent: 0, yPercent: 0, rotation: 0, opacity: 1, scale: 1 });
+      gsap.set('.act1-focal-light-ray', { scaleX: 0, opacity: 0, transformOrigin: 'left center' });
       gsap.set('.act1-mystic-particle', { scale: 0.2, opacity: 0 });
       gsap.set('.act1-col-bg-4', { opacity: 1, transformOrigin: '46.106% 62.320%' });
       gsap.set('.act1-eclipse-rig', { scale: 1, xPercent: 0, yPercent: 0, opacity: 1, filter: 'blur(0px)', transformOrigin: '46.106% 62.320%' });
@@ -71,6 +72,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act2-poster-stage', { autoAlpha: 0 });
       gsap.set('.act2-ambient-atmosphere', { opacity: 0 });
       gsap.set('.act2-horizon-glow', { scaleX: 0, opacity: 0, transformOrigin: 'center center' });
+      gsap.set('.act2-horizon-ray-right', { scaleX: 0, opacity: 0, transformOrigin: 'left center' });
       gsap.set('.act2-vp-flare', { scale: 0.2, opacity: 0 });
       gsap.set('.act2-word-we', { yPercent: 110, opacity: 0 });
       gsap.set('.act2-word-sellout', { yPercent: 110, opacity: 0 });
@@ -219,10 +221,11 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           .to('.act1-col-bg-2', { opacity: 0, duration: 0.7, ease: 'power2.inOut' }, 'DECONSTRUCT+=0.1')
           .to('.act1-col2-axis', { scaleY: 0, opacity: 0, duration: 0.6, ease: 'power3.in' }, 'DECONSTRUCT+=0.1');
 
-        // "run" perspective propulsion
-        tl.to('.act1-run-char-1', { x: -70, y: 75, scale: 0.8, opacity: 0, duration: 0.65, ease: 'power3.in' }, 'DECONSTRUCT')
-          .to('.act1-run-char-2', { y: 110, scale: 0.6, opacity: 0, duration: 0.65, ease: 'power3.in' }, 'DECONSTRUCT+=0.03')
-          .to('.act1-run-char-3', { x: 70, y: 75, scale: 0.8, opacity: 0, duration: 0.65, ease: 'power3.in' }, 'DECONSTRUCT+=0.06')
+        // "run" perspective propulsion & letter reactivity
+        tl.to('.act1-run-char-1', { xPercent: -25, yPercent: -50, rotation: -8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
+          .to('.act1-run-char-2', { yPercent: -70, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.03')
+          .to('.act1-run-char-3', { xPercent: 25, yPercent: -50, rotation: 8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06')
+          .to('.act1-energy-rail', { opacity: 1, strokeDashoffset: 0, duration: 0.45, stagger: 0.02, ease: 'power2.out' }, 'DECONSTRUCT')
           .to('.act1-runway-wrap', { rotateX: 65, scaleX: 3.2, yPercent: 35, opacity: 0, duration: 0.85, ease: 'power3.inOut' }, 'DECONSTRUCT')
           .to('.act1-col-bg-3-top', { yPercent: -100, duration: 0.8, ease: 'power3.inOut' }, 'DECONSTRUCT')
           .to('.act1-col-bg-3-bottom', { yPercent: 100, duration: 0.8, ease: 'power3.inOut' }, 'DECONSTRUCT');
@@ -235,9 +238,13 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         }, 'DECONSTRUCT')
           .to('.act1-bridge-gold-dot', { scale: 0.3, opacity: 0, duration: 0.18, ease: 'power2.in' }, 'DECONSTRUCT');
 
-        // "your" and baseline dissolve into the dark abyss
-        tl.to('.act1-your-char', { y: -45, opacity: 0, stagger: 0.04, duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT')
-          .to('.act1-your-rule', { scaleX: 0, duration: 0.5, ease: 'power2.in' }, 'DECONSTRUCT');
+        // "your" reactive italic drift & baseline laser pulse
+        tl.to('.act1-your-char-1', { xPercent: 10, yPercent: -50, rotation: -5, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
+          .to('.act1-your-char-2', { xPercent: 12, yPercent: -55, rotation: -4, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.03')
+          .to('.act1-your-char-3', { xPercent: 14, yPercent: -60, rotation: -3, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06')
+          .to('.act1-your-char-4', { xPercent: 16, yPercent: -65, rotation: -2, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.09')
+          .to('.act1-your-rule', { scaleX: 0, duration: 0.5, ease: 'power2.in' }, 'DECONSTRUCT')
+          .to('.act1-your-pulse', { opacity: 1, duration: 0.35, ease: 'power2.out' }, 'DECONSTRUCT');
 
         // "ads" kinetic editorial letter lift & dispersion (does NOT shrink into middle!)
         tl.to('.act1-ads-char-1', { xPercent: -25, yPercent: -50, rotation: -8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
@@ -259,6 +266,19 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             duration: 0.8,
             ease: 'power2.inOut',
           }, 'DECONSTRUCT+=0.05')
+
+          // Focal horizon light ray shoots across from shrinking circle towards right vanishing point
+          .to('.act1-focal-light-ray', {
+            scaleX: 1,
+            opacity: 1,
+            duration: 0.55,
+            ease: 'power2.out',
+          }, 'DECONSTRUCT+=0.1')
+          .to('.act1-focal-light-ray', {
+            opacity: 0.85,
+            duration: 0.35,
+            ease: 'power1.out',
+          }, 'DECONSTRUCT+=0.65')
 
           // Mystical celestial particles scatter outward as the circle dissolves
           .to('.act1-mystic-particle', {
@@ -310,7 +330,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       tl.to('.act2-poster-stage', { autoAlpha: 1, duration: 0.4 }, 'TYPE_REVEAL')
         .to('.act2-ambient-atmosphere', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 'TYPE_REVEAL')
 
-        // Horizon Laser & Vanishing Point Flare
+        // Horizon Laser & Sustained Right-Side Golden Ray
         .to(
           '.act2-horizon-glow',
           {
@@ -320,7 +340,18 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             ease: 'power3.out',
           },
           'TYPE_REVEAL'
-        ).to(
+        )
+        .to(
+          '.act2-horizon-ray-right',
+          {
+            scaleX: 1,
+            opacity: 0.95,
+            duration: 0.8,
+            ease: 'power3.out',
+          },
+          'TYPE_REVEAL'
+        )
+        .to(
           '.act2-vp-flare',
           {
             scale: 1,
@@ -396,6 +427,17 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       // BEAT 4: TRUE STATIC READABLE HOLD (Time 3.2 - 5.4, 2.2s dedicated budget)
       // ---------------------------------------------------------------------
       tl.addLabel('ACT2_HOLD', 3.2);
+
+      // Sustained, slow-fading right golden ray during hold
+      tl.to(
+        '.act2-horizon-ray-right',
+        {
+          opacity: 0.45,
+          duration: 2.2,
+          ease: 'power1.out',
+        },
+        'ACT2_HOLD'
+      );
 
       const envHold = { p: 0 };
       tl.to(

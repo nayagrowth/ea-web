@@ -23,11 +23,15 @@ export const Act2EditorialPoster: React.FC = () => {
 
       {/* Horizon Laser & Vanishing Flare Motif (Calibrated to Exact Act 2 VP: 85.72%, 62.32%) */}
       <div
-        className="act2-horizon-glow absolute left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#F5C200] to-transparent opacity-0 pointer-events-none z-0"
+        className="act2-horizon-glow absolute left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-50% via-[#F5C200]/40 to-[#F5C200] opacity-0 pointer-events-none z-0"
         style={{ top: '62.32%' }}
       />
       <div
-        className="act2-vp-flare absolute -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-radial from-[#F5C200]/20 via-[#F5C200]/5 to-transparent blur-2xl opacity-0 pointer-events-none z-0"
+        className="act2-horizon-ray-right absolute right-0 h-[2.5px] bg-gradient-to-r from-transparent via-[#FFF2CC] to-[#F5C200] opacity-0 pointer-events-none z-0"
+        style={{ top: '62.32%', width: '55%', boxShadow: '0 0 14px rgba(245, 194, 0, 0.75)' }}
+      />
+      <div
+        className="act2-vp-flare absolute -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-radial from-[#F5C200]/25 via-[#F5C200]/5 to-transparent blur-2xl opacity-0 pointer-events-none z-0"
         style={{ left: '85.72%', top: '62.32%' }}
       />
 

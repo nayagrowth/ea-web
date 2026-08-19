@@ -260,7 +260,19 @@ export const Act1ArchitecturalColumns: React.FC = () => {
             </div>
           </div>
 
-          {/* Layer z4: Mystical Ethereal Particles Rig */}
+          {/* Layer z4: Focal Horizon Light Ray Interaction */}
+          <div
+            className="act1-focal-light-ray absolute h-[2px] pointer-events-none z-10 opacity-0 origin-left"
+            style={{
+              left: '46.1%',
+              top: '62.32%',
+              right: 0,
+              background: 'linear-gradient(90deg, #FFFFFF 0%, #ecd08e 40%, rgba(245, 194, 0, 0.4) 80%, transparent 100%)',
+              boxShadow: '0 0 12px rgba(245, 194, 0, 0.9), 0 0 4px #FFFFFF',
+            }}
+          />
+
+          {/* Layer z5: Mystical Ethereal Particles Rig */}
           <div className="act1-mystical-particles absolute inset-0 pointer-events-none z-10 overflow-hidden">
             {Array.from({ length: 18 }).map((_, i) => (
               <div
