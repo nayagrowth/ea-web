@@ -86,9 +86,12 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
 
       // Acts 3 - 5 Initial States
       gsap.set('.act3-stage', { autoAlpha: 0 });
-      gsap.set('.act3-line-1', { xPercent: -100, opacity: 0 });
-      gsap.set('.act3-line-2', { xPercent: -100, opacity: 0 });
+      gsap.set('.act3-sheet-frame', { scale: 0.98, opacity: 0, y: 20 });
+      gsap.set('.act3-telemetry-top', { opacity: 0, y: -10 });
+      gsap.set('.act3-line-1', { xPercent: -30, opacity: 0 });
+      gsap.set('.act3-line-2', { xPercent: -40, opacity: 0 });
       gsap.set('.act3-horizon-wrap', { scaleX: 0, transformOrigin: 'left center', opacity: 1 });
+      gsap.set('.act3-milestone-card', { yPercent: 30, opacity: 0 });
       gsap.set('.act4-tri-stage', { autoAlpha: 0 });
       gsap.set('.act4-panel-1', { yPercent: 100, opacity: 0 });
       gsap.set('.act4-panel-2', { yPercent: 100, opacity: 0 });
@@ -458,54 +461,65 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       );
 
       // =====================================================================
-      // ACT 3: KINETIC HIGH-SPEED TIMELINE ("Within Your Planned Timeline")
+      // ACT 3: ARCHITECTURAL TIMELINE SHEET ("Within Your Planned Timeline")
       // =====================================================================
       tl.addLabel('ACT3_START', 6.2);
 
       tl.to('.act3-stage', { autoAlpha: 1, duration: 0.4 }, 'ACT3_START')
-        .to(
-          '.act3-horizon-wrap',
-          {
-            scaleX: 1,
-            duration: 1.2,
-            ease: 'power2.out',
-          },
-          'ACT3_START'
-        )
+        .to('.act3-sheet-frame', { scale: 1, opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 'ACT3_START')
+        .to('.act3-telemetry-top', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 'ACT3_START+=0.1')
         .to(
           '.act3-line-1',
           {
             xPercent: 0,
             opacity: 1,
-            duration: 1.2,
+            duration: 0.9,
             ease: 'power3.out',
           },
-          'ACT3_START+=0.1'
+          'ACT3_START+=0.15'
         )
         .to(
           '.act3-line-2',
           {
             xPercent: 0,
             opacity: 1,
-            duration: 1.2,
+            duration: 0.95,
             ease: 'power3.out',
           },
-          'ACT3_START+=0.3'
+          'ACT3_START+=0.25'
+        )
+        .to(
+          '.act3-horizon-wrap',
+          {
+            scaleX: 1,
+            duration: 1.0,
+            ease: 'power2.out',
+          },
+          'ACT3_START+=0.35'
+        )
+        .to(
+          '.act3-milestone-card',
+          {
+            yPercent: 0,
+            opacity: 1,
+            stagger: 0.08,
+            duration: 0.7,
+            ease: 'power3.out',
+          },
+          'ACT3_START+=0.45'
         )
         .to('.act2-true-stage', { autoAlpha: 0, duration: 0.4 }, 'ACT3_START+=0.6');
 
       // Hold for Act 3
       tl.addLabel('ACT3', 7.4);
-      tl.to('.act3-stage', { scale: 1.008, duration: 1.8, ease: 'none' });
+      tl.to('.act3-sheet-frame', { scale: 1.008, duration: 1.8, ease: 'none' });
 
       // =====================================================================
       // ACT 3 ➔ ACT 4 MOTIF SPLIT
       // =====================================================================
       tl.addLabel('ACT3_TO_ACT4', '+=0.1');
 
-      tl.to('.act3-line-1', { xPercent: 80, opacity: 0, duration: 0.8, ease: 'power2.in' }, 'ACT3_TO_ACT4')
-        .to('.act3-line-2', { xPercent: 80, opacity: 0, duration: 0.8, ease: 'power2.in' }, 'ACT3_TO_ACT4+=0.1')
-        .to('.act3-horizon-wrap', { scaleX: 0, opacity: 0, duration: 0.7, ease: 'power3.in' }, 'ACT3_TO_ACT4')
+      tl.to('.act3-sheet-frame', { scale: 0.97, y: -20, opacity: 0, duration: 0.75, ease: 'power2.in' }, 'ACT3_TO_ACT4')
         .to('.act3-stage', { autoAlpha: 0, duration: 0.2 }, 'ACT3_TO_ACT4+=0.7')
         .to('.act4-tri-stage', { autoAlpha: 1, duration: 0.2 }, 'ACT3_TO_ACT4+=0.7')
         .to(

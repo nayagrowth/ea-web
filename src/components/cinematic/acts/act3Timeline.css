@@ -1,0 +1,48 @@
+/* Act 3 Architectural Timeline Sheet Styles */
+
+@keyframes goldShimmerAct3 {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.act3-gold-shimmer {
+  background: linear-gradient(
+    105deg,
+    #f5c200 0%,
+    #fff2cc 30%,
+    #f5c200 55%,
+    #d4a017 80%,
+    #f5c200 100%
+  ) !important;
+  background-size: 250% auto !important;
+  color: transparent !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  animation: goldShimmerAct3 4s ease-in-out infinite;
+}
+
+.act3-laser-pulse {
+  animation: act3Pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes act3Pulse {
+  0%, 100% {
+    opacity: 0.85;
+    box-shadow: 0 0 12px rgba(245, 194, 0, 0.75);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 24px rgba(245, 194, 0, 0.95), 0 0 40px rgba(245, 194, 0, 0.45);
+  }
+}
+
+.act3-sheet-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
