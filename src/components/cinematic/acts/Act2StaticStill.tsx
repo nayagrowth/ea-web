@@ -8,7 +8,6 @@ export const Act2StaticStill: React.FC = () => {
         className="w-full h-full"
         showCalibrationOverlay={true}
         viewportMode="presentation"
-        initialProgress={0.70}
       />
     </div>
   );
