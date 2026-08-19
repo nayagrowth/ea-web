@@ -56,21 +56,20 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act1-your-pulse', { opacity: 0 });
       gsap.set('.act1-gold-halo', { scale: 1, opacity: 0 });
       gsap.set('.act1-bridge-gold-dot', { x: 0, y: 0, scale: 1, opacity: 1 });
-      // Panel 4 / Eclipse Rig calibrated to exact Act 2 Vanishing Point:
-      // Viewport VP = (85.718vw, 62.320vh). Panel 4 starts at 73.5vw with width 26.5vw -> local VP = (46.106%, 62.320%)
-      gsap.set('.act1-ads-word', { scale: 1, opacity: 1, transformOrigin: '46.106% 62.320%' });
-      gsap.set('.act1-ads-text', { scale: 1, opacity: 1 });
-      gsap.set('.act1-ads-dot', { scale: 1, opacity: 1 });
+      gsap.set('.act1-ads-word', { opacity: 1 });
+      gsap.set('.act1-ads-char', { xPercent: 0, yPercent: 0, rotation: 0, opacity: 1, scale: 1 });
+      gsap.set('.act1-mystic-particle', { scale: 0.2, opacity: 0 });
       gsap.set('.act1-col-bg-4', { opacity: 1, transformOrigin: '46.106% 62.320%' });
-      gsap.set('.act1-eclipse-rig', { scale: 1, xPercent: 0, yPercent: 0, opacity: 1, transformOrigin: '46.106% 62.320%' });
+      gsap.set('.act1-eclipse-rig', { scale: 1, xPercent: 0, yPercent: 0, opacity: 1, filter: 'blur(0px)', transformOrigin: '46.106% 62.320%' });
       gsap.set('.act1-eclipse-glow-wide', { scale: 1, opacity: 0.28 });
       gsap.set('.act1-eclipse-glow-core', { scale: 1, opacity: 0.68 });
 
       // Act 2 Background Ambient Corridor
       gsap.set('.act2-true-stage', { autoAlpha: 1, scale: 1, x: 0, y: 0 });
 
-      // Act 2 Editorial Poster Elements
-      gsap.set('.act2-poster-stage', { autoAlpha: 1 });
+      // Act 2 Editorial Poster Elements - HIDDEN DURING ACT 1 (Reveals strictly in Act 2!)
+      gsap.set('.act2-poster-stage', { autoAlpha: 0 });
+      gsap.set('.act2-ambient-atmosphere', { opacity: 0 });
       gsap.set('.act2-horizon-glow', { scaleX: 0, opacity: 0, transformOrigin: 'center center' });
       gsap.set('.act2-vp-flare', { scale: 0.2, opacity: 0 });
       gsap.set('.act2-word-we', { yPercent: 110, opacity: 0 });
@@ -240,17 +239,17 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
         tl.to('.act1-your-char', { y: -45, opacity: 0, stagger: 0.04, duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT')
           .to('.act1-your-rule', { scaleX: 0, duration: 0.5, ease: 'power2.in' }, 'DECONSTRUCT');
 
-        // "ads" word and optical eclipse semicircle shrink inward directly into the exact Act 2 Vanishing Point (85.72vw, 62.32vh)
-        tl.to('.act1-ads-word', {
-          scale: 0,
-          opacity: 0,
-          duration: 0.8,
-          transformOrigin: '46.106% 62.320%',
-          ease: 'power3.in',
-        }, 'DECONSTRUCT')
+        // "ads" kinetic editorial letter lift & dispersion (does NOT shrink into middle!)
+        tl.to('.act1-ads-char-1', { xPercent: -25, yPercent: -50, rotation: -8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT')
+          .to('.act1-ads-char-2', { yPercent: -65, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.03')
+          .to('.act1-ads-char-3', { xPercent: 25, yPercent: -50, rotation: 8, opacity: 0, duration: 0.65, ease: 'power2.in' }, 'DECONSTRUCT+=0.06')
+          .to('.act1-ads-char-4', { yPercent: -35, opacity: 0, scale: 0.3, duration: 0.4, ease: 'power2.in' }, 'DECONSTRUCT')
+
+          // Semicircle optical eclipse shrinks into Act 2 vanishing point (85.72vw, 62.32vh) with mystical boundary blurring into the abyss
           .to('.act1-eclipse-rig', {
             scale: 0,
             opacity: 0,
+            filter: 'blur(24px)',
             duration: 0.85,
             transformOrigin: '46.106% 62.320%',
             ease: 'power3.in',
@@ -259,7 +258,25 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
             opacity: 0,
             duration: 0.8,
             ease: 'power2.inOut',
-          }, 'DECONSTRUCT+=0.05');
+          }, 'DECONSTRUCT+=0.05')
+
+          // Mystical celestial particles scatter outward as the circle dissolves
+          .to('.act1-mystic-particle', {
+            opacity: (i) => 0.75 + (i % 3) * 0.12,
+            scale: (i) => 1.2 + (i % 3) * 0.4,
+            x: (i) => Math.sin(i * 1.35) * (45 + (i % 4) * 12),
+            y: (i) => Math.cos(i * 1.55) * (45 + (i % 4) * 12),
+            duration: 0.45,
+            stagger: 0.015,
+            ease: 'power2.out',
+          }, 'DECONSTRUCT+=0.05')
+          .to('.act1-mystic-particle', {
+            opacity: 0,
+            scale: 0,
+            duration: 0.4,
+            stagger: 0.015,
+            ease: 'power2.in',
+          }, 'DECONSTRUCT+=0.35');
 
         // "Most"
         tl.to('.act1-most-char', { xPercent: -120, opacity: 0, stagger: 0.03, duration: 0.75, ease: 'power3.in' }, 'DECONSTRUCT')
@@ -289,26 +306,30 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       // ---------------------------------------------------------------------
       tl.addLabel('TYPE_REVEAL', 1.8);
 
-      // Horizon Laser & Vanishing Point Flare
-      tl.to(
-        '.act2-horizon-glow',
-        {
-          scaleX: 1,
-          opacity: 0.85,
-          duration: 0.9,
-          ease: 'power3.out',
-        },
-        'TYPE_REVEAL'
-      ).to(
-        '.act2-vp-flare',
-        {
-          scale: 1,
-          opacity: 0.7,
-          duration: 1.0,
-          ease: 'power2.out',
-        },
-        'TYPE_REVEAL'
-      );
+      // Reveal Act 2 Poster Stage and the luxury chiaroscuro atmosphere
+      tl.to('.act2-poster-stage', { autoAlpha: 1, duration: 0.4 }, 'TYPE_REVEAL')
+        .to('.act2-ambient-atmosphere', { opacity: 1, duration: 0.8, ease: 'power2.out' }, 'TYPE_REVEAL')
+
+        // Horizon Laser & Vanishing Point Flare
+        .to(
+          '.act2-horizon-glow',
+          {
+            scaleX: 1,
+            opacity: 0.85,
+            duration: 0.9,
+            ease: 'power3.out',
+          },
+          'TYPE_REVEAL'
+        ).to(
+          '.act2-vp-flare',
+          {
+            scale: 1,
+            opacity: 0.7,
+            duration: 1.0,
+            ease: 'power2.out',
+          },
+          'TYPE_REVEAL'
+        );
 
       // Staggered Monumental Editorial Typography
       tl.to(

@@ -260,9 +260,33 @@ export const Act1ArchitecturalColumns: React.FC = () => {
             </div>
           </div>
 
-          {/* Layer z4: "ads." Typography with Continuous Champagne Gold Shimmer */}
+          {/* Layer z4: Mystical Ethereal Particles Rig */}
+          <div className="act1-mystical-particles absolute inset-0 pointer-events-none z-10 overflow-hidden">
+            {Array.from({ length: 18 }).map((_, i) => (
+              <div
+                key={i}
+                className={`act1-mystic-particle act1-mystic-particle-${i} absolute rounded-full pointer-events-none opacity-0`}
+                style={{
+                  left: `${46 + Math.sin(i * 1.35) * 16}%`,
+                  top: `${62 + Math.cos(i * 1.55) * 15}%`,
+                  width: `${(i % 3) * 1.5 + 2.5}px`,
+                  height: `${(i % 3) * 1.5 + 2.5}px`,
+                  background:
+                    i % 2 === 0
+                      ? 'radial-gradient(circle, #ffe680 0%, #ecd08e 60%, transparent 100%)'
+                      : 'radial-gradient(circle, #ffffff 0%, #a0a5b2 60%, transparent 100%)',
+                  boxShadow:
+                    i % 2 === 0
+                      ? '0 0 8px rgba(245, 194, 0, 0.85)'
+                      : '0 0 6px rgba(255, 255, 255, 0.85)',
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Layer z5: "ads." Typography with Continuous Champagne Gold Shimmer & Kinetic Letters */}
           <div
-            className="act1-ads-word absolute z-10 flex items-baseline select-none"
+            className="act1-ads-word absolute z-20 flex items-baseline select-none"
             style={{
               left: '12%',
               top: '42.5%',
@@ -273,13 +297,18 @@ export const Act1ArchitecturalColumns: React.FC = () => {
               letterSpacing: '-0.055em',
             }}
           >
-            <span className="act1-ads-text">
-              ads
+            <span className="act1-ads-char act1-ads-char-1 act1-ads-text inline-block">
+              a
+            </span>
+            <span className="act1-ads-char act1-ads-char-2 act1-ads-text inline-block">
+              d
+            </span>
+            <span className="act1-ads-char act1-ads-char-3 act1-ads-text inline-block">
+              s
             </span>
             <span
-              className="act1-ads-dot"
+              className="act1-ads-dot act1-ads-char-4 inline-block"
               style={{
-                display: 'inline-block',
                 width: '0.19em',
                 height: '0.19em',
                 marginLeft: '0.075em',

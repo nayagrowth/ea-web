@@ -4,13 +4,30 @@ import './act2EditorialPoster.css';
 export const Act2EditorialPoster: React.FC = () => {
   return (
     <div className="act2-poster-stage absolute inset-0 z-20 w-full h-full flex flex-col items-center justify-center pointer-events-none select-none overflow-hidden">
+      {/* High-Contrast Luxury Chiaroscuro Gradient Atmosphere */}
+      <div className="act2-ambient-atmosphere absolute inset-0 pointer-events-none z-0">
+        {/* Left Pitch Black to Right Architectural Light Horizon */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#040507] via-[#06070a]/90 via-45% to-transparent w-full z-0" />
+        {/* Top & Bottom Deep Shadow Vignette */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#040507] via-transparent via-30% to-[#040507]/90 pointer-events-none z-0" />
+        {/* Subtle Horizon Atmospheric Glow Cone */}
+        <div
+          className="absolute w-[500px] h-[340px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-35 blur-[80px] pointer-events-none z-0"
+          style={{
+            left: '85.72%',
+            top: '62.32%',
+            background: 'radial-gradient(ellipse at center, rgba(245, 194, 0, 0.15) 0%, rgba(200, 160, 80, 0.05) 50%, transparent 80%)',
+          }}
+        />
+      </div>
+
       {/* Horizon Laser & Vanishing Flare Motif (Calibrated to Exact Act 2 VP: 85.72%, 62.32%) */}
       <div
         className="act2-horizon-glow absolute left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#F5C200] to-transparent opacity-0 pointer-events-none z-0"
         style={{ top: '62.32%' }}
       />
       <div
-        className="act2-vp-flare absolute -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-radial from-[#F5C200]/25 via-[#F5C200]/5 to-transparent blur-3xl opacity-0 pointer-events-none z-0"
+        className="act2-vp-flare absolute -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-radial from-[#F5C200]/20 via-[#F5C200]/5 to-transparent blur-2xl opacity-0 pointer-events-none z-0"
         style={{ left: '85.72%', top: '62.32%' }}
       />
 

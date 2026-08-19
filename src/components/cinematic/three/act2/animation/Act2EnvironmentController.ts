@@ -30,12 +30,12 @@ const minJerk = (t: number) => {
  */
 export function createAct2EnvironmentController(rig: Act2EnvironmentRig): Act2EnvironmentController {
   const base = {
-    ambient: 0.32,
-    key: 4.4,
-    fill: 0.85,
-    wall: 2.2,
-    warm: 1.4,
-    vp: 1.25,
+    ambient: 0.08,
+    key: 5.2,
+    fill: 0.15,
+    wall: 2.8,
+    warm: 2.2,
+    vp: 1.8,
   };
 
   function setIgnitionProgress(raw: number) {
