@@ -254,7 +254,7 @@ export const Act1ArchitecturalColumns: React.FC = () => {
                   left: '-105.5%',
                   top: '-3.1%',
                   background: 'radial-gradient(circle at 72% 42%, #111112 0%, #0b0c0d 48%, #080809 100%)',
-                  boxShadow: '1px 0 0 rgba(247, 222, 170, 0.26), 3px 2px 6px rgba(235, 193, 113, 0.12)',
+                  boxShadow: '1px 0 0 rgba(255, 255, 255, 0.08)',
                 }}
               />
             </div>

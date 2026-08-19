@@ -228,12 +228,17 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
           .to('.act1-col-bg-3-top', { yPercent: -100, duration: 0.8, ease: 'power3.inOut' }, 'DECONSTRUCT')
           .to('.act1-col-bg-3-bottom', { yPercent: 100, duration: 0.8, ease: 'power3.inOut' }, 'DECONSTRUCT');
 
+        // Golden glow rings & halo instantly extinguish to 0 at the start of swipe (no golden ring during shrink)
+        tl.to(['.act1-eclipse-glow-wide', '.act1-eclipse-glow-core', '.act1-gold-halo'], {
+          opacity: 0,
+          duration: 0.12,
+          ease: 'power2.in',
+        }, 'DECONSTRUCT')
+          .to('.act1-bridge-gold-dot', { scale: 0.3, opacity: 0, duration: 0.18, ease: 'power2.in' }, 'DECONSTRUCT');
+
         // "your" and baseline dissolve into the dark abyss
         tl.to('.act1-your-char', { y: -45, opacity: 0, stagger: 0.04, duration: 0.6, ease: 'power2.in' }, 'DECONSTRUCT')
-          .to('.act1-your-rule', { scaleX: 0, duration: 0.5, ease: 'power2.in' }, 'DECONSTRUCT')
-          // Golden ring & dot instantly dissolve into the abyss on first swipe
-          .to('.act1-gold-halo', { scale: 0.3, opacity: 0, duration: 0.25, ease: 'power2.in' }, 'DECONSTRUCT')
-          .to('.act1-bridge-gold-dot', { scale: 0.3, opacity: 0, duration: 0.25, ease: 'power2.in' }, 'DECONSTRUCT');
+          .to('.act1-your-rule', { scaleX: 0, duration: 0.5, ease: 'power2.in' }, 'DECONSTRUCT');
 
         // "ads" word and optical eclipse semicircle shrink inward directly into the exact Act 2 Vanishing Point (85.72vw, 62.32vh)
         tl.to('.act1-ads-word', {
