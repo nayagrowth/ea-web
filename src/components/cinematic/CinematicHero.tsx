@@ -86,7 +86,6 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
       gsap.set('.act2-word-your', { xPercent: 70, yPercent: 15, opacity: 0 });
       gsap.set('.act2-word-realestate', { xPercent: -40, yPercent: -35, opacity: 0 });
       gsap.set('.act2-word-project', { scale: 0.85, xPercent: 30, opacity: 0 });
-      gsap.set('.act2-project-reflection-wrap', { opacity: 0 });
 
       // Acts 3 - 5 Initial States (Vector-aligned with Act 2)
       gsap.set('.act3-stage', { autoAlpha: 0 });
