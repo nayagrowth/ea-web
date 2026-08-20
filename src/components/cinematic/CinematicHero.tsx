@@ -703,7 +703,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ act1Variant = 'col
     <div ref={containerRef} className="relative w-full bg-[#08090a]">
       <div
         ref={stageRef}
-        className="cinematicStage relative w-full h-screen min-h-[660px] flex flex-col justify-center items-center p-0 m-0 overflow-hidden bg-[#08090a] select-none"
+        className="cinematicStage relative w-full h-[100dvh] min-h-[660px] flex flex-col justify-center items-center p-0 m-0 overflow-hidden bg-[#08090a] select-none"
       >
         {/* Layer z-0: Deep Matte Black Base */}
         <div className="absolute inset-0 bg-[#08090a] pointer-events-none z-0" />
